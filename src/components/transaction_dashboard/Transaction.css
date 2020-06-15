@@ -1,0 +1,39 @@
+body {
+    background-color: #EEEEEE;
+}
+
+img{
+    height: 85%;
+    width: 75%
+}
+
+.row-header{
+    padding-top: 5%;
+}
+
+
+p{
+    font-size: 24px;
+}
+
+h2{
+    font-size: 35px;
+}
+
+.btn{
+    border-radius: 25px!important;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 45px;
+    padding-right: 45px;
+}
+.btn-outline-primary{
+            border-color: #150578;
+            color:  #150578
+}
+ .btn-outline-primary:hover {
+    color:#EEEEEE;
+    background-color: #150578!important;
+    border-color: #150578 !important
+}
