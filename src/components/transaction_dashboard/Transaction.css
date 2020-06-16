@@ -1,0 +1,40 @@
+#transaction-dashboard-container {
+    background-color: #EEEEEE;
+}
+
+#transaction-dashboard-container img {
+    height: 85%;
+    width: 75%
+}
+
+.row-header {
+    padding-top: 5%;
+}
+
+#transaction-dashboard-container p {
+    font-size: 24px;
+}
+
+#transaction-dashboard-container h2 {
+    font-size: 35px;
+}
+
+#transaction-dashboard-container .btn {
+    border-radius: 25px!important;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 45px;
+    padding-right: 45px;
+}
+
+#transaction-dashboard-container .btn-outline-primary {
+    border-color: #150578;
+    color:  #150578
+}
+
+#transaction-dashboard-container .btn-outline-primary:hover {
+    color:#EEEEEE;
+    background-color: #150578 !important;
+    border-color: #150578 !important
+}

@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { Button } from '@material-ui/core';
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-import SignIn from './components/account/SignIn';
 
-import ReallosLogo from './assets/reallos-logo.svg';
+import Main from './components/MainComponent';
 import './App.css';
 
 const theme = createMuiTheme({
@@ -14,27 +13,23 @@ const theme = createMuiTheme({
       },
       secondary: {
           main: '#92DCE5'
+      },
+      common: {
+        white: '#ffffff',
+        black: '#000000'
       }
   }
 });
 
 function App() {
-  let [signInModalVisible, setSignInModalVisibility] = useState(false);
-  
   return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <div id="app-container">
-          <img src={ReallosLogo} alt="Reallos" />
-
-          <Button variant="contained" onClick={() => setSignInModalVisibility(true)}>
-            Sign In
-          </Button>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <Main />
         </div>
-
-        <SignIn visible={signInModalVisible.toString()} />
-      </div>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 
