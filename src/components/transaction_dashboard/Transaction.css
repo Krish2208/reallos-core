@@ -91,3 +91,22 @@ body {
     height: 150px;
     width: auto;
 }
+
+.invite-modal-button{
+    box-shadow: 0 0px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background-color: white!important;
+    color: #150578!important;
+}
+.invite-modal-button:hover{
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    background-color: white!important;
+    color: #150578!important;
+}
+
+.invite-people-text{
+    font-size: 25px;
+}
+
+.invite-people-text-subheading{
+    font-size: 15px;
+}

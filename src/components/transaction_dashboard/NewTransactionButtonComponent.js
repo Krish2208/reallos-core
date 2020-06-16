@@ -104,22 +104,22 @@ class NewTransactionButton extends Component{
                     <Grid item>
                        <Grid container direction="row" justify="space-evenly" alignItems="center">
                            <Grid item>
-                               <h2>invite people</h2>
-                               <Box component="p" marginTop={-2}>Invite people to your transaction using their E-mail ID</Box>
+                               <h2 className="invite-people-text">Invite people</h2>
+                               <Box component="p" marginTop={-2} className="invite-people-text-subheading">Invite people to your transaction using their E-mail ID</Box>
                            </Grid>
                            <Grid item>
-                               <Button variant="contained">Invite a person</Button>
+                               <Button variant="contained" className="invite-modal-button">Invite a person</Button>
                            </Grid>
                        </Grid>
                     </Grid>
                     <Grid item>
-                        <Grid container direction="row" justify="space-between" alignItems="center">
+                        <Grid container direction="row" justify="space-evenly" alignItems="center">
                             <Grid item>
                             <img src={require('../../assets/transaction-step-img.png')} alt="" className="transaction-step-img-default"/>
                             </Grid>
                             <Grid item>
-                                <h2>It's lonely up here...</h2>
-                                <Box component="p" marginTop={-2}>Invite some people to your transaction. <br />You can skip this step for now and add more people later on.</Box>
+                                <h2 className="invite-people-text">It's lonely up here...</h2>
+                                <Box component="p" marginTop={-2} className="invite-people-text-subheading">Invite some people to your transaction. <br />You can skip this step for now <br/> and add more people later on.</Box>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -147,6 +147,31 @@ class NewTransactionButton extends Component{
         else{
             return(
                 <>
+                <Grid contaainer direction="column" justify="center">
+                    <Grid item>
+                        <Box component="h2" className="invite-people-text">Are you sure to create the following transaction?</Box>
+                    </Grid>
+                    <Grid item>
+                        <Grid container direction="column">
+                            <Grid item>
+                                <Grid container direction="row" alignItems="center">
+                                    <Grid item><Icon icon={tagIcon} height={25} className="tag-icon"/></Grid>
+                                    <Grid item><div className="invite-people-text-subheading">Transaction 1</div></Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item>
+                                <Grid container direction="row" alignItems="center">
+                                    <Grid item><Icon icon={locationIcon} height={25} className="location-icon"/></Grid>
+                                    <Grid item><div className="invite-people-text-subheading">Mountain View, California, United States</div></Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        <h2>People involved</h2>
+                        {/* Data of all the people invited will be sent here*/}
+                    </Grid>
+                </Grid>
                 <Grid container direction="row" justify="space-between">
                     <Grid item>
                         <Button variant="outlined" onClick={this.toggleModal} className="cancel-back-button">cancel</Button>
@@ -157,7 +182,7 @@ class NewTransactionButton extends Component{
                             <Button variant="outlined" onClick={this.prevSteps} className="cancel-back-button">back</Button>
                             </Grid>
                             <Grid item>
-                            <Button variant="contained" onClick={this.nextSteps} diabled className="next-button">confirm</Button>
+                            <Button variant="contained" onClick={this.toggleModal /*Will change to a fucntion that submits the document to the store*/ } diabled className="next-button">confirm</Button>
                             </Grid>
                         </Grid>
                     </Grid>
