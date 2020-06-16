@@ -1,37 +1,37 @@
-#transaction-dashboard-container {
+body {
     background-color: #EEEEEE;
 }
 
-#transaction-dashboard-container .row-header{
+.row-header{
     padding-top: 3%;
 }
 
-#transaction-dashboard-container .header-transaction{
+
+.header-transaction{
     font-size: 35px;
 }
 
-#transaction-dashboard-container .body-text{
+.body-text{
     font-size: 25px
 }
 
-#transaction-dashboard-container .button-transaction{
-    border-radius: 25px !important;
-    align-items: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 45px;
-    padding-right: 45px;
-    border-color: #150578 !important;
-    color:  #150578 !important
+.button-transaction{
+    border-radius: 25px!important;
+    align-items: center!important;
+    padding-top: 10px!important;
+    padding-bottom: 10px!important;
+    padding-left: 45px!important;
+    padding-right: 45px!important;
+    border-color: #150578!important;
+    color:  #150578!important;
 }
-
-#transaction-dashboard-container .button-transaction:hover {
-    color:#EEEEEE !important;
-    background-color: #150578 !important;
+ .button-transaction:hover {
+    color:#EEEEEE!important;
+    background-color: #150578!important;
     border-color: #150578 !important
 }
 
-#transaction-dashboard-container .no-transasction-default-img{
+.no-transasction-default-img{
     height: 300px;
     width: 400px;
 }
