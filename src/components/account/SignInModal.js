@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormGroup, FormControlLabel, TextField, Checkbox, Button, Fab } from '@material-ui/core';
-import { common } from '@material-ui/core/colors';
 import GoogleLogo from '../../assets/google-logo.svg';
 import FacebookLogo from '../../assets/fb-logo.svg';
 import Modal from '../shared/Modal';
