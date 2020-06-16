@@ -6,7 +6,6 @@ import Container from '@material-ui/core/Container';
 import NewTransactionButton from './NewTransactionButtonComponent';
 import NavBar from '../shared/navbar/navbar'
 import SearchBar from '../shared/SearchBarComponent';
-import SingleLineGridList from './TransactionsListComponent';
 
 
 function RenderTransactionBody({transactions}){ //Rendering the transaction page here
@@ -17,9 +16,6 @@ function RenderTransactionBody({transactions}){ //Rendering the transaction page
                 <SearchBar />
                 {/* Still working on this*/}
             </Grid>
-            <Box m={10}>
-            <SingleLineGridList />
-            </Box>
             </>
         );
     }

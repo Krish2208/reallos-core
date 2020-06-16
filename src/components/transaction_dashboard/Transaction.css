@@ -25,9 +25,10 @@ body {
     padding-right: 45px!important;
     border-color: #150578!important;
     color:  #150578!important;
+    background-color: white!important;
 }
  .button-transaction:hover {
-    color:#EEEEEE!important;
+    color:white!important;
     background-color: #150578!important;
     border-color: #150578 !important
 }
@@ -35,4 +36,15 @@ body {
 .no-transasction-default-img{
     height: 270px;      /*300px*/
     width: auto;        /*400px but auto is good because it will maintain ratio*/
+}
+
+.next-button{
+    background-color: #150578!important;
+    color: white!important;
+}
+
+.cancel-back-button{
+    background-color: white!important;
+    border-color: #150578!important;
+    color: #150578!important
 }
