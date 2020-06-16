@@ -2,39 +2,36 @@
     background-color: #EEEEEE;
 }
 
-#transaction-dashboard-container img {
-    height: 85%;
-    width: 75%
+#transaction-dashboard-container .row-header{
+    padding-top: 3%;
 }
 
-.row-header {
-    padding-top: 5%;
-}
-
-#transaction-dashboard-container p {
-    font-size: 24px;
-}
-
-#transaction-dashboard-container h2 {
+#transaction-dashboard-container .header-transaction{
     font-size: 35px;
 }
 
-#transaction-dashboard-container .btn {
-    border-radius: 25px!important;
+#transaction-dashboard-container .body-text{
+    font-size: 25px
+}
+
+#transaction-dashboard-container .button-transaction{
+    border-radius: 25px !important;
     align-items: center;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 45px;
     padding-right: 45px;
+    border-color: #150578 !important;
+    color:  #150578 !important
 }
 
-#transaction-dashboard-container .btn-outline-primary {
-    border-color: #150578;
-    color:  #150578
-}
-
-#transaction-dashboard-container .btn-outline-primary:hover {
-    color:#EEEEEE;
+#transaction-dashboard-container .button-transaction:hover {
+    color:#EEEEEE !important;
     background-color: #150578 !important;
     border-color: #150578 !important
+}
+
+#transaction-dashboard-container .no-transasction-default-img{
+    height: 300px;
+    width: 400px;
 }
