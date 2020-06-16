@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;531;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('./fonts/Gilroy-Extrabold.woff');
+}
+
+.App {
+    font-family: 'Roboto Slab', serif;
+}
+
+a {
+  text-decoration: none;
+  transition: opacity 150ms ease-in;
+}
+
+a:hover {
+  opacity: 0.6;
+}
+
+a:active {
+  opacity: 0.8;
+}
