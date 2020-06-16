@@ -26,15 +26,17 @@ body {
     border-color: #150578!important;
     color:  #150578!important;
     background-color: white!important;
+    box-shadow: 0 0px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
  .button-transaction:hover {
     color:white!important;
     background-color: #150578!important;
-    border-color: #150578 !important
+    border-color: #150578 !important;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
 .no-transasction-default-img{
-    height: 270px;      /*300px*/
+    height: 300px;      /*300px*/
     width: auto;        /*400px but auto is good because it will maintain ratio*/
 }
 
@@ -47,4 +49,45 @@ body {
     background-color: white!important;
     border-color: #150578!important;
     color: #150578!important
+}
+.cancel-back-button:hover{
+    background-color: #150578!important;
+    border-color: white!important;
+    color: white!important
+}
+
+.tag-icon{
+    align-self: center!important;
+    margin-right: 10px;
+    margin-left: 25px;
+}
+
+.location-icon{
+    align-self: center!important;
+    margin-right: 13px;
+    margin-left: 28px;
+}
+
+.pencil-icon{
+    align-self: flex-start!important;
+    margin-right: 13px;
+    margin-left: 28px;
+}
+
+.input-new-transaction-form{
+    width: 550px;
+}
+
+.button-group{
+    align-self: baseline;
+    margin-top: 20px;
+}
+
+.form-group{
+    padding: 10px;
+}
+
+.transaction-step-img-default{
+    height: 150px;
+    width: auto;
 }

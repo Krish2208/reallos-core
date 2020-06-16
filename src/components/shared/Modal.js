@@ -19,12 +19,13 @@ function Modal({
     title,
     visible,
     modalWidth,
+    modalHeight,
     children
 }) {
     return (
         <>
             <div className="modal-bg" visible={visible.toString()}>
-                <div className="modal" style={{'width': modalWidth}}>
+                <div className="modal" style={{'width': modalWidth,'height': modalHeight}}>
                     <div className="modal-container">
                         <h1 className="modal-heading">
                             {title}
