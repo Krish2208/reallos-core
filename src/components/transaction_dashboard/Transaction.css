@@ -2,38 +2,36 @@ body {
     background-color: #EEEEEE;
 }
 
-img{
-    height: 85%;
-    width: 75%
-}
-
 .row-header{
-    padding-top: 5%;
+    padding-top: 3%;
 }
 
 
-p{
-    font-size: 24px;
-}
-
-h2{
+.header-transaction{
     font-size: 35px;
 }
 
-.btn{
+.body-text{
+    font-size: 25px
+}
+
+.button-transaction{
     border-radius: 25px!important;
     align-items: center;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 45px;
     padding-right: 45px;
+    border-color: #150578!important;
+    color:  #150578!important
 }
-.btn-outline-primary{
-            border-color: #150578;
-            color:  #150578
-}
- .btn-outline-primary:hover {
-    color:#EEEEEE;
+ .button-transaction:hover {
+    color:#EEEEEE!important;
     background-color: #150578!important;
     border-color: #150578 !important
+}
+
+.no-transasction-default-img{
+    height: 300px;
+    width: 400px;
 }

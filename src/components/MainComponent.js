@@ -3,7 +3,7 @@ import TransactionDashbaord from "./transaction_dashboard/TransactionDasboardCom
 import {Switch, Route, Redirect, WithRouter, withRouter} from 'react-router-dom';
 
 function Main(props){
-    // All the routes must be configured here
+    // All the routes must be configured here 
     return(
         <div>
             {/* Routing Added*/}
