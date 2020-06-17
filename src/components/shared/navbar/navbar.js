@@ -1,13 +1,24 @@
 import React, {Component} from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/Avatar';
-import Grid from '@material-ui/core/Grid';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem'; 
-import { ChecklistIcon, BellIcon, InboxIcon } from '@primer/octicons-react';
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    IconButton,
+    Avatar,
+    Grid,
+    Menu,
+    Box,
+    Divider,
+    LinearProgress
+} from '@material-ui/core';
+import {
+    ChecklistIcon,
+    BellIcon,
+    InboxIcon,
+    PencilIcon,
+    BriefcaseIcon,
+    SignOutIcon
+} from '@primer/octicons-react';
 import UserAvatar from '../../../assets/user.png';
 import './navbar.css';
 
@@ -21,12 +32,13 @@ class RenderNav extends Component {
         this.closeUserProfile = this.closeUserProfile.bind(this);
     }
 
+    /* To open the profile modal */
     openUserProfile = (event)=>{
         this.setState({
             userProfileAnchor: event.currentTarget
         });
     }
-
+    /* To close the profile modal */
     closeUserProfile = (event)=>{
         this.setState({
             userProfileAnchor: null
@@ -53,13 +65,52 @@ class RenderNav extends Component {
                                     open={Boolean(this.state.userProfileAnchor)}
                                     onClose={this.closeUserProfile}
                                     getContentAnchorEl={null}
-                                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                                    anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                                     transformOrigin={{ vertical: "top", horizontal: "center" }}
-                                >
+                                    >
+                                    <Grid container direction="column" justify="center" alignItems="center" className="menu-design">
+                                        <Grid item>
+                                            <Grid container direction="row" alignItems="center" justify="space-around" spacing={2}>
+                                                <Grid item>
+                                                    <Box component="div" ml={2}>
+                                                        <Avatar src={UserAvatar} className="avatar-large"/>
+                                                    </Box>
+                                                </Grid>
+                                                <Grid item className="profile-padding">
+                                                    <Box component="h2" className="profile-heading">Joy Joseph</Box>
+                                                    <Box component="p" mt={-2.5} mr={2} className="profile-subheading">joy_joseph@example.com</Box>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <LinearProgress variant="determinate" value={50} className="progress-bar"/>
+                                            <Box component="p" className="profile-subheading-small" mt={0.5}>50% profile completed</Box>
+                                        </Grid>
+                                        <Grid item>
+                                            <Divider className="divider-profile"/>
+                                        </Grid>
 
-                                    <MenuItem onClick={this.closeUserProfile}>Edit Profile</MenuItem>
-                                    <MenuItem onClick={this.closeUserProfile}>Add Resources</MenuItem>
-                                    <MenuItem onClick={this.closeUserProfile}>Logout</MenuItem>
+                                        <Grid container direction="row" alignItems="flex-end" justify="space-evenly" className="padding-top">
+                                            <Grid item>
+                                                <Grid container direction="column" justify="center" alignItems="center">
+                                                    <Grid item><PencilIcon /></Grid>
+                                                    <Grid item><Box component="p" className="profile-subheading-small">Edit Profile</Box></Grid>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item>
+                                                <Grid container direction="column" justify="center" alignItems="center">
+                                                    <Grid item><BriefcaseIcon /></Grid>
+                                                    <Grid item><Box component="p" className="profile-subheading-small">Add Resources</Box></Grid>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item>
+                                                <Grid container direction="column" justify="center" alignItems="center">
+                                                    <Grid item><SignOutIcon /></Grid>
+                                                    <Grid item><Box component="p" className="profile-subheading-small">Log Out</Box></Grid>
+                                                </Grid>    
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
                                 </Menu>
                             </div>
                         </Toolbar>
