@@ -45,7 +45,18 @@ function DummyPage() {
                 visible={sideDrawerVisible}
                 dismissCallback={() => setSideDrawerVisibility(false)}
                 side={isSideDrawerLeftSide ? "left" : "right"}
-            />
+            >
+                Click outside this drawer to close.
+
+                <div style={{position: "absolute", bottom: 20, left: 20}}>
+                    <Button
+                        color="primary"
+                        onClick={() => setSideDrawerVisibility(false)}
+                    >
+                        Click me to Close
+                    </Button>
+                </div>
+            </SideDrawer>
         </>
     );
 }
