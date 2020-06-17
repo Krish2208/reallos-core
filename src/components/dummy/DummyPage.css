@@ -1,5 +1,5 @@
 #dummy-page-container {
-    width: min-content;
+    width: max-content;
 }
 
 #dummy-page-container > * {
