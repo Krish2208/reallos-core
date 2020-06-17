@@ -1,4 +1,5 @@
 .modal-bg {
+    z-index: 10000;
     visibility: hidden;
     position: fixed;
     top: 0;
