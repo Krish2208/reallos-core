@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import SignIn from '../account/SignInModal';
 import ReallosLogo from '../../assets/reallos-logo.svg';
+import './DummyPage.css';
 
 function DummyPage() {
     let [signInModalVisible, setSignInModalVisibility] = useState(false);
@@ -16,7 +17,10 @@ function DummyPage() {
                 </Button>
             </div>
 
-            <SignIn visible={signInModalVisible.toString()} />
+            <SignIn
+                visible={signInModalVisible}
+                dismissCallback={() => setSignInModalVisibility(false)}
+            />
         </>
     );
 }

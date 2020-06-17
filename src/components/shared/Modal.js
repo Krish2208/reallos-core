@@ -1,41 +1,80 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { IconButton } from '@material-ui/core';
+import { XIcon } from '@primer/octicons-react';
 import './Modal.css';
 
 /**
- * Display Modal
- * 
- * @param {string} title
- * Title for the modal
- * 
- * @param {string} visible
- * Make modal visible or not
- * (_boolean_)
- * 
- * @param {string} modalWidth
- * Specify the width of modal
- * (_length_)
+ * Display a modal
+ * @augments {React.Component<Props>}
  */
-function Modal({
-    title,
-    visible,
-    modalWidth,
-    children
-}) {
-    return (
-        <>
-            <div className="modal-bg" visible={visible.toString()}>
-                <div className="modal" style={{'width': modalWidth}}>
-                    <div className="modal-container">
-                        <h1 className="modal-heading">
-                            {title}
-                        </h1>
+class ReallosModal extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-                        {children}
+    static propTypes = {
+        /**
+         * Title to be displayed for the Modal
+         */
+        title: PropTypes.string.isRequired,
+
+        /**
+         * Specify whether the modal is visible
+         */
+        visible: PropTypes.bool,
+
+        /**
+         * Callback function which is called when close button
+         * is pressed.
+         * 
+         * This function typically should contain code to set
+         * visiblity to false. If left unspecified, the close
+         * button won't show up.
+         */
+        dismissCallback: PropTypes.func,
+
+        /**
+         * Set width of the modal. (_Default: 450px_)
+         */
+        modalWidth: PropTypes.string
+    }
+
+    render() {
+        let {
+            title,
+            visible,
+            dismissCallback,
+            modalWidth,
+            children
+        } = this.props;
+
+        return (
+            <>
+                <div className="modal-bg" visible={visible.toString()}>
+                    <div className="modal" style={{'width': modalWidth}}>
+                        <div className="modal-container">
+                            {
+                                (dismissCallback) ?
+                                    <div className="modal-close-btn">
+                                        <IconButton onClick={dismissCallback}>
+                                            <XIcon size="small" />
+                                        </IconButton>
+                                    </div>
+                                    : <></>
+                            }
+                            
+                            <h1 className="modal-heading">
+                                {title}
+                            </h1>
+
+                            {children}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </>
-    )
+            </>
+        )
+    }
 }
 
-export default Modal;
+export default ReallosModal;
