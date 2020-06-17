@@ -4,12 +4,18 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import NewTransactionButton from './NewTransactionButtonComponent';
+import NavBar from '../shared/navbar/navbar'
+import SearchBar from '../shared/SearchBarComponent';
 
 
 function RenderTransactionBody({transactions}){ //Rendering the transaction page here
     if(transactions!=null){ //If transactions exist
         return(
             <>
+            <Grid container direction="row" justify="center" alignItems="center">
+                <SearchBar />
+                {/* Still working on this*/}
+            </Grid>
             </>
         );
     }
@@ -46,13 +52,12 @@ function TransactionDasboard(props){
     return(
         <Box component="body">
             <Container>
-                <Grid container direction="row" justify="center" alignitems="center">
-                    {/* Nav bar goes here*/}
-                </Grid>
+                <NavBar/>
                 <Grid container direction="row" justify="start" alignItems="center" className="row-header">
                     <h2 className="header-transaction">My Transaction</h2>
                 </Grid>
-                <RenderTransactionBody transactions={props.transactions} />
+                <RenderTransactionBody transactions={props.transaction} />
+                {/*props.transaction*/}
                 <Grid container direction="row" justify="flex-end" alignitems="center">
                 <Box component="div" m={-2}>
                     <NewTransactionButton />

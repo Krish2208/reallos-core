@@ -37,7 +37,16 @@ class ReallosModal extends React.Component {
         /**
          * Set width of the modal. (_Default: 450px_)
          */
-        modalWidth: PropTypes.string
+        modalWidth: PropTypes.string,
+
+        /**
+         * Set height of the modal. By default the height
+         * will automatically be determined by the content
+         * inside the modal.
+         * 
+         * (_Usage not recommended_)
+         */
+        modalHeight: PropTypes.string
     }
 
     render() {
@@ -46,13 +55,14 @@ class ReallosModal extends React.Component {
             visible,
             dismissCallback,
             modalWidth,
+            modalHeight,
             children
         } = this.props;
 
         return (
             <>
                 <div className="modal-bg" visible={visible.toString()}>
-                    <div className="modal" style={{'width': modalWidth}}>
+                    <div className="modal" style={{'width': modalWidth, 'height': modalHeight}}>
                         <div className="modal-container">
                             {
                                 (dismissCallback) ?
