@@ -1,19 +1,20 @@
 import React from 'react';
-import FormControl from '@material-ui/core/FormControl';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { Icon, InlineIcon } from '@iconify/react';
-import searchIcon from '@iconify/icons-octicon/search';
+import { OutlinedInput, FormControl, InputAdornment } from '@material-ui/core';
+import { SearchIcon } from '@primer/octicons-react';
 
-
-function SearchBar(props){
-return(
-    <FormControl fullWidth variant="outlined">
-          <OutlinedInput
-            startAdornment={<InputAdornment position="start"><Icon icon={searchIcon} /></InputAdornment>}
-            placeholder="search"/>
-    </FormControl>
-);
+function SearchBar(props) {
+  return (
+      <FormControl fullWidth variant="outlined">
+        <OutlinedInput
+          startAdornment={
+            <InputAdornment position="start">
+            <SearchIcon />
+            </InputAdornment>
+          }
+          placeholder="search"
+        />
+      </FormControl>
+  );
 }
 
 export default SearchBar;

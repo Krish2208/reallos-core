@@ -2,12 +2,12 @@ import React from 'react';
 import { FormGroup, FormControlLabel, TextField, Checkbox, Button, Fab } from '@material-ui/core';
 import GoogleLogo from '../../assets/google-logo.svg';
 import FacebookLogo from '../../assets/fb-logo.svg';
-import ReallosModal from '../shared/Modal';
+import Modal from '../shared/modal/Modal';
 import './SignInModal.css';
 
 function SignIn({ visible, dismissCallback }) {
     return (
-        <ReallosModal title="Sign In" visible={visible} dismissCallback={dismissCallback}>
+        <Modal title="Sign In" visible={visible} dismissCallback={dismissCallback}>
             <FormGroup>
                 <div id="signin-modal-content">
                     <TextField
@@ -70,7 +70,7 @@ function SignIn({ visible, dismissCallback }) {
                 Don't have an account? &nbsp;
                 <a href="#">Sign Up</a>
             </div>
-        </ReallosModal>
+        </Modal>
     );
 }
 

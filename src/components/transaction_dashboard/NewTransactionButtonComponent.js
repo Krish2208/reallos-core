@@ -1,21 +1,34 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import Modal from '../shared/modal/Modal';
 import './Transaction.css';
-import Button from '@material-ui/core/Button';
-import Modal from '../shared/Modal';
-import {Stepper, Step, StepLabel, Grid, FormGroup, TextField, FormControl, Box} from '@material-ui/core';
-import { Icon } from '@iconify/react';
-import tagIcon from '@iconify/icons-octicon/tag';
-import locationIcon from '@iconify/icons-octicon/location';
-import pencilIcon from '@iconify/icons-octicon/pencil';
+import TransactionNoPeople from '../../assets/transaction-no-people.png';
 
+import {
+    PlusIcon,
+    TagIcon,
+    LocationIcon,
+    PencilIcon,
+    PersonIcon
+} from '@primer/octicons-react';
 
+import {
+    Stepper,
+    Step,
+    StepLabel,
+    Grid,
+    FormGroup,
+    TextField,
+    FormControl,
+    Box,
+    Fab,
+    Button
+} from '@material-ui/core';
 
-
-
-class NewTransactionButton extends Component{
+class NewTransactionButton extends Component {
     constructor(props){
         super(props);
-        this.state={
+
+        this.state = {
             isModalOpen: false, // To store the state of the modal
             activeStep: 0
         }
@@ -26,96 +39,109 @@ class NewTransactionButton extends Component{
         this.renderForm = this.renderForm.bind(this);
     }
 
-    toggleModal(){ // To toggle the state of the modal
-        if(this.state.isModalOpen == true){
-            this.setState({
-                isModalOpen: false
-            });
-        }
-        else{
-            this.setState({
-                isModalOpen: true
-            });
-        }
+    /**
+     * Toggle the state of modal
+     */
+    toggleModal() {
         this.setState({
-            activeStep: 0
+            activeStep: 0,
+            isModalOpen: !this.state.isModalOpen
         });
     }
 
-    nextSteps(){
-        var step = this.state.activeStep+1;
-        if(step>3){
-            step=2;
-        }
-        this.setState({
-            activeStep: step
-        });
-    }
+    /**
+     * Advance to next step
+     */
+    nextSteps() {
+        let step = this.state.activeStep + 1;
 
-    prevSteps(){
-        var step = this.state.activeStep-1;
-        if(step<0){
-            step=0;
+        if (step > 3) {
+            step = 3;
         }
+
         this.setState({
             activeStep: step
         });
     }
 
+    /**
+     * Get back one step
+     */
+    prevSteps() {
+        let step = this.state.activeStep - 1;
 
-    renderForm(){ //This function is to render the form and the components of the modal with the buttons
-        if(this.state.activeStep === 0){
-        return(
-            <>
-            <FormControl>
-                <FormGroup row className="form-group">
-                    <Icon icon={tagIcon} height={35} className="tag-icon"/>
-                    <TextField variant="outlined" placeholder="name" className="input-new-transaction-form"/>
-                </FormGroup>
-                <FormGroup row className="form-group">
-                    <Icon icon={locationIcon} height={35} className="location-icon" />
-                    <TextField variant="outlined" placeholder="address" className="input-new-transaction-form"/>
-                </FormGroup>
-                <FormGroup row className="form-group">
-                    <Icon icon={pencilIcon} height={35} className="pencil-icon" />
-                    <TextField variant="outlined" placeholder="description" className="input-new-transaction-form"
-                    multiline
-                    rows={4}
-                    />
-                </FormGroup>
-            </FormControl>
-            <div className="button-group">
-                <Grid container direction="row" justify="space-between">
-                    <Grid item>
-                        <Button variant="outlined" onClick={this.toggleModal} className="cancel-back-button">cancel</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" onClick={this.nextSteps} className="next-button">next</Button>
-                    </Grid>
-                </Grid>
-            </div>
-            </>
-        );
+        if (step < 0) {
+            step = 0;
         }
-        else if(this.state.activeStep === 1){ // for the second step of the modal
-            return(
+
+        this.setState({
+            activeStep: step
+        });
+    }
+
+    /**
+     * Renders the form and the components of the modal with the buttons.
+     */
+    renderForm() {
+        if (this.state.activeStep === 0) {
+            return (
+                <>
+                <FormControl>
+                    <FormGroup row className="form-group">
+                        <TagIcon size={25} className="tag-icon"/>
+                        <TextField variant="outlined" label="Name" className="input-new-transaction-form"/>
+                    </FormGroup>
+                    <FormGroup row className="form-group">
+                        <LocationIcon size={25} className="location-icon" />
+                        <TextField variant="outlined" label="Address" className="input-new-transaction-form"/>
+                    </FormGroup>
+                    <FormGroup row className="form-group">
+                        <PencilIcon size={25} className="pencil-icon" />
+                        <TextField
+                            variant="outlined"
+                            label="Description"
+                            className="input-new-transaction-form"
+                            multiline
+                            rows={4}
+                        />
+                    </FormGroup>
+                </FormControl>
+                <div className="button-group">
+                    <Grid container direction="row" justify="space-between">
+                        <Grid item>
+                            <Button variant="outlined" onClick={this.toggleModal} className="cancel-back-button">cancel</Button>
+                        </Grid>
+                        <Grid item>
+                            <Button variant="contained" onClick={this.nextSteps} className="next-button">next</Button>
+                        </Grid>
+                    </Grid>
+                </div>
+                </>
+            );
+        }
+
+        else if (this.state.activeStep === 1) { // for the second step of the modal
+            return (
                 <>
                 <Grid container direction="column" >
                     <Grid item>
                        <Grid container direction="row" justify="space-evenly" alignItems="center">
                            <Grid item>
-                               <h2 className="invite-people-text">Invite people</h2>
-                               <Box component="p" marginTop={-2} className="invite-people-text-subheading">Invite people to your transaction using their E-mail ID</Box>
+                                <h2 className="invite-people-text">Invite people</h2>
+                                <Box component="p" marginTop={-2} className="invite-people-text-subheading">Invite people to your transaction using their E-mail ID</Box>
                            </Grid>
                            <Grid item>
-                               <Button variant="contained" className="invite-modal-button">Invite a person</Button>
+                                <Button variant="contained" className="invite-modal-button reallos-button">
+                                    <PersonIcon /> &nbsp;
+                                    Invite a person
+                                </Button>
                            </Grid>
                        </Grid>
                     </Grid>
                     <Grid item>
                         <Grid container direction="row" justify="space-evenly" alignItems="center">
                             <Grid item>
-                            <img src={require('../../assets/transaction-step-img.png')} alt="" className="transaction-step-img-default"/>
+                            <img src={TransactionNoPeople} alt="" className="transaction-step-img-default"/>
                             </Grid>
                             <Grid item>
                                 <h2 className="invite-people-text">It's lonely up here...</h2>
@@ -124,30 +150,32 @@ class NewTransactionButton extends Component{
                         </Grid>
                     </Grid>
                 </Grid>
+
                 <div className="button-group">
-                <Grid container direction="row" justify="space-between">
-                    <Grid item>
-                        <Button variant="outlined" onClick={this.toggleModal} className="cancel-back-button">cancel</Button>
-                    </Grid>
-                    <Grid item>
-                        <Grid container direction="row" spacing={2}>
-                            <Grid item>
-                            <Button variant="outlined" onClick={this.prevSteps} className="cancel-back-button">back</Button>
-                            </Grid>
-                            <Grid item>
-                            <Button variant="contained" onClick={this.nextSteps} className="next-button">next</Button>
+                    <Grid container direction="row" justify="space-between">
+                        <Grid item>
+                            <Button variant="outlined" onClick={this.toggleModal} className="cancel-back-button">cancel</Button>
+                        </Grid>
+                        <Grid item>
+                            <Grid container direction="row" spacing={2}>
+                                <Grid item>
+                                <Button variant="outlined" onClick={this.prevSteps} className="cancel-back-button">back</Button>
+                                </Grid>
+                                <Grid item>
+                                <Button variant="contained" onClick={this.nextSteps} className="next-button">next</Button>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
                 </div>
                 </>
             );
         }
+
         else{
             return(
                 <>
-                <Grid contaainer direction="column" justify="center">
+                <Grid container direction="column" justify="center">
                     <Grid item>
                         <Box component="h2" className="invite-people-text">Are you sure to create the following transaction?</Box>
                     </Grid>
@@ -155,14 +183,27 @@ class NewTransactionButton extends Component{
                         <Grid container direction="column">
                             <Grid item>
                                 <Grid container direction="row" alignItems="center">
-                                    <Grid item><Icon icon={tagIcon} height={25} className="tag-icon"/></Grid>
-                                    <Grid item><div className="invite-people-text-subheading">Transaction 1</div></Grid>
+                                    <Grid item>
+                                        <TagIcon size={25} className="tag-icon"/>
+                                    </Grid>
+                                    <Grid item>
+                                        <div className="invite-people-text-subheading">
+                                            Transaction 1
+                                        </div>
+                                    </Grid>
                                 </Grid>
                             </Grid>
+                            <div style={{marginBottom: 10}}></div>
                             <Grid item>
                                 <Grid container direction="row" alignItems="center">
-                                    <Grid item><Icon icon={locationIcon} height={25} className="location-icon"/></Grid>
-                                    <Grid item><div className="invite-people-text-subheading">Mountain View, California, United States</div></Grid>
+                                    <Grid item>
+                                        <LocationIcon size={25} className="location-icon"/>
+                                    </Grid>
+                                    <Grid item>
+                                        <div className="invite-people-text-subheading">
+                                            Mountain View, California, United States
+                                        </div>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -192,26 +233,36 @@ class NewTransactionButton extends Component{
         }
     }
 
-    render(){ 
-    return(
-        <>
-        <Button variant="outlined" className="button-transaction" size="large" onClick={this.toggleModal}>+  New Transaction</Button>
-        <Modal title="New Transaction" visible={this.state.isModalOpen} modalWidth={750}>
-            <Stepper activeStep={this.state.activeStep}>
-                <Step>
-                    <StepLabel/>
-                </Step>
-                <Step>
-                    <StepLabel />
-                </Step>
-                <Step>
-                    <StepLabel />
-                </Step>
-            </Stepper>
-            <this.renderForm />
-        </Modal>
-        </>
-    );
+    render() {
+        return (
+            <>
+            <Fab
+                variant="extended"
+                className="reallos-fab"
+                size="large"
+                onClick={this.toggleModal}
+            >
+                <PlusIcon className="fab-icon" size={20} /> &nbsp;
+                New Transaction
+            </Fab>
+
+            <Modal title="New Transaction" visible={this.state.isModalOpen} modalWidth={750}>
+                <Stepper activeStep={this.state.activeStep}>
+                    <Step>
+                        <StepLabel />
+                    </Step>
+                    <Step>
+                        <StepLabel />
+                    </Step>
+                    <Step>
+                        <StepLabel />
+                    </Step>
+                </Stepper>
+                <this.renderForm />
+            </Modal>
+            </>
+        );
     }
 }
+
 export default NewTransactionButton;
