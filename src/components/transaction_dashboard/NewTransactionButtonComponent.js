@@ -8,7 +8,10 @@ import {
     TagIcon,
     LocationIcon,
     PencilIcon,
-    PersonIcon
+    PersonIcon,
+    MailIcon,
+    QuestionIcon,
+    CheckIcon
 } from '@primer/octicons-react';
 
 import {
@@ -21,7 +24,9 @@ import {
     FormControl,
     Box,
     Fab,
-    Button
+    Button,
+    Select,
+    MenuItem
 } from '@material-ui/core';
 
 class NewTransactionButton extends Component {
@@ -30,13 +35,17 @@ class NewTransactionButton extends Component {
 
         this.state = {
             isModalOpen: false, // To store the state of the modal
-            activeStep: 0
+            activeStep: 0,
+            isInsideModalOpen: false,
+            invites: 0
         }
 
         this.toggleModal = this.toggleModal.bind(this);
         this.nextSteps = this.nextSteps.bind(this);
         this.prevSteps = this.prevSteps.bind(this);
         this.renderForm = this.renderForm.bind(this);
+        this.toggleInsideModal = this.toggleInsideModal.bind(this);
+        this.sendInvite = this.sendInvite.bind(this);
     }
 
     /**
@@ -80,6 +89,31 @@ class NewTransactionButton extends Component {
     }
 
     /**
+     * Toggle Inside Modal
+     */
+
+     toggleInsideModal(){
+         if(this.state.isInsideModalOpen === true){
+             this.setState({
+                 isInsideModalOpen: false
+             });
+         }
+         else{
+             this.setState({
+                 isInsideModalOpen: true
+             });
+         }
+     }
+
+     sendInvite(){  //To add to the people array so that invitations are ready to be sent
+         this.toggleInsideModal();
+         var invite = this.state.invites+1;
+         this.setState({
+             invites: invite
+         });
+     }
+
+    /**
      * Renders the form and the components of the modal with the buttons.
      */
     renderForm() {
@@ -120,7 +154,7 @@ class NewTransactionButton extends Component {
             );
         }
 
-        else if (this.state.activeStep === 1) { // for the second step of the modal
+        else if (this.state.activeStep === 1 && this.state.invites === 0) { // for the second step of the modal and no one has been invited yet
             return (
                 <>
                 <Grid container direction="column" >
@@ -131,7 +165,7 @@ class NewTransactionButton extends Component {
                                 <Box component="p" marginTop={-2} className="invite-people-text-subheading">Invite people to your transaction using their E-mail ID</Box>
                            </Grid>
                            <Grid item>
-                                <Button variant="contained" className="invite-modal-button reallos-button">
+                                <Button variant="contained" className="invite-modal-button reallos-button" onClick={this.toggleInsideModal}>
                                     <PersonIcon /> &nbsp;
                                     Invite a person
                                 </Button>
@@ -168,6 +202,49 @@ class NewTransactionButton extends Component {
                         </Grid>
                     </Grid>
                 </div>
+                </>
+            );
+        }
+
+        else if(this.state.activeStep === 1 && this.state.invites !== 0){
+            return(
+                <>
+                <Grid container direction="column" >
+                    <Grid item>
+                        <Grid container direction="row" justify="space-evenly" alignItems="center">
+                            <Grid item>
+                                <h2 className="invite-people-text">Invite people</h2>
+                                <Box component="p" marginTop={-2} className="invite-people-text-subheading">Invite people to your transaction using their E-mail ID</Box>
+                            </Grid>
+                            <Grid item>
+                                <Button variant="contained" className="invite-modal-button reallos-button" onClick={this.toggleInsideModal}>
+                                    <PersonIcon /> &nbsp;
+                                    Invite a person
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        {/*Add a card component that shows you how many invites you'll be sending*/}
+                    </Grid>
+                </Grid>
+                <div className="button-group">
+                        <Grid container direction="row" justify="space-between">
+                            <Grid item>
+                                <Button variant="outlined" onClick={this.toggleModal} className="cancel-back-button">cancel</Button>
+                            </Grid>
+                            <Grid item>
+                                <Grid container direction="row" spacing={2}>
+                                    <Grid item>
+                                    <Button variant="outlined" onClick={this.prevSteps} className="cancel-back-button">back</Button>
+                                    </Grid>
+                                    <Grid item>
+                                    <Button variant="contained" onClick={this.nextSteps} className="next-button">next</Button>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </div>
                 </>
             );
         }
@@ -246,7 +323,7 @@ class NewTransactionButton extends Component {
                 New Transaction
             </Fab>
 
-            <Modal title="New Transaction" visible={this.state.isModalOpen} modalWidth={750}>
+            <Modal title="New Transaction" visible={this.state.isModalOpen} modalWidth={750} dismissCallback={this.toggleModal}>
                 <Stepper activeStep={this.state.activeStep}>
                     <Step>
                         <StepLabel />
@@ -259,6 +336,30 @@ class NewTransactionButton extends Component {
                     </Step>
                 </Stepper>
                 <this.renderForm />
+            </Modal>
+
+            <Modal title="Invite People" visible={this.state.isInsideModalOpen} modalWidth={750} dismissCallback={this.toggleInsideModal}>
+            <FormControl>
+                    <FormGroup row className="form-group">
+                        <MailIcon size={25} className="tag-icon"/>
+                        <TextField variant="outlined" label="Name" className="input-new-transaction-form"/>
+                    </FormGroup>
+                    <FormGroup row className="form-group">
+                        <QuestionIcon size={25} className="tag-icon" />
+                        <Select variant="outlined" className="input-new-transaction-form" />
+                    </FormGroup>
+            </FormControl>
+                    <div className="button-group">
+                        <Grid container direction="row" spacing={2} justify="flex-end">
+                            <Grid item>
+                            <Button variant="outlined" onClick={this.toggleInsideModal} className="cancel-back-button">cancel</Button>
+                            </Grid>
+                            <Grid item>
+                            <Button variant="contained" onClick={this.sendInvite} className="next-button"><CheckIcon /> &nbsp;
+                            invite</Button>
+                            </Grid>
+                        </Grid>
+                    </div>
             </Modal>
             </>
         );
