@@ -22,3 +22,27 @@ a:hover {
 a:active {
   opacity: 0.8;
 }
+
+.reallos-fab {
+  font-family: 'Gilroy' !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  border-radius: 25px !important;
+  align-items: center !important;
+  padding: 25px 30px !important;
+  color: #150578 !important;
+  background-color: white !important;
+
+  position: fixed !important;
+  bottom: 30px;
+  right: 30px;
+}
+
+.reallos-button {
+  font-family: 'Roboto Slab' !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  padding: 10px 20px !important;
+}

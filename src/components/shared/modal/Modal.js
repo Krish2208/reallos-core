@@ -27,7 +27,7 @@ class ReallosModal extends React.Component {
         /**
          * Callback function which is called when close button
          * is pressed.
-         * 
+         *
          * This function typically should contain code to set
          * visiblity to false. If left unspecified, the close
          * button won't show up.
@@ -37,13 +37,16 @@ class ReallosModal extends React.Component {
         /**
          * Set width of the modal. (_Default: 450px_)
          */
-        modalWidth: PropTypes.string,
+        modalWidth: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
 
         /**
          * Set height of the modal. By default the height
          * will automatically be determined by the content
          * inside the modal.
-         * 
+         *
          * (_Usage not recommended_)
          */
         modalHeight: PropTypes.string
@@ -73,7 +76,7 @@ class ReallosModal extends React.Component {
                                     </div>
                                     : <></>
                             }
-                            
+
                             <h1 className="modal-heading">
                                 {title}
                             </h1>

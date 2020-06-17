@@ -21,7 +21,7 @@
 
 .modal-close-btn {
     position: absolute;
-    top: 38px;
+    top: 35px;
     right: 40px;
 }
 
@@ -49,5 +49,5 @@
 
 .modal-heading {
     color: #000000;
-    font-size: 40px;
+    font-size: 35px;
 }
