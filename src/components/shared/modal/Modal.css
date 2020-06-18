@@ -16,7 +16,7 @@
     backdrop-filter: blur(5px);
     opacity: 0;
 
-    transition: background 250ms ease-in, opacity 150ms ease-in;
+    transition: background 250ms ease-in, opacity 150ms ease-in, visibility 150ms ease-in;
 }
 
 .modal-close-btn {

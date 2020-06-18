@@ -35,3 +35,40 @@
     margin-left: 5px !important;
     margin-top: 7px !important;
 }
+
+.menu-design{
+    width:800px!important;
+    max-width: 300px;
+}
+
+.avatar-large{
+    height: 50px!important;
+    width: 50px!important;
+}
+
+.profile-heading{
+    font-size: 24px;
+}
+
+.profile-subheading{
+    font-size: 16px;
+}
+
+.profile-subheading-small{
+    font-size: 13px;
+}
+
+.progress-bar{
+    border-radius: 5px!important;
+    height: 5px!important;
+    width: 250px!important;
+}
+
+.divider-profile{
+    width: 250px!important;
+}
+
+.padding-top{
+    padding-top: 15px!important;
+}
+

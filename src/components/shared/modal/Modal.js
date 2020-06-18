@@ -22,7 +22,7 @@ class ReallosModal extends React.Component {
         /**
          * Specify whether the modal is visible
          */
-        visible: PropTypes.bool,
+        visible: PropTypes.bool.isRequired,
 
         /**
          * Callback function which is called when close button
