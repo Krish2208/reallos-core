@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container';
 import NewTransactionButton from './NewTransactionButtonComponent';
 import NavBar from '../shared/navbar/navbar'
 import SearchBar from '../shared/SearchBarComponent';
+import ExistingTransaction from './ExistingTransactionComponent';
 
 /**
  * Renders transactions within Transaction Dashboard
@@ -21,6 +22,7 @@ function RenderTransactionBody({transactions}) {
                 <SearchBar />
                 {/* Still working on this*/}
             </Grid>
+            <ExistingTransaction/>
             </>
         );
     }
