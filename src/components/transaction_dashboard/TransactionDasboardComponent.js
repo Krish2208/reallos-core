@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import NewTransactionButton from './NewTransactionButtonComponent';
 import NavBar from '../shared/navbar/navbar'
-import SearchBar from '../shared/SearchBarComponent';
+import SearchBar from '../shared/searchbar/SearchBarComponent';
 import ExistingTransaction from './ExistingTransactionComponent';
 
 /**
@@ -20,7 +20,6 @@ function RenderTransactionBody({transactions}) {
             <>
             <Grid container direction="row" justify="center" alignItems="center">
                 <SearchBar />
-                {/* Still working on this*/}
             </Grid>
             <ExistingTransaction/>
             </>
@@ -66,7 +65,7 @@ function TransactionDasboard(props) {
                 <Grid container direction="row" justify="flex-start" alignItems="center" className="row-header">
                     <h2 className="header-transaction">My Transactions</h2>
                 </Grid>
-                <RenderTransactionBody transactions={props.transaction} />
+                <RenderTransactionBody transactions={{}} />
                 {/*props.transaction*/}
                 <Grid container direction="row" justify="flex-end" alignitems="center">
                     <Box component="div" m={-2}>
