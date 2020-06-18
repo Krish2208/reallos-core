@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container';
 import NewTransactionButton from './NewTransactionButtonComponent';
 import NavBar from '../shared/navbar/navbar'
 import SearchBar from '../shared/searchbar/SearchBarComponent';
-import ExistingTransaction from './ExistingTransactionComponent';
+import TransactionCardGroup from './TransactionCardGroup';
 
 /**
  * Renders transactions within Transaction Dashboard
@@ -15,13 +15,13 @@ import ExistingTransaction from './ExistingTransactionComponent';
  * Transaction Object
  */
 function RenderTransactionBody({transactions}) {
-    if (transactions!=null) { //If transactions exist
+    if (transactions != null) { //If transactions exist
         return(
             <>
-            <Grid container direction="row" justify="center" alignItems="center">
-                <SearchBar />
-            </Grid>
-            <ExistingTransaction/>
+                <Grid container direction="row" justify="center" alignItems="center">
+                    <SearchBar />
+                </Grid>
+                <TransactionCardGroup />
             </>
         );
     }
