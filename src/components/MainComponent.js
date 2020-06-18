@@ -1,6 +1,7 @@
 import React from 'react';
 import TransactionDashbaord from "./transaction_dashboard/TransactionDasboardComponent";
 import TransactionAssist from './transaction_assist/TransactionAssistComponent';
+import PaperWork from './paperwork/PaperWorkComponent';
 import DummyPage from "./dummy/DummyPage";
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ function Main(props) {
                 <Route path="/dummy" component={DummyPage} />
                 <Route path="/transaction" component={TransactionDashbaord} />
                 <Route path="/transaction_assist" component ={TransactionAssist} />
+                <Route path="/paperwork" component={PaperWork} />
                 <Redirect to="/dummy" />
             </Switch>
         </div>
