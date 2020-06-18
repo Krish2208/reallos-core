@@ -8,3 +8,22 @@
     color: white!important;
     margin-top: 25px!important;
 }
+
+.action-button{
+    background-color: #150578!important;
+    color: white!important;
+    margin-top: 25px!important;
+}
+
+.expansion-panel-heading{
+    font-size: 20px!important;
+    padding: 9px;
+}
+
+.expansion-panel-text{
+    font-size: 16px;
+}
+
+.expansion-divider{
+    height: 50px!important;
+}
