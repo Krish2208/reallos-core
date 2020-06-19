@@ -7,7 +7,7 @@ import NewTransactionButton from "./NewTransactionButtonComponent";
 import NavBar from "../shared/navbar/navbar";
 import SearchBar from "../shared/searchbar/SearchBarComponent";
 import TransactionCardGroup from "./TransactionCardGroup";
-import MiniDrawer from "./TransactionDrawerComponent";
+import MiniDrawer from "../shared/TransactionDrawerComponent";
 /**
  * Renders transactions within Transaction Dashboard
  *
@@ -82,7 +82,7 @@ function TransactionDasboard(props) {
         >
           <h2 className="header-transaction">My Transactions</h2>
         </Grid>
-        <RenderTransactionBody transactions={{}} />
+        <RenderTransactionBody transactions={props.transactions} />
         {/*props.transaction*/}
         <Grid container direction="row" justify="flex-end" alignitems="center">
           <Box component="div" m={-2}>

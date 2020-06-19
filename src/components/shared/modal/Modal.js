@@ -45,7 +45,10 @@ class ReallosModal extends React.Component {
          *
          * (_Usage not recommended_)
          */
-        modalHeight: PropTypes.string
+        modalHeight: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ])
     }
 
     render() {

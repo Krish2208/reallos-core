@@ -1,4 +1,4 @@
-.main {
+.navbar-main {
     background-color: #efefef;
 }
 
@@ -13,6 +13,14 @@
 
 .navbar-btn-group > * {
     margin-left: 10px !important;
+}
+
+.navbar-profile-menu-popup ul > div {
+    outline: none;
+}
+
+.navbar-profile-menu-popup {
+    font-family: 'Roboto Slab';
 }
 
 .logo {
@@ -36,39 +44,68 @@
     margin-top: 7px !important;
 }
 
-.menu-design{
-    width:800px!important;
-    max-width: 300px;
+.menu-design {
+    width: 800px !important;
+    max-width: 400px;
 }
 
-.avatar-large{
-    height: 50px!important;
-    width: 50px!important;
+.profile-popup-info {
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
-.profile-heading{
+.avatar-large {
+    height: 50px !important;
+    width: 50px !important;
+}
+
+.profile-padding h2 {
+    margin-top: 0;
+}
+
+.profile-heading {
     font-size: 24px;
 }
 
-.profile-subheading{
+.profile-subheading {
     font-size: 16px;
+    margin-bottom: 0;
 }
 
-.profile-subheading-small{
+.profile-subheading-small {
     font-size: 13px;
+    margin-top: 10px !important;
 }
 
-.progress-bar{
-    border-radius: 5px!important;
-    height: 5px!important;
-    width: 250px!important;
+.profile-progress-link {
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #000000;
 }
 
-.divider-profile{
-    width: 250px!important;
+.profile-progress-bar {
+    margin-top: 10px;
+    border-radius: 5px !important;
+    height: 5px !important;
+    width: 90% !important;
 }
 
-.padding-top{
-    padding-top: 15px!important;
+.divider-profile {
+    width: 360px !important;
+    height: 2px !important;
+}
+
+.profile-popup-action-group {
+    padding-top: 10px;
+}
+
+.profile-popup-action-group button {
+    padding-bottom: 5px !important;
+    font-family: 'Roboto Slab' !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    margin: 5px;
+    max-width: 150px;
 }
 
