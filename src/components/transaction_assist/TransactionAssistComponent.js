@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import NavBar from '../shared/navbar/navbar';
 import Modal from '../shared/modal/Modal';
+import MiniDrawer from '../shared/TransactionDrawerComponent';
 import {
     Container,
     Box, 
@@ -342,6 +343,7 @@ class TransactionAssist extends Component{
             <Box component="div">
                 <Container>
                     <NavBar />
+                    <MiniDrawer />
                     <this.firstTimeModal />
                     <Box component="div" paddingTop={5} paddingBottom={5}>
                         <Grid container direction="row" alignItems="center" spacing={2}>

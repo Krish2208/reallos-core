@@ -1,0 +1,39 @@
+.input-item {
+    margin-top: 10px !important;
+    width: 100%;
+}
+
+.big-next-button{
+    width: 100%;
+    background-color: #150578!important;
+    color: white!important;
+    font-size: larger!important;
+    margin-top: 10px!important;
+}
+
+.small-next-button{
+    width: 175px!important;
+    background-color: #150578!important;
+    color: white!important;
+    margin-top :10px!important
+}
+
+.small-back-button{
+    width: 175px!important;
+    background-color: white !important;
+    border-color: #150578 !important;
+    color: #150578 !important;
+    margin-top:10px!important;
+}
+
+.verified-icon{
+    color: #3F88C5!important;
+    padding-top: 25px;
+}
+
+.awaiting-heading{
+    font-size: 35px!important;
+    font-weight: bold!important;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
