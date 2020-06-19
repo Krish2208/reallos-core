@@ -91,27 +91,27 @@ class NewTransactionButton extends Component {
     /**
      * Toggle Inside Modal
      */
+    toggleInsideModal(){
+        if (this.state.isInsideModalOpen === true) {
+            this.setState({
+                isInsideModalOpen: false
+            });
+        }
+        else {
+            this.setState({
+                isInsideModalOpen: true
+            });
+        }
+    }
 
-     toggleInsideModal(){
-         if(this.state.isInsideModalOpen === true){
-             this.setState({
-                 isInsideModalOpen: false
-             });
-         }
-         else{
-             this.setState({
-                 isInsideModalOpen: true
-             });
-         }
-     }
+    sendInvite() {  //To add to the people array so that invitations are ready to be sent
+        this.toggleInsideModal();
+        var invite = this.state.invites + 1;
 
-     sendInvite(){  //To add to the people array so that invitations are ready to be sent
-         this.toggleInsideModal();
-         var invite = this.state.invites+1;
-         this.setState({
-             invites: invite
-         });
-     }
+        this.setState({
+            invites: invite
+        });
+    }
 
     /**
      * Renders the form and the components of the modal with the buttons.
@@ -313,42 +313,42 @@ class NewTransactionButton extends Component {
     render() {
         return (
             <>
-            <Fab
-                variant="extended"
-                className="reallos-fab"
-                size="large"
-                onClick={this.toggleModal}
-            >
-                <PlusIcon className="fab-icon" size={20} /> &nbsp;
-                New Transaction
-            </Fab>
+                <Fab
+                    variant="extended"
+                    className="reallos-fab"
+                    size="large"
+                    onClick={this.toggleModal}
+                >
+                    <PlusIcon className="fab-icon" size={20} /> &nbsp;
+                    New Transaction
+                </Fab>
 
-            <Modal title="New Transaction" visible={this.state.isModalOpen} modalWidth={750} dismissCallback={this.toggleModal}>
-                <Stepper activeStep={this.state.activeStep}>
-                    <Step>
-                        <StepLabel />
-                    </Step>
-                    <Step>
-                        <StepLabel />
-                    </Step>
-                    <Step>
-                        <StepLabel />
-                    </Step>
-                </Stepper>
-                <this.renderForm />
-            </Modal>
+                <Modal title="New Transaction" visible={this.state.isModalOpen} modalWidth={750} dismissCallback={this.toggleModal}>
+                    <Stepper activeStep={this.state.activeStep}>
+                        <Step>
+                            <StepLabel />
+                        </Step>
+                        <Step>
+                            <StepLabel />
+                        </Step>
+                        <Step>
+                            <StepLabel />
+                        </Step>
+                    </Stepper>
+                    <this.renderForm />
+                </Modal>
 
-            <Modal title="Invite People" visible={this.state.isInsideModalOpen} modalWidth={750} dismissCallback={this.toggleInsideModal}>
-            <FormControl>
-                    <FormGroup row className="form-group">
-                        <MailIcon size={25} className="tag-icon"/>
-                        <TextField variant="outlined" label="Name" className="input-new-transaction-form"/>
-                    </FormGroup>
-                    <FormGroup row className="form-group">
-                        <QuestionIcon size={25} className="tag-icon" />
-                        <Select variant="outlined" className="input-new-transaction-form" />
-                    </FormGroup>
-            </FormControl>
+                <Modal title="Invite People" visible={this.state.isInsideModalOpen} modalWidth={750} dismissCallback={this.toggleInsideModal}>
+                    <FormControl>
+                            <FormGroup row className="form-group">
+                                <MailIcon size={25} className="tag-icon"/>
+                                <TextField variant="outlined" label="Name" className="input-new-transaction-form"/>
+                            </FormGroup>
+                            <FormGroup row className="form-group">
+                                <QuestionIcon size={25} className="tag-icon" />
+                                <Select variant="outlined" className="input-new-transaction-form" />
+                            </FormGroup>
+                    </FormControl>
                     <div className="button-group">
                         <Grid container direction="row" spacing={2} justify="flex-end">
                             <Grid item>
@@ -360,7 +360,7 @@ class NewTransactionButton extends Component {
                             </Grid>
                         </Grid>
                     </div>
-            </Modal>
+                </Modal>
             </>
         );
     }
