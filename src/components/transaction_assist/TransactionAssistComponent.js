@@ -54,7 +54,7 @@ class TransactionAssist extends Component{
                         <img src={require('../../assets/transaction-assist-first-time.png')} className="first-time-image"/>
                     </Grid>
                     <Grid item>
-                        <Box component="h1">Trasaction assist</Box>
+                        <Box component="h1">Transaction assist</Box>
                     </Grid>
                     <Grid item>
                         <Box  component="p" m={-2}>Exactly know the progress of your transaction</Box>

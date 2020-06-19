@@ -3,6 +3,7 @@
 }
 
 .side-drawer-backdrop {
+    z-index: 1200;
     position: fixed;
     top: 0;
     left: 0;
@@ -19,6 +20,7 @@
 }
 
 .side-drawer-container {
+    z-index: 1200;
     position: fixed;
     display: flex;
     justify-content: flex-end;
