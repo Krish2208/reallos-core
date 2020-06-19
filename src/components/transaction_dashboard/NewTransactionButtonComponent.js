@@ -94,27 +94,20 @@ class NewTransactionButton extends Component {
     /**
      * Toggle Inside Modal
      */
+    toggleInsideModal(){
+        this.setState({
+            isInsideModalOpen: !this.state.isInsideModalOpen
+        });
+    }
 
-     toggleInsideModal(){
-         if(this.state.isInsideModalOpen === true){
-             this.setState({
-                 isInsideModalOpen: false
-             });
-         }
-         else{
-             this.setState({
-                 isInsideModalOpen: true
-             });
-         }
-     }
+    sendInvite() {  //To add to the people array so that invitations are ready to be sent
+        this.toggleInsideModal();
+        var invite = this.state.invites + 1;
 
-     sendInvite(){  //To add to the people array so that invitations are ready to be sent
-         this.toggleInsideModal();
-         var invite = this.state.invites+1;
-         this.setState({
-             invites: invite
-         });
-     }
+        this.setState({
+            invites: invite
+        });
+    }
 
     /**
      * Renders the form and the components of the modal with the buttons.
@@ -228,8 +221,7 @@ class NewTransactionButton extends Component {
                         </Grid>
                     </Grid>
                     <Grid item className="invited-person-card">
-                            <InvitationCard />
-                        {/*Add a card component that shows you how many invites you'll be sending*/}
+                        <InvitationCard />
                     </Grid>
                 </Grid>
                 <div className="button-group">
@@ -319,33 +311,32 @@ class NewTransactionButton extends Component {
     render() {
         return (
             <>
-            <Fab
-                variant="extended"
-                className="reallos-fab"
-                size="large"
-                onClick={this.toggleModal}
-            >
-                <PlusIcon className="fab-icon" size={20} /> &nbsp;
-                New Transaction
-            </Fab>
+                <Fab
+                    variant="extended"
+                    className="reallos-fab"
+                    size="large"
+                    onClick={this.toggleModal}
+                >
+                    <PlusIcon className="fab-icon" size={20} /> &nbsp;
+                    New Transaction
+                </Fab>
 
-            <Modal title="New Transaction" visible={this.state.isModalOpen} modalWidth={750} dismissCallback={this.toggleModal}>
-                <Stepper activeStep={this.state.activeStep}>
-                    <Step>
-                        <StepLabel />
-                    </Step>
-                    <Step>
-                        <StepLabel />
-                    </Step>
-                    <Step>
-                        <StepLabel />
-                    </Step>
-                </Stepper>
-                <this.renderForm />
-            </Modal>
+                <Modal title="New Transaction" visible={this.state.isModalOpen} modalWidth={750} dismissCallback={this.toggleModal}>
+                    <Stepper activeStep={this.state.activeStep}>
+                        <Step>
+                            <StepLabel />
+                        </Step>
+                        <Step>
+                            <StepLabel />
+                        </Step>
+                        <Step>
+                            <StepLabel />
+                        </Step>
+                    </Stepper>
+                    <this.renderForm />
+                </Modal>
 
-            <Modal title="Invite People" visible={this.state.isInsideModalOpen} modalWidth={750} dismissCallback={this.toggleInsideModal}>
-            <FormControl>
+                <Modal title="Invite People" visible={this.state.isInsideModalOpen} modalWidth={750} dismissCallback={this.toggleInsideModal}>
                     <FormGroup row className="form-group">
                         <PersonIcon size={25} className="tag-icon"/>
                         <TextField variant="outlined" label="Name" className="input-new-transaction-form"/>
@@ -366,7 +357,7 @@ class NewTransactionButton extends Component {
                             <MenuItem >Home Inspector</MenuItem>
                         </Select>
                     </FormGroup>
-            </FormControl>
+
                     <div className="button-group">
                         <Grid container direction="row" spacing={2} justify="flex-end">
                             <Grid item>
@@ -378,7 +369,7 @@ class NewTransactionButton extends Component {
                             </Grid>
                         </Grid>
                     </div>
-            </Modal>
+                </Modal>
             </>
         );
     }

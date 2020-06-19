@@ -43,7 +43,7 @@ class SideDrawer extends React.Component {
         let {
             title,
             visible,
-            side,
+            side="right",
             dismissCallback,
             children
         } = this.props;
