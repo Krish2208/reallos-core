@@ -15,12 +15,51 @@
     margin-left: 10px !important;
 }
 
-.navbar-profile-menu-popup ul > div {
+.navbar-profile-menu-popup ul > div, .navbar-notification-popup ul > div {
     outline: none;
 }
 
-.navbar-profile-menu-popup {
+.navbar-notification-popup ul {
+    padding-top: 0;
+}
+
+.notification-menu {
+    width: 320px !important;
+}
+
+ul[role="menu"] {
+    padding-right: 0 !important;
+}
+
+.navbar-profile-menu-popup, .navbar-notification-popup {
     font-family: 'Roboto Slab';
+}
+
+.notification-popup-header {
+    width: 100%;
+    background: #150578;
+    color: #ffffff;
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
+
+.notification-popup-header > p {
+    margin-top: 0;
+}
+
+.notification-popup-header > * {
+    display: flex;
+    align-items: center;
+}
+
+.notification-list {
+    height: 350px;
+    overflow-y: auto;
+}
+
+.profile-popup-info {
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
 .logo {
@@ -47,11 +86,6 @@
 .menu-design {
     width: 800px !important;
     max-width: 400px;
-}
-
-.profile-popup-info {
-    padding-top: 10px;
-    padding-bottom: 20px;
 }
 
 .avatar-large {
@@ -108,7 +142,3 @@
     margin: 5px;
     max-width: 150px;
 }
-.notification-menu{
-    width: 300px !important;
-}
-

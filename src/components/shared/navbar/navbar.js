@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+
 import {
     AppBar,
     Button,
     Toolbar,
     Typography,
     IconButton,
+    Badge,
     Avatar,
     Grid,
     Menu,
     Box,
     Divider,
-    LinearProgress
+    LinearProgress,
+    List
 } from '@material-ui/core';
+
 import {
     ChecklistIcon,
     BellIcon,
@@ -19,13 +24,57 @@ import {
     PencilIcon,
     BriefcaseIcon,
     SignOutIcon,
-    ChevronRightIcon,
-    XIcon,
-    AlertIcon
+    ChevronRightIcon
 } from '@primer/octicons-react';
+
 import UserAvatar from '../../../assets/user.png';
 import ProfileEditDrawer from '../../account/ProfileEditDrawer.js';
+import NotificationListItem from './NotificationListItem.js';
 import './navbar.css';
+
+const styles = (theme) => ({
+    notificationBadge: {
+        backgroundColor: "#01AE4B",
+        color: "white"
+    }
+})
+
+// DUMMY DATA
+// @TODO: Change names to User ID
+
+let dummyData = [
+    {
+        type: 'TASK_DUE_SOON',
+        task: 'Task 2',
+        days_passed: 2,
+        isRead: false
+    },
+    {
+        type: 'TASK_COMPLETED',
+        task: 'Task 3',
+        completed_by: 'John Doe',
+        completed_on: 1592658849.414344,
+        isRead: true
+    },
+    {
+        type: 'CHAT_MESSAGE',
+        from: 'John Doe',
+        message: 'Will get it done by Friday',
+        isRead: false
+    },
+    {
+        type: 'TASK_OVERDUE',
+        task: 'Task 1',
+        due_date: 1592658849.414344,
+        isRead: false
+    },
+    {
+        type: 'DOC_UPLOADED',
+        transaction: 'Transaction 1',
+        doc_name: 'Document 8',
+        isRead: true
+    }
+]
 
 class RenderNav extends Component {
     constructor(props) {
@@ -61,7 +110,7 @@ class RenderNav extends Component {
      */
     toggleProfileEditDrawer() {
         let _isProfileEditDrawerVisible = !this.state.isProfileEditDrawerVisible;
-        
+
         this.setState({
             userProfileAnchor: null,
             isProfileEditDrawerVisible: _isProfileEditDrawerVisible
@@ -80,7 +129,17 @@ class RenderNav extends Component {
         });
     }
 
+    /**
+     * Computes number of unread notifications from
+     * notification data.
+     */
+    get getUnreadNotificationsCount() {
+        return dummyData.filter(data => !data.isRead).length;
+    }
+
     render() {
+        let { classes } = this.props;
+
         return (
             <div className="navbar-main">
                 <Grid container direction="row" justify="center" alignitems="center">
@@ -90,10 +149,25 @@ class RenderNav extends Component {
                                 Reallos
                             </Typography>
                             <div className="navbar-btn-group">
-                            <   IconButton onClick={this.openNotification}><BellIcon size={20}/></IconButton>
-                                <IconButton><InboxIcon size={20}/></IconButton>
-                                <IconButton><ChecklistIcon size={20}/></IconButton>
-                                <IconButton onClick={this.openUserProfilePopup}><Avatar src={UserAvatar} /></IconButton>
+                                <IconButton onClick={this.openNotification}>
+                                    <Badge
+                                        variant="dot"
+                                        classes={(this.getUnreadNotificationsCount) ? {
+                                            badge: classes.notificationBadge
+                                        } : null}
+                                    >
+                                        <BellIcon size={20}/>
+                                    </Badge>
+                                </IconButton>
+                                <IconButton>
+                                    <InboxIcon size={20}/>
+                                </IconButton>
+                                <IconButton>
+                                    <ChecklistIcon size={20}/>
+                                </IconButton>
+                                <IconButton onClick={this.openUserProfilePopup}>
+                                    <Avatar src={UserAvatar} />
+                                </IconButton>
                             </div>
 
                             <Menu
@@ -178,81 +252,39 @@ class RenderNav extends Component {
                                 </Grid>
                             </Menu>
                             <Menu
-                        className="navbar-notification-popup"
-                        anchorEl={this.state.notificationAnchor}
-                        keepMounted
-                        open={Boolean(this.state.notificationAnchor)}
-                        onClose={this.closeNotification}
-                        getContentAnchorEl={null}
-                        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                        transformOrigin={{ vertical: "top", horizontal: "center" }}
-                        PaperProps={{
-                            style: {
-                                borderRadius: 20
-                            }
-                        }}
-                    >
-                        <Grid container direction="column" justify="center" alignItems="center" className="notification-menu">
-                            <Grid item justify="center">
-                                <Box component="p" ml={5} style={{alignContent:"center"}}>
-                                    You have
-                                </Box>
-                                <Box component="p" mt={-2.5} mr={2} style={{fontWeight:800 , paddingTop: 1}}>
-                                    3 New Notifications
-                                </Box>
-                            </Grid>
-                            <Grid item style={{width: '100%', paddingLeft: 20, marginTop: 10}}>
-                                <Grid container direction="row" alignItems="center" spacing={1}>
-                                    <Grid item xs={2}>
-                                        <Avatar style={{width: 30 , height: 30}}>R</Avatar>
+                                className="navbar-notification-popup"
+                                anchorEl={this.state.notificationAnchor}
+                                keepMounted
+                                open={Boolean(this.state.notificationAnchor)}
+                                onClose={this.closeNotification}
+                                getContentAnchorEl={null}
+                                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                                transformOrigin={{ vertical: "top", horizontal: "center" }}
+                                PaperProps={{
+                                    style: {
+                                        borderRadius: 10
+                                    }
+                                }}
+                            >
+                                <Grid direction="column" alignContent="center" className="notification-menu">
+                                    <Grid item className="notification-popup-header" justify="center">
+                                        <Box component="p" style={{justifyContent: "center"}}>
+                                            You have
+                                        </Box>
+                                        <Box component="h3" mt={-1.5} style={{justifyContent: "center"}}>
+                                            {(this.getUnreadNotificationsCount)
+                                                ? `${this.getUnreadNotificationsCount} Unread Notifications`
+                                                : "No Unread Notifications"
+                                            }
+                                        </Box>
                                     </Grid>
-                                    <Grid item xs={7}>
-                                        <Grid item justify="flex-start">
-                                            <Box component="p" style={{fontWeight:800 , paddingTop: 1}}>
-                                                You have
-                                            </Box>
-                                            <Box component="p" mt={-2.5} mr={2} style={{fontSize:12}}>
-                                                3 New Notifications
-                                            </Box>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        <IconButton>
-                                            <XIcon></XIcon>
-                                        </IconButton>
-                                    </Grid>
+                                    <List className="notification-list">
+                                        {dummyData.map(data => (
+                                            <NotificationListItem notificationData={data} />
+                                        ))}
+                                    </List>
                                 </Grid>
-                                <Grid item>
-                                <   Divider variant='middle'/>
-                                </Grid>
-                            </Grid>
-                            <Grid item style={{width: '100%', paddingLeft: 20, marginTop: 10}}>
-                                <Grid container direction="row" alignItems="center" spacing={1}>
-                                    <Grid item xs={2}>
-                                        <Avatar style={{width: 30 , height: 30}}><AlertIcon style={{backgroundColor:'yellow'}}/></Avatar>
-                                    </Grid>
-                                    <Grid item xs={7}>
-                                        <Grid item justify="flex-start">
-                                            <Box component="p" style={{fontWeight:800 , paddingTop: 1}}>
-                                                You have
-                                            </Box>
-                                            <Box component="p" mt={-2.5} mr={2} style={{fontSize:12}}>
-                                                3 New Notifications
-                                            </Box>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        <IconButton>
-                                            <XIcon></XIcon>
-                                        </IconButton>
-                                    </Grid>
-                                </Grid>
-                                <Grid item>
-                                <   Divider variant='middle'/>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Menu>
+                            </Menu>
                         </Toolbar>
                     </AppBar>
                 </Grid>
@@ -266,4 +298,4 @@ class RenderNav extends Component {
     }
 }
 
-export default RenderNav;
+export default withStyles(styles)(RenderNav);
