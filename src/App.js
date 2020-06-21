@@ -16,8 +16,17 @@ const theme = createMuiTheme({
       },
       common: {
         white: '#ffffff',
-        black: '#000000'
-      }
+        black: '#000000',
+      },
+      success: {
+        main: '#01AE4B'
+      },
+      error: {
+        main: '#EB0000'
+      },
+      warning: {
+        main: '#F6AC00'
+      },
   }
 });
 

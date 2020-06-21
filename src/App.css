@@ -46,3 +46,32 @@ a:active {
   letter-spacing: normal !important;
   padding: 10px 20px !important;
 }
+
+/* WARNING: Not a cross-browser solution for scrollbar */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #0000001c; 
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #00000040;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #00000080;
+}
+
+/* Handle on active */
+::-webkit-scrollbar-thumb:active {
+  background: #00000090;
+}
