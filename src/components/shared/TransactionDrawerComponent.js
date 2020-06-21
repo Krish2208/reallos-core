@@ -50,29 +50,40 @@ const useStyles = makeStyles((theme) => ({
     overflowX: "hidden",
     width: theme.spacing(7) + 1,
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(7) + 1,
+      width: theme.spacing(9) + 1,
     },
   },
   toolbar: {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
-    padding: theme.spacing(0, 0.5),
+    padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
+  },
+  list: {
+    color: "#150578",
+  },
+  active: {
+    color: "#150578",
+    fontWeight: "Bold",
   },
 }));
 
 export default function MiniDrawer() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
+  let activeClass = "inactive";
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const changeActiveState = (component) => {
+    //This function will perform the action on click of llist option
   };
 
   return (
@@ -99,7 +110,7 @@ export default function MiniDrawer() {
               [classes.hide]: open,
             })}
           >
-            <ThreeBarsIcon size={24} />
+            <ThreeBarsIcon size={30} />
           </IconButton>
           <IconButton
             onClick={handleDrawerClose}
@@ -107,48 +118,51 @@ export default function MiniDrawer() {
               [classes.hide]: !open,
             })}
           >
-            <ChevronLeftIcon size={24} />
+            <ChevronLeftIcon size={38} />
           </IconButton>
         </div>
         <Divider />
         <List>
-          <ListItem button key={"text"}>
+          <ListItem button onClick={changeActiveState("Transaction Assistant")}>
             <ListItemIcon>
-              <PackageIcon size={24} />
+              <PackageIcon size={38} />
             </ListItemIcon>
-            <ListItemText primary={"Transaction Assistant"} />
+            <ListItemText
+              primary={"Transaction Assistant"}
+              className={classes.list}
+            />
           </ListItem>
         </List>
         <List>
-          <ListItem button key={"text"}>
+          <ListItem button onClick={changeActiveState("Paperworks")}>
             <ListItemIcon>
-              <FileIcon size={24} />
+              <FileIcon size={38} />
             </ListItemIcon>
-            <ListItemText primary={"Paperworks"} />
+            <ListItemText primary={"Paperworks"} className={classes.list} />
           </ListItem>
         </List>
         <List>
-          <ListItem button key={"text"}>
+          <ListItem button onClick={changeActiveState("People")}>
             <ListItemIcon>
-              <PersonIcon size={24} />
+              <PersonIcon size={38} />
             </ListItemIcon>
-            <ListItemText primary={"Paperworks"} />
+            <ListItemText primary={"People"} className={classes.list} />
           </ListItem>
         </List>
         <List>
-          <ListItem button key={"text"}>
+          <ListItem button onClick={changeActiveState("Todo")}>
             <ListItemIcon>
-              <ChecklistIcon size={24} />
+              <ChecklistIcon size={38} />
             </ListItemIcon>
-            <ListItemText primary={"Todo"} />
+            <ListItemText primary={"Todo"} className={classes.list} />
           </ListItem>
         </List>
         <List>
-          <ListItem button key={"text"}>
+          <ListItem button onClick={changeActiveState("Chat")}>
             <ListItemIcon>
-              <CommentDiscussionIcon size={24} />
+              <CommentDiscussionIcon size={38} />
             </ListItemIcon>
-            <ListItemText primary={"Chat"} />
+            <ListItemText primary={"Chat"} className={classes.list} />
           </ListItem>
         </List>
       </Drawer>
