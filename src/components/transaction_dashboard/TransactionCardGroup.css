@@ -1,21 +1,3 @@
-/* WARNING: Not a cross-browser solution for scrollbar */
-
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: #ababab; 
-    border-radius: 2.5px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #323232;
-    border-radius: 2.5px;
-}
-
 .transaction-card-root {
     margin-top: 30px;
 }
