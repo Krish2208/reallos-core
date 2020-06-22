@@ -2,12 +2,10 @@ import * as actions from '../actions/todoActions';
 
 const initialState = [
     {
-        id: 1,
-        name: 'abc'
-    },
-    {
-        id: 2,
-        name: 'def'
+        title: 'do this',
+        description: 'done this',
+        date: '02/02/2000',
+        to: 'person1'
     }
 ]; // initial data that is assumed to be fetched from the server
 
@@ -16,12 +14,14 @@ function todoReducer(state=initialState,action){
         case actions.ADD_TODO:
             return [
                 ...state,{
-                    id: action.id,
-                    name: action.name
+                    title: action.title,
+                    description: action.description,
+                    date: action.date,
+                    to: action.to
                 }
             ]
         case actions.DELETE_TODO:
-            return state.filter(todo => todo.name!=action.name )
+            return state.filter(todo => todo.title!=action.title )
         default:
             return state;
     }

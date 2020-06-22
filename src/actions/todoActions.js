@@ -1,16 +1,19 @@
 export const ADD_TODO = 'ADD_TODO';
 export const DELETE_TODO = 'DELETE_TODO';
 
-export function addTodo(name){ // action creator for ADD_TODO
+export function addTodo(title,description,date,to){ // action creator for ADD_TODO
     return({
         type: ADD_TODO,
-        name 
+        title,
+        description,
+        date,
+        to
     });
 }
 
-export function deleteTodo(name){ // action creator for DELETE_TODO
+export function deleteTodo(title){ // action creator for DELETE_TODO
     return({
         type: DELETE_TODO,
-        name
+        title
     })
 }
