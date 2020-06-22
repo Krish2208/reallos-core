@@ -124,7 +124,7 @@ class SignUpModal extends Component {
             onChange={this.handleChange}
             onBlur={this.handleChange}
             helperText={this.state.errors.firstName}
-            error={this.state.errors.firstName != ""}
+            error={this.state.errors.firstName !== ""}
           />
           <TextField
             className="input-item"
@@ -134,7 +134,7 @@ class SignUpModal extends Component {
             onChange={this.handleChange}
             onBlur={this.handleChange}
             helperText={this.state.errors.lastName}
-            error={this.state.errors.lastName != ""}
+            error={this.state.errors.lastName !== ""}
           />
           <TextField
             className="input-item"
@@ -144,7 +144,7 @@ class SignUpModal extends Component {
             onChange={this.handleChange}
             onBlur={this.handleChange}
             helperText={this.state.errors.email}
-            error={this.state.errors.email != ""}
+            error={this.state.errors.email !== ""}
           />
           <TextField
             className="input-item"
@@ -154,7 +154,7 @@ class SignUpModal extends Component {
             onChange={this.handleChange}
             onBlur={this.handleChange}
             helperText={this.state.errors.phone}
-            error={this.state.errors.phone != ""}
+            error={this.state.errors.phone !== ""}
           />
           <Button
             variant="contained"
@@ -186,7 +186,7 @@ class SignUpModal extends Component {
             onChange={this.handleChange}
             onBlur={this.handleChange}
             helperText={this.state.errors.password}
-            error={this.state.errors.password === ""}
+            error={this.state.errors.password !== ""}
           />
           <TextField
             className="input-item"
@@ -197,7 +197,7 @@ class SignUpModal extends Component {
             onChange={this.handleChange}
             onBlur={this.handleChange}
             helperText={this.state.errors.confirm}
-            error={this.state.errors.confirm === ""}
+            error={this.state.errors.confirm !== ""}
           />
           <Grid
             container
