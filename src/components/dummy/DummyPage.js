@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Link} from 'react-router-dom';
 import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import SignIn from '../account/SignInModal';
 import SignUpModal from '../account/SignUpModal';
@@ -28,6 +29,8 @@ function DummyPage() {
                 <Button variant="contained" onClick={() => setSideDrawerVisibility(true)}>
                     Show Side Drawer
                 </Button>
+
+                <Link to="/transaction">Transaction Dashboard link</Link> {/* This is done to move to the next transaction */}
 
                 <FormControlLabel
                     label="Left Side Drawer"

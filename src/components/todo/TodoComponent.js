@@ -14,7 +14,6 @@ import {
     MenuItem,
     Card,
     Box,
-    CardHeader,
     IconButton,
     Avatar,
 } from '@material-ui/core';

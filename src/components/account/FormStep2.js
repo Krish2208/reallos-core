@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./SignUpModal.css";
-import { ChevronRightIcon, ChevronLeftIcon } from "@primer/octicons-react";
+import {ChevronLeftIcon, CheckIcon } from "@primer/octicons-react";
 import {
   FormGroup,
   InputLabel,
@@ -9,14 +9,10 @@ import {
   Select,
   FormControl,
   Grid,
+  MenuItem
 } from "@material-ui/core";
 
 export class FormStep2 extends Component {
-  continue = (e) => {
-    e.preventDefault();
-    this.props.addStep();
-  };
-
   back = (e) => {
     e.preventDefault();
     this.props.subStep();
@@ -28,11 +24,21 @@ export class FormStep2 extends Component {
       <FormGroup>
         <FormControl variant="outlined" className="input-item">
           <InputLabel id="role">Role</InputLabel>
-          <Select labelId="role" id="role_select" label="Role"></Select>
+          <Select labelId="role" id="role_select" name="role" label="Role" defaultValue={values.role} onChange={handleChange}>
+            <MenuItem value="buyer">Buyer</MenuItem>
+            <MenuItem value="seller">Seller</MenuItem>
+            <MenuItem value="buyer-agent">Buyer Agent</MenuItem>
+            <MenuItem value="seller-agent">Seller Agent</MenuItem>
+            <MenuItem value="title-agent">Title Agent</MenuItem>
+            <MenuItem value="Escrow-agent">Escrow Agent</MenuItem>
+            <MenuItem value="Home Inspector">Home Inspector</MenuItem>
+          </Select>
         </FormControl>
         <FormControl variant="outlined" className="input-item">
           <InputLabel id="state">State</InputLabel>
-          <Select labelId="sate" id="state_select" label="State"></Select>
+          <Select labelId="sate" id="state_select" label="State" name="state" defaultValue={values.state} onChange={handleChange}>
+            <MenuItem value="TX">Texas</MenuItem>
+          </Select>
         </FormControl>
         <TextField
           className="input-item"
@@ -68,10 +74,10 @@ export class FormStep2 extends Component {
             <Button
               variant="contained"
               className="small-next-button"
-              onClick={this.continue}
+              onClick={this.props.submit}
             >
-              Next &nbsp;
-              <ChevronRightIcon />
+              Confirm &nbsp;
+              <CheckIcon />
             </Button>
           </Grid>
           <Grid item>
