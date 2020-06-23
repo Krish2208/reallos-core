@@ -18,6 +18,7 @@ import {
     XIcon,
     DotFillIcon
 } from '@primer/octicons-react';
+import Modal from '../shared/modal/Modal';
 import './PeopleInvolved.css';
 import {PEOPLE} from './TestData';
 
@@ -26,10 +27,22 @@ class PaperWork extends Component{
         super(props);
         this.state={
             data: PEOPLE,
-            people:1
+            people:1,
+            isModalOpen: false
         }
         this.RenderPeopleInvolved = this.RenderPeopleInvolved.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
     }
+
+    toggleModal(){
+        if(this.state.isModalOpen === true){
+            this.setState({isModalOpen: false})
+        }
+        else{
+            this.setState({isModalOpen: true})
+        }
+    }
+
     RenderPeopleInvolved(){
         const card = this.state.data.map((data) =>{
             return(
@@ -133,6 +146,9 @@ class PaperWork extends Component{
                 <Container>
                     <NavBar/>
                     <MiniDrawer />
+                    <Modal title="Invite people" visible={this.state.isModalOpen} dismissCallback={this.toggleModal}>
+                        {/*Do your styling for code here*/}
+                    </Modal>
                     <Box component="div" paddingTop={3} paddingBottom={-1} paddingLeft={5}>
                         <Grid container direction="row" alignItems="center" spacing={2} >
                             <Grid item>
