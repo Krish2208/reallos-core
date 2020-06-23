@@ -50,14 +50,14 @@ const useStyles = makeStyles((theme) => ({
     overflowX: "hidden",
     width: theme.spacing(7) + 1,
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(7) + 1,
     },
   },
   toolbar: {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
-    padding: theme.spacing(0, 1),
+    padding: theme.spacing(0, 0.5),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
@@ -110,7 +110,7 @@ export default function MiniDrawer() {
               [classes.hide]: open,
             })}
           >
-            <ThreeBarsIcon size={30} />
+            <ThreeBarsIcon size={24} />
           </IconButton>
           <IconButton
             onClick={handleDrawerClose}
@@ -118,14 +118,14 @@ export default function MiniDrawer() {
               [classes.hide]: !open,
             })}
           >
-            <ChevronLeftIcon size={38} />
+            <ChevronLeftIcon size={24} />
           </IconButton>
         </div>
         <Divider />
         <List>
           <ListItem button onClick={changeActiveState("Transaction Assistant")}>
             <ListItemIcon>
-              <PackageIcon size={38} />
+              <PackageIcon size={24} />
             </ListItemIcon>
             <ListItemText
               primary={"Transaction Assistant"}
@@ -136,7 +136,7 @@ export default function MiniDrawer() {
         <List>
           <ListItem button onClick={changeActiveState("Paperworks")}>
             <ListItemIcon>
-              <FileIcon size={38} />
+              <FileIcon size={24} />
             </ListItemIcon>
             <ListItemText primary={"Paperworks"} className={classes.list} />
           </ListItem>
@@ -144,7 +144,7 @@ export default function MiniDrawer() {
         <List>
           <ListItem button onClick={changeActiveState("People")}>
             <ListItemIcon>
-              <PersonIcon size={38} />
+              <PersonIcon size={24} />
             </ListItemIcon>
             <ListItemText primary={"People"} className={classes.list} />
           </ListItem>
@@ -152,7 +152,7 @@ export default function MiniDrawer() {
         <List>
           <ListItem button onClick={changeActiveState("Todo")}>
             <ListItemIcon>
-              <ChecklistIcon size={38} />
+              <ChecklistIcon size={24} />
             </ListItemIcon>
             <ListItemText primary={"Todo"} className={classes.list} />
           </ListItem>
@@ -160,7 +160,7 @@ export default function MiniDrawer() {
         <List>
           <ListItem button onClick={changeActiveState("Chat")}>
             <ListItemIcon>
-              <CommentDiscussionIcon size={38} />
+              <CommentDiscussionIcon size={24} />
             </ListItemIcon>
             <ListItemText primary={"Chat"} className={classes.list} />
           </ListItem>
