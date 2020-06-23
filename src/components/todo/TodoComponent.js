@@ -15,11 +15,12 @@ import {
     Card,
     Box,
     CardHeader,
-    IconButton
+    IconButton,
+    Avatar,
 } from '@material-ui/core';
 
 import {
-    PlusIcon, TagIcon, PencilIcon, CalendarIcon, PeopleIcon, PersonIcon, CheckIcon, XIcon
+    PlusIcon, TagIcon, PencilIcon, CalendarIcon, PeopleIcon, PersonIcon, CheckIcon, XIcon, AlertIcon, ArrowRightIcon
 } from '@primer/octicons-react';
 import SideDrawer from '../shared/drawer/SideDrawer';
 import NavBar from '../shared/navbar/navbar';
@@ -69,41 +70,60 @@ class Todo extends Component{
         else{
             return(
                 <div>
+                    <Box paddingLeft={5}>
                     <h1>Tasks</h1>
                     <SearchBar />
                     {this.props.todo.map((todo)=>(
                     <Box component="div" marginTop={2}>
                         <Card elevation={3}>
-                            <Grid container direction="row" alignItems="center" justify="space-around">
+                            <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
                                 <Grid item>
-                                    <Box component="h3" margin={2}>
+                                    <Box paddingLeft={2}>
+                                        <AlertIcon className='alert-icon' size={20}/>
+                                    </Box>
+                                </Grid>
+                                <Grid item>
+                                    <Box marginY={2}>
+                                        <Avatar style={{backgroundColor:'#150578'}}></Avatar>
+                                    </Box>
+                                </Grid>
+                                <Grid item>
+                                    <ArrowRightIcon size={24}/>
+                                </Grid>
+                                <Grid item>
+                                    <Box marginY={2}>
+                                        <Avatar style={{backgroundColor:'#150578'}}></Avatar>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography align='center' style={{color:'#150578', fontWeight:800, fontSize: '20px'}}>
                                         {todo.title}
-                                    </Box>
+                                    </Typography>
                                 </Grid>   
-                                <Grid item>
-                                    <Box component="h3" margin={2}>
+                                <Grid item xs={4}>
+                                    <Typography align='center' style={{color:'#150578', fontWeight:500, fontSize: '17px'}}>
                                         {todo.description}
-                                    </Box>
+                                    </Typography>
                                 </Grid>    
-                                <Grid item>
-                                    <Box component="h3" margin={2}>
+                                <Grid item xs={1}>
+                                    <Typography align='left' style={{color:'#150578', fontSize: '16px'}}>
                                         {todo.date}
-                                    </Box>
+                                    </Typography>
                                 </Grid> 
-                                <Grid item>
-                                    <Box component="h3" margin={2}>
+                                <Grid item xs={1} >
+                                    <Typography align='left' style={{color:'#150578', fontSize: '16px'}}>
                                         {todo.to}
-                                    </Box>
+                                    </Typography>
                                 </Grid> 
-                                <Grid item>
-                                    <Box margin={2}>
-                                        <IconButton onClick={()=>this.props.deleteTodo(todo.title)}><XIcon /></IconButton>
-                                    </Box>
+                                <Grid item xs={1}>
+                                    <IconButton><PencilIcon /></IconButton>
+                                    <IconButton onClick={()=>this.props.deleteTodo(todo.title)}><XIcon /></IconButton>
                                 </Grid>       
                             </Grid> 
                         </Card>
                     </Box>
                     ))}
+                    </Box>
                 </div>
             );
         }
