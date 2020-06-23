@@ -58,6 +58,7 @@ class Todo extends Component{
         this.handleAssignChange = this.handleAssignChange.bind(this);
         this.cancelAddTask = this.cancelAddTask.bind(this);
         this.addNewTask = this.addNewTask.bind(this);
+        this.editTask = this.editTask.bind(this);
     }
 
     RenderToDo(){
@@ -115,7 +116,7 @@ class Todo extends Component{
                                     </Typography>
                                 </Grid> 
                                 <Grid item xs={1}>
-                                    <IconButton><PencilIcon /></IconButton>
+                                    <IconButton onClick={()=>this.editTask(todo)}><PencilIcon /></IconButton>
                                     <IconButton onClick={()=>this.props.deleteTodo(todo.title)}><XIcon /></IconButton>
                                 </Grid>       
                             </Grid> 
@@ -175,6 +176,16 @@ class Todo extends Component{
         });
     }
 
+    editTask(todo){ // Editing task that already exist
+        this.setState({
+            title: todo.title,
+            description: todo.description,
+            date: todo.date,
+            to: todo.to,
+            isNewTaskFormOpen:true
+        });
+    }
+
     render(){
         return(
             <Container>
@@ -205,8 +216,8 @@ class Todo extends Component{
                     <FormGroup row className="form-group">
                         <PersonIcon size={30} className="tag-icon" />
                         <Select id="person_select" label="Select a person" className="form-fields" onChange={this.handleAssignChange} value={this.state.to}>
-                            <MenuItem value="person_1">Person 1</MenuItem>
-                            <MenuItem value="person_2">Person 2</MenuItem>
+                            <MenuItem value="Person 1">Person 1</MenuItem>
+                            <MenuItem value="Person 2">Person 2</MenuItem>
                         </Select>
                     </FormGroup>
                     <Grid container direction="row" justify="flex-end">

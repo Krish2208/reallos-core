@@ -5,7 +5,7 @@ const initialState = [
         title: 'do this',
         description: 'done this',
         date: '02/02/2000',
-        to: 'person1'
+        to: 'Person 1'
     }
 ]; // initial data that is assumed to be fetched from the server
 
