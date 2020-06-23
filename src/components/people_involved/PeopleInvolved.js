@@ -9,14 +9,22 @@ import {
     Fab,
     Card,
     Avatar,
-    IconButton
+    IconButton,
+    FormGroup,
+    TextField,
+    Select,
+    MenuItem,
+    Button
 } from '@material-ui/core';
 import {
     PackageIcon,
     PlusIcon,
     PencilIcon,
     XIcon,
-    DotFillIcon
+    DotFillIcon,
+    PersonIcon,
+    MailIcon,
+    CheckIcon
 } from '@primer/octicons-react';
 import Modal from '../shared/modal/Modal';
 import './PeopleInvolved.css';
@@ -28,7 +36,7 @@ class PaperWork extends Component{
         this.state={
             data: PEOPLE,
             people:1,
-            isModalOpen: false
+            isModalOpen: true
         }
         this.RenderPeopleInvolved = this.RenderPeopleInvolved.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
@@ -138,16 +146,57 @@ class PaperWork extends Component{
         }
     }
 
-    
-
     render(){
         return(
             <div>
                 <Container>
                     <NavBar/>
                     <MiniDrawer />
-                    <Modal title="Invite people" visible={this.state.isModalOpen} dismissCallback={this.toggleModal}>
-                        {/*Do your styling for code here*/}
+                    <Modal title="Invite people" modalWidth={600} visible={this.state.isModalOpen} dismissCallback={this.toggleModal}>
+                        <Box marginTop={-3}>
+                            <Typography style={{fontSize: 15}}>
+                                Invite Someone to your transaction using thier E-mail ID
+                            </Typography>
+                        </Box>
+                        <Grid container direction="row">
+                            <Grid item>
+                                <Box marginLeft={7} marginTop={3}>
+                                    <PersonIcon size={90} />
+                                </Box>
+                                <Box marginLeft={0} marginTop={2}>
+                                    <TextField variant='outlined' className='modal-name-field' size='small' label='Name'></TextField>
+                                </Box>
+                            </Grid>
+                            <Grid item>
+                                <Box marginLeft={3} marginTop={3} style={{width:'100%'}}>
+                                    <Grid container spacing={0} alignItems="center">
+                                        <Grid item xs={1}>
+                                            <MailIcon size={17}/>
+                                        </Grid>
+                                        <Grid xs={11}>
+                                            <TextField fullWidth variant="outlined" size="small" className="modal-right-field" label="E-mail ID"></TextField>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container spacing={0} alignItems="center">
+                                        <Grid item xs={1}>
+                                            <MailIcon size={17}/>
+                                        </Grid>
+                                        <Grid xs={11}>
+                                            <Select value='buyer' fullWidth variant="outlined" className="modal-right-field" style={{height: '40px', marginTop: '10px'}}>
+                                                <MenuItem value='buyer'>Buyer</MenuItem>
+                                            </Select>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container justify="flex-end">
+                                        <Box marginTop={2}>
+                                            <Button variant='contained' style={{backgroundColor:'#150578', color:'white'}} startIcon={
+                                                <CheckIcon size={20}/>}
+                                            >Invite</Button>
+                                        </Box>
+                                    </Grid>
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </Modal>
                     <Box component="div" paddingTop={3} paddingBottom={-1} paddingLeft={5}>
                         <Grid container direction="row" alignItems="center" spacing={2} >
