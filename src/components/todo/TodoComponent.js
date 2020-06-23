@@ -11,15 +11,20 @@ import {
     Button,
     Typography,
     Select,
-    MenuItem
+    MenuItem,
+    Card,
+    Box,
+    CardHeader,
+    IconButton
 } from '@material-ui/core';
 
 import {
-    PlusIcon, TagIcon, PencilIcon, CalendarIcon, PeopleIcon, PersonIcon, CheckIcon
+    PlusIcon, TagIcon, PencilIcon, CalendarIcon, PeopleIcon, PersonIcon, CheckIcon, XIcon
 } from '@primer/octicons-react';
 import SideDrawer from '../shared/drawer/SideDrawer';
 import NavBar from '../shared/navbar/navbar';
 import MiniDrawer from '../shared/TransactionDrawerComponent'; 
+import SearchBar from '../shared/searchbar/SearchBarComponent';
 import './Todo.css';
 
 const mapStateToProps = (state)=>{ // mapping the state of the store to the props of the component
@@ -56,7 +61,7 @@ class Todo extends Component{
     }
 
     RenderToDo(){
-        if(this.props.todo === null){ // If no todo exists in the server
+        if(this.props.todo === null){ // If no todo exists in the server || have to replace this with an image
             return(
                 <p>No todo found</p>
             );
@@ -65,11 +70,39 @@ class Todo extends Component{
             return(
                 <div>
                     <h1>Tasks</h1>
+                    <SearchBar />
                     {this.props.todo.map((todo)=>(
-                        <>
-                        <p>{todo.title} {todo.description} {todo.date} {todo.to}</p>
-                        <button onClick={()=>this.props.deleteTodo(todo.title)}>delete</button>
-                        </>
+                    <Box component="div" marginTop={2}>
+                        <Card elevation={3}>
+                            <Grid container direction="row" alignItems="center" justify="space-around">
+                                <Grid item>
+                                    <Box component="h3" margin={2}>
+                                        {todo.title}
+                                    </Box>
+                                </Grid>   
+                                <Grid item>
+                                    <Box component="h3" margin={2}>
+                                        {todo.description}
+                                    </Box>
+                                </Grid>    
+                                <Grid item>
+                                    <Box component="h3" margin={2}>
+                                        {todo.date}
+                                    </Box>
+                                </Grid> 
+                                <Grid item>
+                                    <Box component="h3" margin={2}>
+                                        {todo.to}
+                                    </Box>
+                                </Grid> 
+                                <Grid item>
+                                    <Box margin={2}>
+                                        <IconButton onClick={()=>this.props.deleteTodo(todo.title)}><XIcon /></IconButton>
+                                    </Box>
+                                </Grid>       
+                            </Grid> 
+                        </Card>
+                    </Box>
                     ))}
                 </div>
             );
@@ -128,7 +161,6 @@ class Todo extends Component{
             <Container>
                 <NavBar />
                 <MiniDrawer />
-
                 <SideDrawer visible={this.state.isNewTaskFormOpen} side="right" dismissCallback={this.toggleNewTaskForm} title="Add a Task">
                     <Typography className="sub-heading-task-form">
                         What is the task about?
