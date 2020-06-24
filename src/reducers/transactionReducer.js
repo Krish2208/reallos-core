@@ -9,7 +9,12 @@ const initialState = [ // this intitial state represents all the transaction is 
     {
         id: 2,
         Name: 'Transaction 2',
-        Address: 'California Street, some random data'
+        Address: 'California Street, some random data aaaaaaaaaaaa'
+    },
+    {
+        id: 3,
+        Name: 'Transaction 3',
+        Address: 'California Street, some random data aaaaaaaaaaaa'
     }
 ];
 
