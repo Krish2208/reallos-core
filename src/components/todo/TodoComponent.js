@@ -50,8 +50,15 @@ class Todo extends Component{
             title: '',
             description:'',
             date: '',
-            to: ''
+            to: '',
+            expandedTask:{
+                title: '',
+                description: '',
+                date: '',
+                to: ''
+            }
         }
+        
         this.RenderToDo = this.RenderToDo.bind(this);
         this.toggleNewTaskForm = this.toggleNewTaskForm.bind(this); // binding it to the particular instance of the class
         this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -63,6 +70,7 @@ class Todo extends Component{
         this.editTask = this.editTask.bind(this);
         this.RenderToDoModal = this.RenderToDoModal.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
+        this.expandTask = this.expandTask.bind(this);
     }
 
     RenderToDo(){
@@ -81,7 +89,7 @@ class Todo extends Component{
                     <Box component="div" marginTop={2}>
                         <Card elevation={3}>
                             <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
-                                <div onClick={this.toggleModal} style={{ width: '91.6%', cursor: 'pointer' }}>
+                                <div onClick={()=>this.expandTask(todo)} style={{ width: '91.6%', cursor: 'pointer' }}>
                                     <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
                                         <Grid item>
                                             <Box paddingLeft={2}>
@@ -102,7 +110,7 @@ class Todo extends Component{
                                             </Box>
                                         </Grid>
                                         <Grid item xs={2}>
-                                            <Typography align='center' style={{ color: '#150578', fontWeight: 800, fontSize: '20px' }}>
+                                            <Typography noWrap align='center' style={{ color: '#150578', fontWeight: 800, fontSize: '20px' }}>
                                                 {todo.title}
                                             </Typography>
                                         </Grid>
@@ -133,9 +141,10 @@ class Todo extends Component{
             );
         }
     }
-    RenderToDoModal(){
+
+    RenderToDoModal(){ // function to render the modal
         return(
-            <Modal title="Task Title" modalWidth={750} visible={this.state.isModalOpen} dismissCallback={this.toggleModal}> 
+            <Modal title={this.state.expandedTask.title} modalWidth={750} visible={this.state.isModalOpen} dismissCallback={this.toggleModal}> 
                 <Grid direction="column" container spacing={1} justify="flex-start">
                     <Grid item>
                         <Box className="alert-color">
@@ -150,7 +159,7 @@ class Todo extends Component{
                     <Grid item>
                         <Box marginTop={2}>
                             <Typography align="justify">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac eros id eros laoreet tincidunt. Maecenas nec rutrum enim, egestas elementum tellus. Mauris id fringilla turpis. Suspendisse commodo nulla sed pretium malesuada. Nullam euismod eu justo ullamcorper rutrum. Pellentesque pharetra urna sed justo mattis, sit amet gravida felis ornare. Integer sed malesuada diam. Phasellus commodo elit rutrum nunc imperdiet, ut efficitur diam malesuada. Aliquam tempor rhoncus ipsum non lacinia. Nullam tempus augue ac risus dignissim lacinia. Sed eget pulvinar elit, eu dignissim mi.
+                                {this.state.expandedTask.description}
                             </Typography>
                         </Box>
                     </Grid>
@@ -160,7 +169,7 @@ class Todo extends Component{
                                 <table>
                                     <tr>
                                         <td><CalendarIcon/></td>
-                                        <td style={{paddingLeft: '10px', paddingTop: '4px'}}>24 June 2020</td>
+                                        <td style={{paddingLeft: '10px', paddingTop: '4px'}}>{this.state.expandedTask.date}</td>
                                     </tr>
                                 </table>
                             </Typography>
@@ -171,11 +180,11 @@ class Todo extends Component{
                             <table>
                                 <tr>
                                     <td><Avatar>JD</Avatar></td>
-                                    <td style={{paddingLeft:'15px'}}>Assigned by <strong>John Doe</strong></td>
+                                    <td style={{paddingLeft:'15px'}}>Assigned to <strong>{this.state.expandedTask.to}</strong></td>
                                 </tr>
                                 <tr>
                                     <td style={{paddingTop:'10px'}}><Avatar>PY</Avatar></td>
-                                    <td style={{paddingLeft:'15px',paddingTop:'10px'}}>Assigned by <strong>Paxton Yoshida</strong></td>
+                                    <td style={{paddingLeft:'15px',paddingTop:'10px'}}>Assigned by <strong>Paxton Yoshida</strong></td> {/* This field should be edited with the user's name */}
                                 </tr>
                             </table>
                         </Box>
@@ -246,6 +255,18 @@ class Todo extends Component{
             to: todo.to,
             isNewTaskFormOpen:true
         });
+    }
+
+    expandTask(todo){ // opens the modal for that particular task
+        this.setState({
+            expandedTask:{
+                title: todo.title,
+                description: todo.description,
+                date: todo.date,
+                to: todo.to
+            }
+        });
+        this.toggleModal();
     }
 
     render(){
