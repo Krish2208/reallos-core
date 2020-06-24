@@ -26,6 +26,7 @@ import NavBar from '../shared/navbar/navbar';
 import MiniDrawer from '../shared/TransactionDrawerComponent'; 
 import SearchBar from '../shared/searchbar/SearchBarComponent';
 import './Todo.css';
+import Modal from '../shared/modal/Modal'
 
 const mapStateToProps = (state)=>{ // mapping the state of the store to the props of the component
     return({
@@ -45,6 +46,7 @@ class Todo extends Component{
         super(props);
         this.state={
             isNewTaskFormOpen: false,
+            isModalOpen: false,
             title: '',
             description:'',
             date: '',
@@ -59,6 +61,8 @@ class Todo extends Component{
         this.cancelAddTask = this.cancelAddTask.bind(this);
         this.addNewTask = this.addNewTask.bind(this);
         this.editTask = this.editTask.bind(this);
+        this.RenderToDoModal = this.RenderToDoModal.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
     }
 
     RenderToDo(){
@@ -79,7 +83,7 @@ class Todo extends Component{
                             <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
                                 <Grid item>
                                     <Box paddingLeft={2}>
-                                        <AlertIcon className='alert-icon' size={20}/>
+                                        <AlertIcon className='alert-color' size={20}/>
                                     </Box>
                                 </Grid>
                                 <Grid item>
@@ -100,21 +104,18 @@ class Todo extends Component{
                                         {todo.title}
                                     </Typography>
                                 </Grid>   
-                                <Grid item xs={4}>
-                                    <Typography align='center' style={{color:'#150578', fontWeight:500, fontSize: '17px'}}>
-                                        {todo.description}
-                                    </Typography>
+                                <Grid item xs={5}>
+                                    <Box textOverflow="ellipsis">
+                                        <Typography noWrap align='center' style={{color:'#150578', fontWeight:500, fontSize: '17px'}}>
+                                            {todo.description}
+                                        </Typography>
+                                    </Box>
                                 </Grid>    
                                 <Grid item xs={1}>
                                     <Typography align='left' style={{color:'#150578', fontSize: '16px'}}>
                                         {todo.date}
                                     </Typography>
-                                </Grid> 
-                                <Grid item xs={1} >
-                                    <Typography align='left' style={{color:'#150578', fontSize: '16px'}}>
-                                        {todo.to}
-                                    </Typography>
-                                </Grid> 
+                                </Grid>  
                                 <Grid item xs={1}>
                                     <IconButton onClick={()=>this.editTask(todo)}><PencilIcon /></IconButton>
                                     <IconButton onClick={()=>this.props.deleteTodo(todo.title)}><XIcon /></IconButton>
@@ -127,6 +128,63 @@ class Todo extends Component{
                 </div>
             );
         }
+    }
+    RenderToDoModal(){
+        return(
+            <Modal title="Task Title" modalWidth={750} visible={this.state.isModalOpen} dismissCallback={this.toggleModal}> 
+                <Grid direction="column" container spacing={1} justify="flex-start">
+                    <Grid item>
+                        <Box className="alert-color">
+                            <table>
+                                <tr>
+                                    <td><AlertIcon/></td>
+                                    <td style={{paddingLeft: '10px', paddingTop: '4px'}}>This Task is going to hit the deadline soon!</td>
+                                </tr>
+                            </table>
+                        </Box>
+                    </Grid>
+                    <Grid item>
+                        <Box marginTop={2}>
+                            <Typography align="justify">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac eros id eros laoreet tincidunt. Maecenas nec rutrum enim, egestas elementum tellus. Mauris id fringilla turpis. Suspendisse commodo nulla sed pretium malesuada. Nullam euismod eu justo ullamcorper rutrum. Pellentesque pharetra urna sed justo mattis, sit amet gravida felis ornare. Integer sed malesuada diam. Phasellus commodo elit rutrum nunc imperdiet, ut efficitur diam malesuada. Aliquam tempor rhoncus ipsum non lacinia. Nullam tempus augue ac risus dignissim lacinia. Sed eget pulvinar elit, eu dignissim mi.
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item>
+                        <Box marginTop={1}>
+                            <Typography style={{fontWeight:800}}>
+                                <table>
+                                    <tr>
+                                        <td><CalendarIcon/></td>
+                                        <td style={{paddingLeft: '10px', paddingTop: '4px'}}>24 June 2020</td>
+                                    </tr>
+                                </table>
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item>
+                        <Box marginTop={2}>
+                            <table>
+                                <tr>
+                                    <td><Avatar>JD</Avatar></td>
+                                    <td style={{paddingLeft:'15px'}}>Assigned by <strong>John Doe</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style={{paddingTop:'10px'}}><Avatar>PY</Avatar></td>
+                                    <td style={{paddingLeft:'15px',paddingTop:'10px'}}>Assigned by <strong>Paxton Yoshida</strong></td>
+                                </tr>
+                            </table>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Modal>
+        );
+    }
+
+    toggleModal(){
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        });
     }
 
     toggleNewTaskForm(){ // to toggle the new task form
@@ -191,6 +249,7 @@ class Todo extends Component{
             <Container>
                 <NavBar />
                 <MiniDrawer />
+                <this.RenderToDoModal/>
                 <SideDrawer visible={this.state.isNewTaskFormOpen} side="right" dismissCallback={this.toggleNewTaskForm} title="Add a Task">
                     <Typography className="sub-heading-task-form">
                         What is the task about?
