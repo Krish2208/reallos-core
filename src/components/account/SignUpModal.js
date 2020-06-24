@@ -123,11 +123,25 @@ class SignUpModal extends Component {
   };
 
   addStep() {
-    var steps = this.state.activeStep + 1;
-    if (validateForm(this.state.errors)) {
+    let errorsStep_1 = { // Setting up an object to check if the fields in the first step have an error
+      firstName: this.state.errors.firstName,
+      lastName: this.state.errors.lastName,
+      email: this.state.errors.email,
+      phone: this.state.errors.phone
+    }
+    let errorsStep_2 = { // Setting up an object to check if the fields in the second step have an error
+      password: this.state.errors.password,
+      confirm: this.state.errors.confirm
+    }
+    if(this.state.activeStep === 0 && validateForm(errorsStep_1)){ // if no errors in the first step and the active step is 0
       this.setState({
-        activeStep: steps,
-      });
+        activeStep: 1
+      })
+    }
+    if(this.state.activeStep === 1 && validateForm(errorsStep_2)){ // if no errors in the second step and the active step is 1
+      this.setState({
+        activeStep: 2
+      })
     }
   }
 
