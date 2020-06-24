@@ -23,7 +23,7 @@ import {
 } from '@primer/octicons-react';
 import SideDrawer from '../shared/drawer/SideDrawer';
 import NavBar from '../shared/navbar/navbar';
-import MiniDrawer from '../shared/TransactionDrawerComponent'; 
+import NavRail from '../shared/navigation_rail/TransactionNavRail'; 
 import SearchBar from '../shared/searchbar/SearchBarComponent';
 import './Todo.css';
 import Modal from '../shared/modal/Modal'
@@ -248,7 +248,7 @@ class Todo extends Component{
         return(
             <Container>
                 <NavBar />
-                <MiniDrawer />
+                <NavRail />
                 <this.RenderToDoModal/>
                 <SideDrawer visible={this.state.isNewTaskFormOpen} side="right" dismissCallback={this.toggleNewTaskForm} title="Add a Task">
                     <Typography className="sub-heading-task-form">
