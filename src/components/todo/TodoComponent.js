@@ -81,41 +81,45 @@ class Todo extends Component{
                     <Box component="div" marginTop={2}>
                         <Card elevation={3}>
                             <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
-                                <Grid item>
-                                    <Box paddingLeft={2}>
-                                        <AlertIcon className='alert-color' size={20}/>
-                                    </Box>
-                                </Grid>
-                                <Grid item>
-                                    <Box marginY={2}>
-                                        <Avatar style={{backgroundColor:'#150578'}}></Avatar>
-                                    </Box>
-                                </Grid>
-                                <Grid item>
-                                    <ArrowRightIcon size={24}/>
-                                </Grid>
-                                <Grid item>
-                                    <Box marginY={2}>
-                                        <Avatar style={{backgroundColor:'#150578'}}></Avatar>
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Typography align='center' style={{color:'#150578', fontWeight:800, fontSize: '20px'}}>
-                                        {todo.title}
-                                    </Typography>
-                                </Grid>   
-                                <Grid item xs={5}>
-                                    <Box textOverflow="ellipsis">
-                                        <Typography noWrap align='center' style={{color:'#150578', fontWeight:500, fontSize: '17px'}}>
-                                            {todo.description}
-                                        </Typography>
-                                    </Box>
-                                </Grid>    
-                                <Grid item xs={1}>
-                                    <Typography align='left' style={{color:'#150578', fontSize: '16px'}}>
-                                        {todo.date}
-                                    </Typography>
-                                </Grid>  
+                                <div onClick={this.toggleModal} style={{ width: '91.6%', cursor: 'pointer' }}>
+                                    <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
+                                        <Grid item>
+                                            <Box paddingLeft={2}>
+                                                <AlertIcon className='alert-color' size={20} />
+                                            </Box>
+                                        </Grid>
+                                        <Grid item>
+                                            <Box marginY={2}>
+                                                <Avatar style={{ backgroundColor: '#150578' }}></Avatar>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item>
+                                            <ArrowRightIcon size={24} />
+                                        </Grid>
+                                        <Grid item>
+                                            <Box marginY={2}>
+                                                <Avatar style={{ backgroundColor: '#150578' }}></Avatar>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            <Typography align='center' style={{ color: '#150578', fontWeight: 800, fontSize: '20px' }}>
+                                                {todo.title}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={5}>
+                                            <Box textOverflow="ellipsis">
+                                                <Typography noWrap align='center' style={{ color: '#150578', fontWeight: 500, fontSize: '17px' }}>
+                                                    {todo.description}
+                                                </Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <Typography align='left' style={{ color: '#150578', fontSize: '16px' }}>
+                                                {todo.date}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </div>
                                 <Grid item xs={1}>
                                     <IconButton onClick={()=>this.editTask(todo)}><PencilIcon /></IconButton>
                                     <IconButton onClick={()=>this.props.deleteTodo(todo.title)}><XIcon /></IconButton>

@@ -223,6 +223,8 @@ class NewTransactionButton extends Component {
                     <Grid item className="invited-person-card">
                         <Box marginX={4}>
                             <InvitationCard />
+			    <InvitationCard />
+                            <InvitationCard />
                         </Box>
                     </Grid>
                 </Grid>
