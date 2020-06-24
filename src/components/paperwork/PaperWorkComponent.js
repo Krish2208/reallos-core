@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import NavBar from '../shared/navbar/navbar';
-import MiniDrawer from '../shared/TransactionDrawerComponent';
+import NavRail from '../shared/navigation_rail/TransactionNavRail';
 import {
     Container,
     Grid,
@@ -56,7 +56,7 @@ class PaperWork extends Component{
             <div>
                 <Container>
                     <NavBar />
-                    <MiniDrawer />
+                    <NavRail />
                     <Box component="div" paddingTop={5} paddingBottom={5}>
                         <Grid container direction="row" alignItems="center" spacing={2}>
                             <Grid item>

@@ -1,0 +1,21 @@
+.nav-rail-icon-active * {
+    color: #150578;
+}
+
+.nav-rail-indicator-container {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    margin-right: 7px;
+}
+
+.nav-rail-indicator-active, .nav-rail-indicator-inactive {
+    height: 7px;
+    width: 7px;
+    vertical-align: middle;
+    border-radius: 5px;
+}
+
+.nav-rail-indicator-active {
+    background-color: #150578;
+}

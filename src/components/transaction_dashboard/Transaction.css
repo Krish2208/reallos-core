@@ -86,3 +86,7 @@ body {
 .people-involved-grid{
     margin-left: 28px !important;
 }
+.invited-person-card{
+    overflow-y: auto !important;
+    max-height: 150px !important
+}
