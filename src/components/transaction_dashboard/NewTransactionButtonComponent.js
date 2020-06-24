@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import Modal from '../shared/modal/Modal';
 import './Transaction.css';
 import TransactionNoPeople from '../../assets/transaction-no-people.png';
-import InvitationCard from './InvitationCard';
-import PeopleChip from './PersonChip';
-
 import {
     PlusIcon,
     TagIcon,
@@ -14,6 +11,7 @@ import {
     MailIcon,
     QuestionIcon,
     CheckIcon,
+    XIcon
 } from '@primer/octicons-react';
 
 import {
@@ -29,7 +27,9 @@ import {
     Button,
     Select,
     MenuItem,
-    Dialog,
+    Card,
+    CardContent,
+    Chip
 } from '@material-ui/core';
 
 class NewTransactionButton extends Component {
@@ -40,7 +40,15 @@ class NewTransactionButton extends Component {
             isModalOpen: false, // To store the state of the modal
             activeStep: 0,
             isInsideModalOpen: false,
-            invites: 0,
+            Name: '',
+            Address: '',
+            Description: '',
+            Invite: { // Holding the temprorary state of the invites
+                    Name:'',
+                    Email: '',
+                    Role: ''
+            },
+            Invites:[] // Holding the array of the invites
             
         }
 
@@ -49,7 +57,10 @@ class NewTransactionButton extends Component {
         this.prevSteps = this.prevSteps.bind(this);
         this.renderForm = this.renderForm.bind(this);
         this.toggleInsideModal = this.toggleInsideModal.bind(this);
-        this.sendInvite = this.sendInvite.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleInviteChange = this.handleInviteChange.bind(this);
+        this.addInvite = this.addInvite.bind(this);
+        this.editInvite = this.editInvite.bind(this);
     }
 
     /**
@@ -58,7 +69,10 @@ class NewTransactionButton extends Component {
     toggleModal() {
         this.setState({
             activeStep: 0,
-            isModalOpen: !this.state.isModalOpen
+            isModalOpen: !this.state.isModalOpen,
+            Name:'',
+            Address:'',
+            Description:''
         });
     }
 
@@ -97,17 +111,51 @@ class NewTransactionButton extends Component {
      */
     toggleInsideModal(){
         this.setState({
-            isInsideModalOpen: !this.state.isInsideModalOpen
+            isInsideModalOpen: !this.state.isInsideModalOpen,
+            Invite:{
+                Name: '',
+                Email: '',
+                Role: ''
+            }
         });
     }
 
-    sendInvite() {  //To add to the people array so that invitations are ready to be sent
-        this.toggleInsideModal();
-        var invite = this.state.invites + 1;
+    handleChange(event){
+        const {name, value} = event.target;
+        this.setState({[name]:value});
+    }
 
-        this.setState({
-            invites: invite
-        });
+    handleInviteChange(event){
+        const {name, value} = event.target;
+        let Invite = this.state.Invite; // Intitalizing Invite with the state Invite
+        if(name === 'Name'){
+            Invite.Name = value;
+        }
+        if(name === 'Email'){
+            Invite.Email = value;
+        }
+        if(name === 'Role'){
+            Invite.Role = value;
+        }
+        this.setState({Invite}); // Setting the state of the invite
+    }
+
+    addInvite(){ // Function to add the person's invite to the state array
+        let Invites = this.state.Invites;
+        Invites.push(this.state.Invite);
+        this.setState({Invites})
+        this.toggleInsideModal(); //Closing the inside modal
+    }
+
+    editInvite(invite){ // function to edit the invites
+        // Delete that particular invite
+        this.toggleInsideModal();
+        let Invite = this.state.Invite;
+        Invite.Name = invite.Name;
+        Invite.Email = invite.Email;
+        Invite.Role = invite.Role;
+        this.setState({Invite});
+        console.log(this.state.Invite)
     }
 
     /**
@@ -120,11 +168,11 @@ class NewTransactionButton extends Component {
                 <FormControl>
                     <FormGroup row className="form-group">
                         <TagIcon size={25} className="location-icon" />
-                        <TextField variant="outlined" label="Name" className="input-new-transaction-form"/>
+                        <TextField variant="outlined" label="Name" className="input-new-transaction-form" name="Name" onChange={this.handleChange} value={this.state.Name}/>
                     </FormGroup>
                     <FormGroup row className="form-group">
                         <LocationIcon size={25} className="location-icon" />
-                        <TextField variant="outlined" label="Address" className="input-new-transaction-form"/>
+                        <TextField variant="outlined" label="Address" className="input-new-transaction-form" name="Address" onChange={this.handleChange} value={this.state.Address}/>
                     </FormGroup>
                     <FormGroup row className="form-group">
                         <PencilIcon size={25} className="pencil-icon" />
@@ -134,6 +182,9 @@ class NewTransactionButton extends Component {
                             className="input-new-transaction-form"
                             multiline
                             rows={4}
+                            name="Description"
+                            value={this.state.Description}
+                            onChange={this.handleChange}
                         />
                     </FormGroup>
                 </FormControl>
@@ -151,7 +202,7 @@ class NewTransactionButton extends Component {
             );
         }
 
-        else if (this.state.activeStep === 1 && this.state.invites === 0) { // for the second step of the modal and no one has been invited yet
+        else if (this.state.activeStep === 1 && this.state.Invites.length=== 0) { // for the second step of the modal and no one has been invited yet
             return (
                 <>
                 <Grid container direction="column" >
@@ -203,7 +254,7 @@ class NewTransactionButton extends Component {
             );
         }
 
-        else if(this.state.activeStep === 1 && this.state.invites !== 0){
+        else if(this.state.activeStep === 1 && this.state.Invites.length !== 0){ // For the second step and someone has already been invited
             return(
                 <>
                 <Grid container direction="column" >
@@ -223,9 +274,36 @@ class NewTransactionButton extends Component {
                     </Grid>
                     <Grid item className="invited-person-card">
                         <Box marginX={4}>
-                            <InvitationCard />
-			    <InvitationCard />
-                            <InvitationCard />
+                            {this.state.Invites.map((Invite)=>(
+                                 <Card variant="outlined">
+                                    <CardContent>
+                                        <Grid
+                                        container
+                                        spacing={1}
+                                        direction="row"
+                                        justify="center"
+                                        alignItems="center"
+                                        style={{color: '#150578'}}
+                                        >
+                                        <Grid item xs={2} style={{fontWeight: 500, paddingTop: 0, paddingBottom: 0}}>
+                                            {Invite.Name}
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            {Invite.Role}
+                                        </Grid>
+                                        <Grid item xs={6} alignContent='right'>
+                                            {Invite.Email}
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <Button onClick={()=>this.editInvite(Invite)}><PencilIcon size={16}/></Button>                
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <Button><XIcon size={16}/></Button>
+                                        </Grid>
+                                        </Grid>
+                                    </CardContent>
+                                 </Card>
+                            ))}
                         </Box>
                     </Grid>
                 </Grid>
@@ -287,9 +365,15 @@ class NewTransactionButton extends Component {
                         </Grid>
                     </Grid>
                     <Grid item>
-                        <h2>People involved</h2>
+                        <h2>People involved</h2> {/* Still have to perform the styling and when no one is involved */}
                         <Grid item className="people-involved-grid">
-                            <PeopleChip />
+                            <Grid direction="row">
+                            {this.state.Invites.map((Invite)=>(
+                                    <Grid item>
+                                        <Chip onDelete className="third-step-person-chip" color='primary'  variant='outlined' label={Invite.Name}/>
+                                    </Grid>
+                            ))}
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -344,22 +428,22 @@ class NewTransactionButton extends Component {
                 <Modal title="Invite People" visible={this.state.isInsideModalOpen} modalWidth={750} dismissCallback={this.toggleInsideModal}>
                     <FormGroup row className="form-group">
                         <PersonIcon size={25} className="location-icon"/>
-                        <TextField variant="outlined" label="Name" className="input-new-transaction-form"/>
+                        <TextField variant="outlined" label="Name" className="input-new-transaction-form" name="Name" value={this.state.Invite.Name} onChange={this.handleInviteChange}/>
                     </FormGroup>
                     <FormGroup row className="form-group">
                         <MailIcon size={25} className="location-icon"/>
-                        <TextField variant="outlined" label="E-mail" className="input-new-transaction-form"/>
+                        <TextField variant="outlined" label="E-mail" className="input-new-transaction-form" name="Email" value={this.state.Invite.Email} onChange={this.handleInviteChange}/>
                     </FormGroup>
                     <FormGroup row className="form-group">
                         <QuestionIcon size={25} className="location-icon" />
-                        <Select variant="outlined" id="select" className="input-new-transaction-form" >
-                            <MenuItem >Buyer</MenuItem>
-                            <MenuItem >Seller</MenuItem>
-                            <MenuItem >Buyer Agent</MenuItem>
-                            <MenuItem >Seller Agent</MenuItem>
-                            <MenuItem >Title Agent</MenuItem>
-                            <MenuItem >Escrow Agent</MenuItem>
-                            <MenuItem >Home Inspector</MenuItem>
+                        <Select variant="outlined" id="select" className="input-new-transaction-form" name="Role" value={this.state.Invite.Role} onChange={this.handleInviteChange}>
+                            <MenuItem value="Buyer">Buyer</MenuItem>
+                            <MenuItem value="Seller">Seller</MenuItem>
+                            <MenuItem value="Buyer Agent">Buyer Agent</MenuItem>
+                            <MenuItem value="Seller Agent">Seller Agent</MenuItem>
+                            <MenuItem value="Title Agent">Title Agent</MenuItem>
+                            <MenuItem value="Escrow Agent">Escrow Agent</MenuItem>
+                            <MenuItem value="Home Inspector">Home Inspector</MenuItem>
                         </Select>
                     </FormGroup>
 
@@ -369,7 +453,7 @@ class NewTransactionButton extends Component {
                             <Button variant="outlined" onClick={this.toggleInsideModal} className="cancel-back-button">cancel</Button>
                             </Grid>
                             <Grid item>
-                            <Button variant="contained" onClick={this.sendInvite} className="next-button"><CheckIcon /> &nbsp;
+                            <Button variant="contained" onClick={this.addInvite} className="next-button"><CheckIcon /> &nbsp;
                             invite</Button>
                             </Grid>
                         </Grid>
