@@ -118,7 +118,7 @@ class NewTransactionButton extends Component {
                 <>
                 <FormControl>
                     <FormGroup row className="form-group">
-                        <TagIcon size={25} className="tag-icon"/>
+                        <TagIcon size={25} className="location-icon" />
                         <TextField variant="outlined" label="Name" className="input-new-transaction-form"/>
                     </FormGroup>
                     <FormGroup row className="form-group">
@@ -221,7 +221,9 @@ class NewTransactionButton extends Component {
                         </Grid>
                     </Grid>
                     <Grid item className="invited-person-card">
-                        <InvitationCard />
+                        <Box marginX={4}>
+                            <InvitationCard />
+                        </Box>
                     </Grid>
                 </Grid>
                 <div className="button-group">

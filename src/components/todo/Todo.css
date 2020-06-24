@@ -1,0 +1,25 @@
+.sub-heading-task-form{
+    font-size: 22px!important;
+    padding-bottom: 10px!important;
+}
+
+.tag-icon{
+    align-self: center!important;
+    margin-left: 0px!important;
+    margin-right: 10px!important;
+}
+
+.form-fields{
+    width: 260px!important;
+    margin-right: 0px!important;
+    padding-bottom: 10px!important;
+}
+
+.sub-heading-task-form-2{
+    font-size: 22px!important;
+    padding-bottom: 10px!important;
+    padding-top: 25px!important;
+}
+.alert-color{
+    color: #ffaa00;
+}

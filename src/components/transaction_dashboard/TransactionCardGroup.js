@@ -46,7 +46,7 @@ const chart={
             enabled: false,
         },
         title: {
-            text: 'Transaction 1',
+            text: '', 
             align: 'center',
             margin: 20,
             offsetX: 0,
@@ -62,12 +62,54 @@ const chart={
     },
 };
 
-function RenderCard(){
-  const classes = useStyles();
 
-  return (
+function getChartOptions(name){  // function to return the chart options with the required json
+  return({
+    options: {
+        colors:['#150578', '#92DCE5'],   
+        chart: {
+            width: 250,
+            type: 'donut',
+        },
+        legend:{
+            show: false,
+        },
+        dataLabels:{
+            enabled: false,
+        },
+        title: {
+            text: name, 
+            align: 'center',
+            margin: 20,
+            offsetX: 0,
+            offsetY: 0,
+            floating: false,
+            style: {
+              fontSize:  '22px',
+              fontWeight:  '900',
+              fontFamily:  'Gilroy',
+              color:  '#263238'
+            },
+        },
+    },
+})
+}
+
+function getChartSeries(){ // function to return the required series with the right data
+  return({
+    series: [60, 40]
+  });
+}
+    
+
+
+function RenderCard({transaction}){
+  const classes = useStyles();
+  // mapping the transactions
+  return ( 
     <div className="transaction-card-root">
       <GridList className={classes.gridList} cols={2.25}>
+      { transaction.map((transaction)=>
         <GridListTile className="transaction-card-item">
           <Card className="transaction-card" variant="outlined">
             <CardContent>
@@ -79,7 +121,7 @@ function RenderCard(){
                 alignItems="center"
               >
                 <Grid item xs={6}>
-                  <Chart options={chart.options} series={chart.series} type="donut" width={250}/>
+                  <Chart options={getChartOptions(transaction.Name).options} series={getChartSeries().series} type="donut" width={250} />
                 </Grid>
                 <Grid className='transaction-card-rgrid' item xs={6}>
                   <List>
@@ -100,14 +142,14 @@ function RenderCard(){
                       Address
                     </ListItem>
                     <ListItem className='transaction-card-secondlisub'>
-                      Tasks
+                      {transaction.Address}
                     </ListItem>
                   </List>
                 </Grid>
               </Grid>
             </CardContent>
           </Card>
-        </GridListTile>
+        </GridListTile>)}
       </GridList>
     </div>
   );
