@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import NavBar from '../shared/navbar/navbar';
-import MiniDrawer from '../shared/TransactionDrawerComponent';
+import NavRail from '../shared/navigation_rail/TransactionNavRail';
 import {
     Container,
     Grid,
@@ -151,7 +151,7 @@ class PaperWork extends Component{
             <div>
                 <Container>
                     <NavBar/>
-                    <MiniDrawer />
+                    <NavRail />
                     <Modal title="Invite people" modalWidth={600} visible={this.state.isModalOpen} dismissCallback={this.toggleModal}>
                         <Box marginTop={-3}>
                             <Typography style={{fontSize: 15}}>

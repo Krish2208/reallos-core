@@ -7,7 +7,6 @@ import NewTransactionButton from "./NewTransactionButtonComponent";
 import NavBar from "../shared/navbar/navbar";
 import SearchBar from "../shared/searchbar/SearchBarComponent";
 import TransactionCardGroup from "./TransactionCardGroup";
-import MiniDrawer from "../shared/TransactionDrawerComponent";
 import {connect} from 'react-redux';
 import {fetchTransaction} from '../../actions/transactionActions';
 import {bindActionCreators} from 'redux';
@@ -96,7 +95,6 @@ class TransactionDasboard extends Component{
     return (
       <Box component="div">
         <Container>
-          <MiniDrawer />
           <NavBar />
           <Grid
             container
