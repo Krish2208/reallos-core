@@ -16,6 +16,7 @@ import {
     Box,
     IconButton,
     Avatar,
+    CardActionArea
 } from '@material-ui/core';
 
 import {
@@ -46,7 +47,7 @@ class Todo extends Component{
         super(props);
         this.state={
             isNewTaskFormOpen: false,
-            isModalOpen: false,
+            isModalOpen: false, // To make sure the task modal is open or not
             title: '',
             description:'',
             date: '',
@@ -80,6 +81,7 @@ class Todo extends Component{
                     {this.props.todo.map((todo)=>(
                     <Box component="div" marginTop={2}>
                         <Card elevation={3}>
+                            <CardActionArea onClick={this.toggleModal}>
                             <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
                                 <Grid item>
                                     <Box paddingLeft={2}>
@@ -121,6 +123,7 @@ class Todo extends Component{
                                     <IconButton onClick={()=>this.props.deleteTodo(todo.title)}><XIcon /></IconButton>
                                 </Grid>       
                             </Grid> 
+                            </CardActionArea>
                         </Card>
                     </Box>
                     ))}

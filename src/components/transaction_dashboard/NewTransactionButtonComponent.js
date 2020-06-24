@@ -40,7 +40,8 @@ class NewTransactionButton extends Component {
             isModalOpen: false, // To store the state of the modal
             activeStep: 0,
             isInsideModalOpen: false,
-            invites: 0
+            invites: 0,
+            
         }
 
         this.toggleModal = this.toggleModal.bind(this);
