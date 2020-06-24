@@ -36,7 +36,7 @@ class PaperWork extends Component{
         this.state={
             data: PEOPLE,
             people:1,
-            isModalOpen: true
+            isModalOpen: false
         }
         this.RenderPeopleInvolved = this.RenderPeopleInvolved.bind(this);
         this.toggleModal = this.toggleModal.bind(this);

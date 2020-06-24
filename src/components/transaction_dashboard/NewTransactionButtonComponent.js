@@ -260,7 +260,7 @@ class NewTransactionButton extends Component {
                             <Grid item>
                                 <Grid container direction="row" alignItems="center">
                                     <Grid item>
-                                        <TagIcon size={25} className="tag-icon"/>
+                                        <TagIcon size={25} className="location-icon"/>
                                     </Grid>
                                     <Grid item>
                                         <div className="invite-people-text-subheading">
@@ -341,15 +341,15 @@ class NewTransactionButton extends Component {
 
                 <Modal title="Invite People" visible={this.state.isInsideModalOpen} modalWidth={750} dismissCallback={this.toggleInsideModal}>
                     <FormGroup row className="form-group">
-                        <PersonIcon size={25} className="tag-icon"/>
+                        <PersonIcon size={25} className="location-icon"/>
                         <TextField variant="outlined" label="Name" className="input-new-transaction-form"/>
                     </FormGroup>
                     <FormGroup row className="form-group">
-                        <MailIcon size={25} className="tag-icon"/>
+                        <MailIcon size={25} className="location-icon"/>
                         <TextField variant="outlined" label="E-mail" className="input-new-transaction-form"/>
                     </FormGroup>
                     <FormGroup row className="form-group">
-                        <QuestionIcon size={25} className="tag-icon" />
+                        <QuestionIcon size={25} className="location-icon" />
                         <Select variant="outlined" id="select" className="input-new-transaction-form" >
                             <MenuItem >Buyer</MenuItem>
                             <MenuItem >Seller</MenuItem>
