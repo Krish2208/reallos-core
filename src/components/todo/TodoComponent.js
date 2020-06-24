@@ -15,8 +15,7 @@ import {
     Card,
     Box,
     IconButton,
-    Avatar,
-    CardActionArea
+    Avatar
 } from '@material-ui/core';
 
 import {
@@ -81,7 +80,6 @@ class Todo extends Component{
                     {this.props.todo.map((todo)=>(
                     <Box component="div" marginTop={2}>
                         <Card elevation={3}>
-                            <CardActionArea onClick={this.toggleModal}>
                             <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
                                 <Grid item>
                                     <Box paddingLeft={2}>
@@ -123,7 +121,6 @@ class Todo extends Component{
                                     <IconButton onClick={()=>this.props.deleteTodo(todo.title)}><XIcon /></IconButton>
                                 </Grid>       
                             </Grid> 
-                            </CardActionArea>
                         </Card>
                     </Box>
                     ))}
