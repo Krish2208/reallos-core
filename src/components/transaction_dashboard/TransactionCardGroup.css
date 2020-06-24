@@ -10,11 +10,6 @@
     min-height: 280px;
 }
 
-.transaction-card-chart {
-    padding-top: 20px;
-    padding-left: 20px;
-}
-
 /*.transaction-card-heading{
     font-size: 24px;
     font-weight: 900;
@@ -28,12 +23,10 @@
 }
 
 .transaction-card-subiconred {
-    padding-right: 5px !important;
     color: red !important
 }
 
 .transaction-card-subicongreen {
-    padding-right: 5px !important;
     color: green !important
 }
 
