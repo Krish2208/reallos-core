@@ -61,6 +61,7 @@ class NewTransactionButton extends Component {
         this.handleInviteChange = this.handleInviteChange.bind(this);
         this.addInvite = this.addInvite.bind(this);
         this.editInvite = this.editInvite.bind(this);
+        this.deleteInvite = this.deleteInvite.bind(this);
     }
 
     /**
@@ -148,14 +149,18 @@ class NewTransactionButton extends Component {
     }
 
     editInvite(invite){ // function to edit the invites
-        // Delete that particular invite
         this.toggleInsideModal();
         let Invite = this.state.Invite;
         Invite.Name = invite.Name;
         Invite.Email = invite.Email;
         Invite.Role = invite.Role;
         this.setState({Invite});
-        console.log(this.state.Invite)
+    }
+
+    deleteInvite(email){
+        let Invites = this.state.Invites;
+        Invites = Invites.filter(Invite => Invite.Email != email);
+        this.setState({Invites});
     }
 
     /**
@@ -298,7 +303,7 @@ class NewTransactionButton extends Component {
                                             <Button onClick={()=>this.editInvite(Invite)}><PencilIcon size={16}/></Button>                
                                         </Grid>
                                         <Grid item xs={1}>
-                                            <Button><XIcon size={16}/></Button>
+                                            <Button onClick={()=>this.deleteInvite(Invite.Email)}><XIcon size={16}/></Button>
                                         </Grid>
                                         </Grid>
                                     </CardContent>
@@ -365,12 +370,12 @@ class NewTransactionButton extends Component {
                         </Grid>
                     </Grid>
                     <Grid item>
-                        <h2>People involved</h2> {/* Still have to perform the styling and when no one is involved */}
+                        <h2>People involved</h2> {/* Still have to perform the styling when no one is involved */}
                         <Grid item className="people-involved-grid">
                             <Grid direction="row">
                             {this.state.Invites.map((Invite)=>(
                                     <Grid item>
-                                        <Chip onDelete className="third-step-person-chip" color='primary'  variant='outlined' label={Invite.Name}/>
+                                        <Chip onDelete={()=>this.deleteInvite(Invite.Email)} className="third-step-person-chip" color='primary'  variant='outlined' label={Invite.Name}/>
                                     </Grid>
                             ))}
                             </Grid>
