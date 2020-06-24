@@ -3,38 +3,55 @@
     width: 100%;
 }
 
-.big-next-button{
+.signup-contained-button {
     width: 100%;
-    background-color: #150578!important;
-    color: white!important;
-    font-size: larger!important;
-    margin-top: 10px!important;
+    font-family: 'Roboto Slab', 'Roboto' !important;
+    background-color: #150578 !important;
+    color: white !important;
+    font-size: larger !important;
+    text-transform: none !important;
+    margin-top: 10px !important;
 }
 
-.small-next-button{
-    width: 175px!important;
-    background-color: #150578!important;
-    color: white!important;
-    margin-top :10px!important
+.small-next-button {
+    width: 175px !important;
+    background-color: #150578 !important;
+    color: white !important;
+    margin-top: 10px !important
 }
 
-.small-back-button{
-    width: 175px!important;
+.small-back-button {
+    width: 175px !important;
     background-color: white !important;
     border-color: #150578 !important;
     color: #150578 !important;
-    margin-top:10px!important;
-    justify-items: flex-start!important;
+    margin-top: 10px !important;
 }
 
-.verified-icon{
-    color: #3F88C5!important;
+.verified-icon {
+    color: #3F88C5 !important;
     padding-top: 25px;
 }
 
-.awaiting-heading{
-    font-size: 35px!important;
-    font-weight: bold!important;
+.signup-awaiting-verification-textblock p {
+    font-family: 'Roboto Slab' !important;
+    text-align: center;
+}
+
+.signup-awaiting-verification-container {
+    margin-top: 20px;
+    margin-bottom: 100px;
+}
+
+.awaiting-heading {
+    font-size: 35px !important;
+    font-weight: bold !important;
     padding-top: 10px;
     padding-bottom: 15px;
+}
+
+#signin-link-footer {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
 }

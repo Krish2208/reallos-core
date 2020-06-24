@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import Modal from "../shared/modal/Modal";
-import FormStep1 from "./FormStep1";
-import FormStep2 from "./FormStep2";
-import FormStep3 from "./FormStep3";
+import SignupFormStep1 from "./SignUpFormStep1";
+import SignupFormStep2 from "./SignupFormStep2";
+import SignupFormStep3 from "./SignupFormStep3";
 import "./SignUpModal.css";
 import { Stepper, Step, StepLabel } from "@material-ui/core";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {addUser} from '../../actions/userActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { addUser } from '../../actions/userActions';
 
 const validEmailRegex = RegExp(
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
@@ -141,10 +141,11 @@ class SignUpModal extends Component {
   RenderStepsForm() {
     const { firstName, lastName, email, phone, password, confirm } = this.state;
     const values = { firstName, lastName, email, phone, password, confirm };
+
     switch (this.state.activeStep) {
       case 0:
         return (
-          <FormStep1
+          <SignupFormStep1
             handleChange={this.handleChange}
             addStep={this.addStep}
             errors={this.state.errors}
@@ -153,7 +154,7 @@ class SignUpModal extends Component {
         );
       case 1:
         return (
-          <FormStep2
+          <SignupFormStep2
             handleChange={this.handleChange}
             addStep={this.addStep}
             subStep={this.subStep}
@@ -163,7 +164,7 @@ class SignUpModal extends Component {
           />
         );
       case 2:
-        return <FormStep3 />;
+        return <SignupFormStep3 />;
       default:
     }
   }
@@ -193,4 +194,4 @@ class SignUpModal extends Component {
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(SignUpModal);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpModal);
