@@ -1,12 +1,13 @@
 import firebase from "firebase";
 
 const config = {
-  apiKey: "AIzaSyAC9ZSyvTxU2o5W0jcL0hDvzS4utLuicE8",
-  authDomain: "flutterchatdemo.firebaseapp.com",
-  databaseURL: "https://flutterchatdemo.firebaseio.com",
-  projectId: "flutterchatdemo",
-  storageBucket: "flutterchatdemo.appspot.com",
-  messagingSenderId: "347976604232",
+  apiKey: "AIzaSyC1shuTRVSO8C4fFCKYbT_wYJk0wtH1lAA",
+  authDomain: "chatzy-2c0a7.firebaseapp.com",
+  databaseURL: "https://chatzy-2c0a7.firebaseio.com",
+  projectId: "chatzy-2c0a7",
+  storageBucket: "chatzy-2c0a7.appspot.com",
+  messagingSenderId: "579453515181",
+  appId: "1:579453515181:web:44e4da825d3a8fe5571d24",
 };
 firebase.initializeApp(config);
 firebase.firestore().settings({
