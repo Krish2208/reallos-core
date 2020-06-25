@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Modal from '../shared/modal/Modal';
 import './Transaction.css';
 import TransactionNoPeople from '../../assets/transaction-no-people.png';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {addTransaction} from '../../actions/transactionActions';
 import {
     PlusIcon,
     TagIcon,
@@ -31,6 +34,16 @@ import {
     CardContent,
     Chip
 } from '@material-ui/core';
+
+const mapStateToProps = (state) => ({
+    transaction: state.transaction
+});
+
+const mapDispatchToProps = (dispatch) =>{
+    return bindActionCreators({
+        addTransaction  
+    },dispatch);
+}
 
 class NewTransactionButton extends Component {
     constructor(props){
@@ -62,6 +75,7 @@ class NewTransactionButton extends Component {
         this.addInvite = this.addInvite.bind(this);
         this.editInvite = this.editInvite.bind(this);
         this.deleteInvite = this.deleteInvite.bind(this);
+        this.createTransaction = this.createTransaction.bind(this);
     }
 
     /**
@@ -161,6 +175,17 @@ class NewTransactionButton extends Component {
         let Invites = this.state.Invites;
         Invites = Invites.filter(Invite => Invite.Email != email);
         this.setState({Invites});
+    }
+
+    createTransaction(){
+        this.toggleModal(); // Closing the modal
+        let payload = {
+            Name: this.state.Name,
+            Address: this.state.Address,
+            Description: this.state.Description,
+            Invites: this.state.Invites
+        }
+        this.props.addTransaction(payload); // dispatching an action with the appropriate payload
     }
 
     /**
@@ -392,7 +417,7 @@ class NewTransactionButton extends Component {
                             <Button variant="outlined" onClick={this.prevSteps} className="cancel-back-button">back</Button>
                             </Grid>
                             <Grid item>
-                            <Button variant="contained" onClick={this.toggleModal /*Will change to a fucntion that submits the document to the store*/ } diabled className="next-button">confirm</Button>
+                            <Button variant="contained" onClick={this.createTransaction} diabled className="next-button">confirm</Button>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -441,7 +466,7 @@ class NewTransactionButton extends Component {
                     </FormGroup>
                     <FormGroup row className="form-group">
                         <QuestionIcon size={25} className="location-icon" />
-                        <Select variant="outlined" id="select" className="input-new-transaction-form" name="Role" value={this.state.Invite.Role} onChange={this.handleInviteChange}>
+                        <Select label="Role" variant="outlined" id="select" className="input-new-transaction-form" name="Role" value={this.state.Invite.Role} onChange={this.handleInviteChange}>
                             <MenuItem value="Buyer">Buyer</MenuItem>
                             <MenuItem value="Seller">Seller</MenuItem>
                             <MenuItem value="Buyer Agent">Buyer Agent</MenuItem>
@@ -469,4 +494,4 @@ class NewTransactionButton extends Component {
     }
 }
 
-export default NewTransactionButton;
+export default connect(mapStateToProps,mapDispatchToProps)(NewTransactionButton);
