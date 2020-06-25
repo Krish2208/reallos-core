@@ -120,6 +120,24 @@
 }
 
 /* List user */
+.logo {
+  font-family: "Gilroy" !important;
+  font-weight: 900 !important;
+  font-size: 25px !important;
+  color: #150578 !important;
+}
+
+.listDiv {
+  background-color: #ffffff;
+  border-radius: 10px 0px 0px 10px;
+  height: 92vh;
+}
+
+.chatDiv {
+  background-color: lightgrey;
+  border-radius: 0px 10px 10px 0px;
+  height: 92vh;
+}
 
 .viewListUser {
   overflow-y: scroll;

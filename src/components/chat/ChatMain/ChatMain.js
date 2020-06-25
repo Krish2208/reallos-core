@@ -5,7 +5,19 @@ import { myFirestore } from "../../../Config/MyFirebase";
 import WelcomeBoard from "../WelcomeBoard/WelcomeBoard";
 import "./ChatMain.css";
 import ChatBoard from "../ChatBoard/ChatBoard";
+import NavBar from "../../shared/navbar/navbar";
+import NavRail from "../../shared/navigation_rail/TransactionNavRail";
 import { AppString } from "../Const";
+import { Container, Box } from "@material-ui/core";
+import {
+  List,
+  Grid,
+  Divider,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
 
 class Chat extends Component {
   constructor(props) {
@@ -35,69 +47,89 @@ class Chat extends Component {
 
   renderListUser = () => {
     if (this.listUser.length > 0) {
-      let viewListUser = [];
+      let viewListUser = [
+        <ListItem>
+          <Typography className="logo" variant="h6">
+            Reallos
+          </Typography>
+        </ListItem>,
+      ];
       this.listUser.forEach((item, index) => {
         if (item.data().id !== this.currentUserId) {
           viewListUser.push(
-            <button
-              key={index}
-              className={
-                this.state.currentPeerUser &&
-                this.state.currentPeerUser.id === item.data().id
-                  ? "viewWrapItemFocused"
-                  : "viewWrapItem"
-              }
-              onClick={() => {
-                this.setState({ currentPeerUser: item.data() });
-              }}
-            >
-              <img
-                className="viewAvatarItem"
-                src={item.data().photoUrl}
-                alt="icon avatar"
-              />
-              <div className="viewWrapContentItem">
-                <span className="textItem">{`${item.data().nickname}`}</span>
-              </div>
-            </button>
+            <List>
+              <ListItem
+                button
+                key={index}
+                className={
+                  this.state.currentPeerUser &&
+                  this.state.currentPeerUser.id === item.data().id
+                    ? "viewWrapItemFocused"
+                    : "viewWrapItem"
+                }
+                onClick={() => {
+                  this.setState({ currentPeerUser: item.data() });
+                }}
+              >
+                <ListItemAvatar>
+                  <img
+                    className="viewAvatarItem"
+                    src={item.data().photoUrl}
+                    alt="icon avatar"
+                  ></img>
+                </ListItemAvatar>
+                <ListItemText
+                  className="viewWrapContentItem"
+                  primary={`${item.data().name}`}
+                />
+              </ListItem>
+              <Divider />
+            </List>
           );
         }
       });
       return viewListUser;
     } else {
-      return null;
+      return (
+        <List>
+          <ListItem>
+            <ListItemText primary="Empty List" />
+          </ListItem>
+        </List>
+      );
     }
   };
 
   render() {
     return (
-      <div className="root">
-        {/* Body */}
-        <div className="body">
-          <div className="viewListUser"> {this.renderListUser()}</div>
-          <div className="viewBoard">
-            {this.state.currentPeerUser ? (
-              <ChatBoard currentPeerUser={this.state.currentPeerUser} />
-            ) : (
-              <WelcomeBoard
-                currentUserNickname={this.currentUserNickname}
-                currentUserAvatar={this.currentUserAvatar}
-              />
-            )}
-          </div>
-        </div>
-        {/* Loading */}
-        {this.state.isLoading ? (
-          <div className="viewLoading">
-            <ReactLoading
-              type={"spin"}
-              color={"#203152"}
-              height={"3%"}
-              width={"3%"}
-            />
-          </div>
-        ) : null}
-      </div>
+      <Box component="div" className="innerDiv">
+        <Container>
+          <NavBar />
+          <NavRail />
+          <Box component="div" paddingTop={5} paddingBottom={3}>
+            <Grid container>
+              <Grid item xs={4}>
+                <Box component="div" className="listDiv">
+                  <List></List>
+                  {this.renderListUser()}
+                </Box>
+              </Grid>
+              <Grid item xs={8}>
+                <Box component="div" className="chatDiv">
+                  {this.state.currentPeerUser ? (
+                    <ChatBoard currentPeerUser={this.state.currentPeerUser} />
+                  ) : (
+                    <WelcomeBoard
+                      currentUserNickname={this.currentUserNickname}
+                      currentUserAvatar={this.currentUserAvatar}
+                    />
+                  )}
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </Container>
+      </Box>
     );
   }
 }
