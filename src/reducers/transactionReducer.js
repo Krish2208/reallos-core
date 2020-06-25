@@ -25,6 +25,7 @@ function transactionReducer(state=initialState, action){
         case actions.ADD_TRANSACTION: // Adding a transaction for a particular user
             return [
                 ...state,{
+                    id: action.payload.id,
                     Name: action.payload.Name,
                     Address: action.payload.Address,
                     Description: action.payload.Description,

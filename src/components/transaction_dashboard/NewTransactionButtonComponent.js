@@ -36,7 +36,8 @@ import {
 } from '@material-ui/core';
 
 const mapStateToProps = (state) => ({
-    transaction: state.transaction
+    transaction: state.transaction,
+    user: state.user
 });
 
 const mapDispatchToProps = (dispatch) =>{
@@ -180,6 +181,7 @@ class NewTransactionButton extends Component {
     createTransaction(){
         this.toggleModal(); // Closing the modal
         let payload = {
+            id: this.props.user.id,
             Name: this.state.Name,
             Address: this.state.Address,
             Description: this.state.Description,
