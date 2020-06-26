@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import './TransactionCardGroup.css';
+import {useHistory} from 'react-router-dom';
 
 import {
   VersionsIcon,
@@ -17,10 +18,8 @@ import {
   GridListTile,
   Card,
   CardContent,
-  List,
-  ListItem,
-  ListItemIcon,
-  CircularProgress
+  CircularProgress,
+  CardActionArea
 } from '@material-ui/core';  
 
 const useStyles = makeStyles((theme) => ({
@@ -47,12 +46,18 @@ const useStyles = makeStyles((theme) => ({
 function RenderCard({transaction}){
   const classes = useStyles();
   // mapping the transactions
+  const history = useHistory();
+  const routeToTransaction = ()=>{
+    let path = '/assist';
+    history.push(path);
+  }
   return ( 
     <div className="transaction-card-root">
       <GridList className={classes.gridList} cols={2.25}>
       { transaction.map((transaction)=>
         <GridListTile className="transaction-card-item">
           <Card className="transaction-card" variant="outlined">
+            <CardActionArea onClick={routeToTransaction}>
           <Box paddingY={3}>
             <CardContent>
               <Grid
@@ -145,6 +150,7 @@ function RenderCard({transaction}){
               </Grid>
             </CardContent>
             </Box>
+            </CardActionArea>
           </Card>
         </GridListTile>)}
       </GridList>

@@ -22,7 +22,7 @@ function Main(props) {
       <Switch>
         <Route path="/dummy" component={DummyPage} />
         <PrivateRoute path="/transaction" component={TransactionDashbaord} />
-        <PrivateRoute path="/transaction_assist" component={TransactionAssist} />
+        <PrivateRoute path="/assist" component={TransactionAssist} />
         <PrivateRoute path="/paperwork" component={PaperWork} />
         <PrivateRoute path="/people" component={PeopleInvolved} />
         <PrivateRoute path="/todo" component={Todo} />

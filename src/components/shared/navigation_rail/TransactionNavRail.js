@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import './TransactionNavRail.css';
+import {useHistory} from 'react-router-dom';
 
 import {
   Drawer,
@@ -88,8 +89,8 @@ export default function NavRail() {
     {
       icon: (<PackageIcon size={24} />),
       label: 'Transaction Assist',
-      isActiveRoute: routerLocation.pathname.startsWith('/transaction_assist'),
-      linkTo: '/transaction_assist'
+      isActiveRoute: routerLocation.pathname.startsWith('/assist'),
+      linkTo: '/assist'
     },
     {
       icon: (<FileIcon size={24} />),
@@ -139,16 +140,19 @@ export default function NavRail() {
    * The URL to direct the user when the list item
    * is clicked.
    */
+
+  const History = useHistory();
   const renderNavRailListItem = (navRailItem) => {
     const { icon, label, isActiveRoute, linkTo } = navRailItem;
-
     return (
       <ListItem
         button
         style={{marginTop: 15, paddingLeft: 10}}
         component="a"
-        href={!isActiveRoute ? linkTo : null}
         key={label}
+        onClick={()=>(
+          History.push(linkTo)
+        )}
       >
         <ListItemIcon className={(isActiveRoute) ? 'nav-rail-icon-active' : ''}>
           <div className="nav-rail-indicator-container">
