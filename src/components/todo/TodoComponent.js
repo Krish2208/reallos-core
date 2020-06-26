@@ -30,7 +30,9 @@ import Modal from '../shared/modal/Modal'
 
 const mapStateToProps = (state)=>{ // mapping the state of the store to the props of the component
     return({
-        todo: state.todo
+        todo: state.todo,
+        transaction: state.transaction,
+        user: state.user
     });
 }
 

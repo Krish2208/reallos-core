@@ -14,6 +14,7 @@ function transactionReducer(state=initialState, action){
                     Name: action.Name,
                     Address: action.Address,
                     Description: action.Description,
+                    People: action.People,
                     active:false
                 }
             ]
@@ -22,12 +23,28 @@ function transactionReducer(state=initialState, action){
                 if(transaction.id === action.transId){
                     return {
                         ...transaction,
-                        active: true
+                        active: true // Used to set which transaction is open
                     }
                 }
                 else
-                    return transaction
+                    return{
+                        ...transaction,
+                        active: false
+                    }
             });
+        case actions.REMOVE_FROM_TRANSACTION: // Removing a person from the transaction
+        return state.map((transaction)=>{
+            if(transaction.id === action.transId){ // Still have to figure out a way to do this
+                return{
+                    ...transaction,
+                }
+            }
+            else{
+                return{
+                    ...transaction
+                }
+            }
+        });
         default:
             return state;
     }

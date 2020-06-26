@@ -2,6 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import './TransactionCardGroup.css';
 import {useHistory} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {setActiveTransaction} from '../../actions/transactionActions';
 
 import {
   VersionsIcon,
@@ -21,6 +24,14 @@ import {
   CircularProgress,
   CardActionArea
 } from '@material-ui/core';  
+
+
+const mapDispatchToProps = (dispatch)=>{
+  return bindActionCreators({
+    setActiveTransaction
+  },dispatch);
+}
+
 
 const useStyles = makeStyles((theme) => ({
     gridList: {
@@ -43,21 +54,22 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-function RenderCard({transaction}){
+function RenderCard(props){
   const classes = useStyles();
   // mapping the transactions
   const history = useHistory();
-  const routeToTransaction = ()=>{
+  const routeToTransaction = (id)=>{
+    props.setActiveTransaction(id);
     let path = '/assist';
     history.push(path);
   }
-  return ( 
+    return ( 
     <div className="transaction-card-root">
       <GridList className={classes.gridList} cols={2.25}>
-      { transaction.map((transaction)=>
+      { props.transaction.map((transaction)=>
         <GridListTile className="transaction-card-item">
           <Card className="transaction-card" variant="outlined">
-            <CardActionArea onClick={routeToTransaction}>
+            <CardActionArea onClick={()=>routeToTransaction(transaction.id)}>
           <Box paddingY={3}>
             <CardContent>
               <Grid
@@ -158,4 +170,4 @@ function RenderCard({transaction}){
   );
 }
 
-export default RenderCard;
+export default connect(null,mapDispatchToProps)(RenderCard);

@@ -43,7 +43,7 @@ class TransactionDasboard extends Component{
           <Grid container direction="row" justify="center" alignItems="center">
             <SearchBar />
           </Grid>
-          <TransactionCardGroup transaction={transaction}/>
+          <TransactionCardGroup transaction ={transaction}/>
         </>
       );
     } else {
@@ -91,7 +91,7 @@ class TransactionDasboard extends Component{
 
   render(){
   //console.log(this.props.user); // To log the fact the user data that is stored during signup is available here
-  console.log(this.props.transaction); // To log the transaction state after fetching it from the user
+  //console.log(this.props.transaction); // To log the transaction state after fetching it from the user
     return (
       <Box component="div">
         <Container>

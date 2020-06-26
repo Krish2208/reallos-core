@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import NavBar from '../shared/navbar/navbar';
 import NavRail from '../shared/navigation_rail/TransactionNavRail';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {
     Container,
     Grid,
@@ -24,90 +26,135 @@ import {
     DotFillIcon,
     PersonIcon,
     MailIcon,
-    CheckIcon
+    CheckIcon,
+    VerifiedIcon
 } from '@primer/octicons-react';
 import Modal from '../shared/modal/Modal';
 import './PeopleInvolved.css';
 import {PEOPLE} from './TestData';
 
+const mapStateToProps = (state)=>({
+    transaction: state.transaction,
+    user: state.user
+});
+
+
 class PaperWork extends Component{
     constructor(props){
         super(props);
         this.state={
-            data: PEOPLE,
             people:1,
-            isModalOpen: false
+            isModalOpen: false,
+            activeTransaction: this.props.transaction.filter(transaction => transaction.active === true)[0], // Gets the active transaction that is open
+            Name: '',
+            Email: '',
+            Role: '',
+
         }
         this.RenderPeopleInvolved = this.RenderPeopleInvolved.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     toggleModal(){
         if(this.state.isModalOpen === true){
-            this.setState({isModalOpen: false})
+            this.setState({
+                isModalOpen: false,
+                Name: '',
+                Email: '',
+                Role: ''
+            })
         }
         else{
             this.setState({isModalOpen: true})
         }
     }
 
+    handleChange(event){
+        const {name, value} = event.target;
+        this.setState({
+            [name]: value
+        })    
+    }
+
     RenderPeopleInvolved(){
-        const card = this.state.data.map((data) =>{
-            return(
-                <Grid key={data.id} container paddingLeft={6} direction="column" alignItems="center" justify="center" spacing={1}>
-                    <Grid item paddingLeft={6} style={{width:'100%'}}>
-                        <Box paddingLeft={6}>
-                            <Card elevation={3}>
-                                <Grid container direction="row" alignItems="center" spacing={1} style={{color:'#150158'}}>
-                                    <Grid item xs={1}>
-                                        <Box marginY={1} paddingLeft={2}>
-                                            { data.img ? (
-                                                <Avatar src={process.env.PUBLIC_URL + data.img}></Avatar>
-                                            ) : (
-                                            <Avatar style={{backgroundColor: '#150578'}}>{data.name.charAt(0)}</Avatar>
-                                            )}
-                                        </Box>
+        if(this.state.activeTransaction.People.length) // If there are people involved in the transaction
+        {
+            const card = this.state.activeTransaction.People.map((data) =>{
+                return(
+                    <Grid key={data.id} container paddingLeft={6} direction="column" alignItems="center" justify="center" spacing={1}>
+                        <Grid item paddingLeft={6} style={{width:'100%'}}>
+                            <Box paddingLeft={6}>
+                                <Card elevation={3}>
+                                    <Grid container direction="row" alignItems="center" spacing={1} style={{color:'#150158'}}>
+                                        <Grid item xs={1}>
+                                            <Box marginY={1} paddingLeft={2}>
+                                                { data.img ? (
+                                                    <Avatar src={process.env.PUBLIC_URL + data.img}></Avatar>
+                                                ) : (
+                                                <Avatar style={{backgroundColor: '#150578'}}>{data.Name[0]}</Avatar>
+                                                )}
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <Box marginY={1}>
+                                                <Typography style={{fontWeight:800}}>
+                                                    {data.Name}
+                                                    <span style={{paddingLeft: 12, fontWeight:200}}><DotFillIcon size={12}/></span>
+                                                    <span style={{paddingLeft: 12, fontWeight:450, fontSize:15}}>{data.Role}</span>
+                                                </Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            <Box marginY={1}>
+                                                {()=> (data.Accepted ? 'Invitation accepted' : 'Invitation pending')}
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <Box marginY={1} paddingRight={2}>
+                                                <Typography align="right" style={{fontSize: 15}}>
+                                                    {data.Email}
+                                                </Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <Box marginY={1}>
+                                                {()=>(data.Accepted ? // The ternary operator is used to only render the cross for people that have not accepted the invitation
+                                                (
+                                                    <>
+                                                    </>
+                                                )
+                                                :
+                                                (
+                                                    <IconButton style={{color:"#565656"}} >
+                                                        <XIcon/>
+                                                    </IconButton>
+                                                ))}
+
+                                            </Box>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <Box marginY={1}>
-                                            <Typography style={{fontWeight:800}}>
-                                                {data.name}
-                                                <span style={{paddingLeft: 12, fontWeight:200}}><DotFillIcon size={12}/></span>
-                                                <span style={{paddingLeft: 12, fontWeight:450, fontSize:15}}>{data.role}</span>
-                                            </Typography>
-                                        </Box>
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Box marginY={1}>
-                                            {data.status}
-                                        </Box>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Box marginY={1} paddingRight={2}>
-                                            <Typography align="right" style={{fontSize: 15}}>
-                                                {data.email}
-                                            </Typography>
-                                        </Box>
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        <Box marginY={1}>
-                                            <IconButton style={{color:"#565656"}}>
-                                                <PencilIcon />
-                                            </IconButton>
-                                            <IconButton style={{color:"#565656"}}>
-                                                <XIcon/>
-                                            </IconButton>
-                                        </Box>
-                                    </Grid>
-                                </Grid>
-                            </Card>
-                        </Box>
+                                </Card>
+                            </Box>
+                        </Grid>
                     </Grid>
+                );
+            }
+            );
+            return(
+                <Grid container direction="column" spacing={1} paddingTop={-1}>
+                    <Box paddingLeft={6}>
+                        <Grid item>
+                            <h3>People Involved</h3>
+                        </Grid>
+                    </Box>
+                    <Box marginTop={-1}>
+                        {card}
+                    </Box>
                 </Grid>
             );
         }
-        );
-        if(this.state.people === 0)
+        else
         {
             return(
                 <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
@@ -126,21 +173,6 @@ class PaperWork extends Component{
                             <Typography className="people-subheading">Invite People to the Transaction</Typography>
                         </Box>
                     </Grid>
-                </Grid>
-            );
-        }
-        else
-        {
-            return(
-                <Grid container direction="column" spacing={1} paddingTop={-1}>
-                    <Box paddingLeft={6}>
-                        <Grid item>
-                            <h3>People Involved</h3>
-                        </Grid>
-                    </Box>
-                    <Box marginTop={-1}>
-                        {card}
-                    </Box>
                 </Grid>
             );
         }
@@ -164,7 +196,7 @@ class PaperWork extends Component{
                                     <PersonIcon size={90} />
                                 </Box>
                                 <Box marginLeft={0} marginTop={2}>
-                                    <TextField variant='outlined' className='modal-name-field' size='small' label='Name'></TextField>
+                                    <TextField variant='outlined' className='modal-name-field' size='small' label='Name' name="Name" onChange={this.handleChange} value={this.state.Name} />
                                 </Box>
                             </Grid>
                             <Grid item>
@@ -174,16 +206,21 @@ class PaperWork extends Component{
                                             <MailIcon size={17}/>
                                         </Grid>
                                         <Grid xs={11}>
-                                            <TextField fullWidth variant="outlined" size="small" className="modal-right-field" label="E-mail ID"></TextField>
+                                            <TextField fullWidth variant="outlined" size="small" className="modal-right-field" label="Email" name="Email" value={this.state.Email} onChange={this.handleChange}></TextField>
                                         </Grid>
                                     </Grid>
                                     <Grid container spacing={0} alignItems="center">
                                         <Grid item xs={1}>
-                                            <MailIcon size={17}/>
+                                            <VerifiedIcon size={17}/>
                                         </Grid>
                                         <Grid xs={11}>
-                                            <Select value='buyer' fullWidth variant="outlined" className="modal-right-field" style={{height: '40px', marginTop: '10px'}}>
-                                                <MenuItem value='buyer'>Buyer</MenuItem>
+                                            <Select value={this.state.Role} fullWidth variant="outlined" label="Role" name="Role" onChange={this.handleChange} className="modal-right-field" style={{height: '40px', marginTop: '10px'}}>
+                                                <MenuItem value='Buyer'>Buyer</MenuItem>
+                                                <MenuItem value='Seller'>Seller</MenuItem>
+                                                <MenuItem value='Buyer Agent'>Buyer Agent</MenuItem>
+                                                <MenuItem value='Seller Agent'>Seller Agent</MenuItem>
+                                                <MenuItem value='Buyer'>Home Inspector</MenuItem>
+                                                <MenuItem value='Home Inspector'>Title Agent</MenuItem>
                                             </Select>
                                         </Grid>
                                     </Grid>
@@ -226,4 +263,4 @@ class PaperWork extends Component{
     }
 }
 
-export default PaperWork;
+export default connect(mapStateToProps)(PaperWork);

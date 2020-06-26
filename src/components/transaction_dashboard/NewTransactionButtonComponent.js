@@ -62,7 +62,8 @@ class NewTransactionButton extends Component {
             Invite: { // Holding the temprorary state of the invites
                     Name:'',
                     Email: '',
-                    Role: ''
+                    Role: '',
+                    Accepted: false
             },
             Invites:[] // Holding the array of the invites
             
@@ -97,7 +98,8 @@ class NewTransactionButton extends Component {
             isModalOpen: !this.state.isModalOpen,
             Name:'',
             Address:'',
-            Description:''
+            Description:'',
+            Invites: [],
         });
     }
 
@@ -153,6 +155,7 @@ class NewTransactionButton extends Component {
     handleInviteChange(event){
         const {name, value} = event.target;
         let Invite = this.state.Invite; // Intitalizing Invite with the state Invite
+        Invite.Accepted = false; // Always setting the accepted value to false
         if(name === 'Name'){
             Invite.Name = value;
         }
@@ -189,7 +192,7 @@ class NewTransactionButton extends Component {
 
     createTransaction(){
         this.toggleModal(); // Closing the modal
-        this.props.addTransaction(this.state.Name, this.state.Address, this.state.Description); // dispatching an action with the appropriate payload
+        this.props.addTransaction(this.state.Name, this.state.Address, this.state.Description,this.state.Invites); // dispatching an action with the appropriate payload
     }
 
     /**
