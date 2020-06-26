@@ -7,6 +7,12 @@ import PeopleInvolved from "./people_involved/PeopleInvolved";
 import Todo from "./todo/TodoComponent";
 import ChatMain from "./chat/ChatMain/ChatMain";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+import Auth from './account/Authenticate';
+
+const PrivateRoute = ({ component: Component, ...rest }) => ( // Component that protects all the routing if the user is not autenticated
+  <Route {...rest}
+  render={props => Auth.getAuth() ? (<Component {...props} />) : (<Redirect to={{pathname: "/"}}/>)}/>
+  );
 
 function Main(props) {
   // All the routes must be configured here
@@ -15,11 +21,11 @@ function Main(props) {
     <div>
       <Switch>
         <Route path="/dummy" component={DummyPage} />
-        <Route path="/transaction" component={TransactionDashbaord} />
-        <Route path="/transaction_assist" component={TransactionAssist} />
-        <Route path="/paperwork" component={PaperWork} />
-        <Route path="/people" component={PeopleInvolved} />
-        <Route path="/todo" component={Todo} />
+        <PrivateRoute path="/transaction" component={TransactionDashbaord} />
+        <PrivateRoute path="/transaction_assist" component={TransactionAssist} />
+        <PrivateRoute path="/paperwork" component={PaperWork} />
+        <PrivateRoute path="/people" component={PeopleInvolved} />
+        <PrivateRoute path="/todo" component={Todo} />
         <Route path="/chat" render={(props) => <ChatMain {...props} />} />
         <Redirect to="/dummy" />
       </Switch>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {Redirect} from 'react-router-dom';
 import Modal from "../shared/modal/Modal";
 import SignupFormStep1 from "./SignUpFormStep1";
 import SignupFormStep2 from "./SignupFormStep2";
@@ -8,6 +9,7 @@ import { Stepper, Step, StepLabel } from "@material-ui/core";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addUser } from '../../actions/userActions';
+import Auth from './Authenticate';
 
 const validEmailRegex = RegExp(
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
@@ -52,6 +54,7 @@ class SignUpModal extends Component {
         password: "",
         confirm: "",
       },
+      authenticated: false
     };
 
     this.RenderStepsForm = this.RenderStepsForm.bind(this);
@@ -84,7 +87,13 @@ class SignUpModal extends Component {
       this.state.role,
       this.state.state,
       this.state.password); // Dispatching a function to add the values of the state to the user
-    this.addStep(); // moving the sorm to the next step
+      this.addStep(); // moving the form to the next step
+      Auth.authenticate(); // Authenticating the user
+        setTimeout(() => {
+          this.setState({
+            authenticated: Auth.getAuth()
+          });
+      }, 2000); // To add a delay to mimic the Server behavior
   }
 
   handleChange = (event) => {
@@ -184,27 +193,33 @@ class SignUpModal extends Component {
   }
 
   render() {
-    //console.log(this.props.user); // Logging purpose to see of the state of the store is changing or not
-    return (
-      <Modal
-        title="Sign Up"
-        visible={this.props.visible}
-        dismissCallback={this.closeSignUpModal}
-      >
-        <Stepper activeStep={this.state.activeStep}>
-          <Step>
-            <StepLabel />
-          </Step>
-          <Step>
-            <StepLabel />
-          </Step>
-          <Step>
-            <StepLabel />
-          </Step>
-        </Stepper>
-        <this.RenderStepsForm />
-      </Modal>
-    );
+    if(this.state.authenticated === true){ // If the user is authenticated then automatically redirect to transaction
+      return(
+      <Redirect to="/transaction"/>
+      )
+    }
+    else{
+      return (
+        <Modal
+          title="Sign Up"
+          visible={this.props.visible}
+          dismissCallback={this.closeSignUpModal}
+        >
+          <Stepper activeStep={this.state.activeStep}>
+            <Step>
+              <StepLabel />
+            </Step>
+            <Step>
+              <StepLabel />
+            </Step>
+            <Step>
+              <StepLabel />
+            </Step>
+          </Stepper>
+          <this.RenderStepsForm />
+        </Modal>
+      );
+    }
   }
 }
 
