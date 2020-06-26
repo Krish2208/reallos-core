@@ -5,6 +5,7 @@ import TransactionNoPeople from '../../assets/transaction-no-people.png';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {addTransaction} from '../../actions/transactionActions';
+import {addTransactionUser} from '../../actions/userActions';
 import {
     PlusIcon,
     TagIcon,
@@ -42,7 +43,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) =>{
     return bindActionCreators({
-        addTransaction  
+        addTransaction,
+        addTransactionUser
     },dispatch);
 }
 
@@ -77,6 +79,13 @@ class NewTransactionButton extends Component {
         this.editInvite = this.editInvite.bind(this);
         this.deleteInvite = this.deleteInvite.bind(this);
         this.createTransaction = this.createTransaction.bind(this);
+    }
+
+    componentDidUpdate(){ // whenever the component is updated
+        if(this.props.transaction.length && this.props.transaction.length > this.props.user.transactionID.length){ // If the number of transactions are greater than the ones stored for the user
+            let transId = this.props.transaction.map((transaction)=>transaction.id); // getting all the ids of the transactions that were created
+            this.props.addTransactionUser(transId);
+        }
     }
 
     /**
@@ -180,14 +189,7 @@ class NewTransactionButton extends Component {
 
     createTransaction(){
         this.toggleModal(); // Closing the modal
-        let payload = {
-            id: this.props.user.id,
-            Name: this.state.Name,
-            Address: this.state.Address,
-            Description: this.state.Description,
-            Invites: this.state.Invites
-        }
-        this.props.addTransaction(payload); // dispatching an action with the appropriate payload
+        this.props.addTransaction(this.state.Name, this.state.Address, this.state.Description); // dispatching an action with the appropriate payload
     }
 
     /**

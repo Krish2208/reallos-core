@@ -9,6 +9,10 @@ const initialState = {
     role: null,
     state: null,
     password: null,
+    transactionID: [],
+    eSignature: null,
+    initials: null
+    // Add more fields as and when required
 }
 
 function userReducer(state = initialState, action){
@@ -24,6 +28,11 @@ function userReducer(state = initialState, action){
                 role: action.role,
                 state: action.state,
                 password: action.password
+            }
+        case actions.ADD_TRANSACTION_USER:
+            return{
+                ...state,
+                transactionID: action.payload
             }
         default: 
         return state;
