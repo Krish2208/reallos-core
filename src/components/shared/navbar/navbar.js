@@ -17,6 +17,8 @@ import {
   Divider,
   LinearProgress,
   List,
+  Tooltip,
+  Zoom
 } from "@material-ui/core";
 
 import {
@@ -32,6 +34,8 @@ import {
 import UserAvatar from "../../../assets/user.png";
 import ProfileEditDrawer from "../../account/ProfileEditDrawer.js";
 import NotificationListItem from "./NotificationListItem.js";
+import DocumentListItem from "./DocumentListItem.js";
+import TaskListItem from "./TasksListItem.js"
 import "./navbar.css";
 
 const styles = (theme) => ({
@@ -78,12 +82,42 @@ let dummyData = [
   },
 ];
 
+let docData = [
+    {
+        id: 0,
+        transaction: 'Transaction 1',
+        DocName: 'SampleForm.pdf'
+    },
+    {
+        id: 1,
+        transaction: 'Transaction 2',
+        DocName: 'SampleAAAAAAAAAAAAAAAAAAForm.pdf'
+    }
+];
+
+let tasksData = [
+  {
+      id: 0,
+      transaction: 'Transaction 1',
+      TaskName: 'Fill the Document',
+      Date: '27-06-2020'
+  },
+  {
+      id: 1,
+      transaction: 'Transaction 2',
+      TaskName: 'Fill the Document AAAAAAAAAAAAAAAAAA.pdf',
+      Date: '27-06-2020'
+  }
+];
+
 class RenderNav extends Component {
     constructor(props) {
         super(props);
         this.state = {
             userProfileAnchor: null,
             notificationAnchor: null,
+            documentsAnchor: null,
+            tasksAnchor: null,
             isProfileEditDrawerVisible: false,
             authenticated: Auth.getAuth()
         };
@@ -91,6 +125,10 @@ class RenderNav extends Component {
         this.closeUserProfilePopup = this.closeUserProfilePopup.bind(this);
         this.openNotification = this.openNotification.bind(this);
         this.closeNotification = this.closeNotification.bind(this);
+        this.openDocuments = this.openDocuments.bind(this);
+        this.closeDocuments = this.closeDocuments.bind(this);
+        this.openTasks = this.openTasks.bind(this);
+        this.closeTasks = this.closeTasks.bind(this);
         this.toggleProfileEditDrawer = this.toggleProfileEditDrawer.bind(this);
         this.signOut = this.signOut.bind(this);
     }
@@ -133,6 +171,30 @@ class RenderNav extends Component {
     });
   };
 
+  openDocuments = (event) => {
+    this.setState({
+      documentsAnchor: event.currentTarget,
+    });
+  };
+
+  closeDocuments = (event) => {
+    this.setState({
+      documentsAnchor: null,
+    });
+  };
+
+  openTasks = (event) => {
+    this.setState({
+      tasksAnchor: event.currentTarget,
+    });
+  };
+
+  closeTasks = (event) => {
+    this.setState({
+      tasksAnchor: null,
+    });
+  };
+
   /**
    * Computes number of unread notifications from
    * notification data.
@@ -157,159 +219,348 @@ class RenderNav extends Component {
         }
         else{
             return (
-                <div className="navbar-main">
-                    <Grid container direction="row" justify="center" alignitems="center">
-                        <AppBar className="nav" position="static">
-                            <Toolbar>
-                                <Typography className="logo" variant="h6">
-                                    Reallos
-                                </Typography>
-                                <div className="navbar-btn-group">
-                                    <IconButton onClick={this.openNotification}>
-                                        <Badge
-                                            variant="dot"
-                                            classes={(this.getUnreadNotificationsCount) ? {
-                                                badge: classes.notificationBadge
-                                            } : null}
-                                        >
-                                            <BellIcon size={20}/>
-                                        </Badge>
-                                    </IconButton>
-                                    <IconButton>
-                                        <InboxIcon size={20}/>
-                                    </IconButton>
-                                    <IconButton>
-                                        <ChecklistIcon size={20}/>
-                                    </IconButton>
-                                    <IconButton onClick={this.openUserProfilePopup}>
-                                        <Avatar src={UserAvatar} />
-                                    </IconButton>
-                                </div>
+              <div className="navbar-main">
+                <Grid
+                  container
+                  direction="row"
+                  justify="center"
+                  alignitems="center"
+                >
+                  <AppBar className="nav" position="static">
+                    <Toolbar>
+                      <Typography className="logo" variant="h6">
+                        Reallos
+                      </Typography>
+                      <div className="navbar-btn-group">
+                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Notifications</Typography>} arrow TransitionComponent={Zoom}>
+                          <IconButton onClick={this.openNotification}>
+                            <Badge
+                              variant="dot"
+                              classes={
+                                this.getUnreadNotificationsCount
+                                  ? {
+                                    badge: classes.notificationBadge,
+                                  }
+                                  : null
+                              }
+                            >
+                              <BellIcon size={20} />
+                            </Badge>
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Documents</Typography>} arrow TransitionComponent={Zoom}>
+                          <IconButton onClick={this.openDocuments}>
+                            <InboxIcon size={20} />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Tasks</Typography>} arrow TransitionComponent={Zoom}>
+                          <IconButton onClick={this.openTasks}>
+                            <ChecklistIcon size={20} />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Profile</Typography>} arrow TransitionComponent={Zoom}>
+                          <IconButton onClick={this.openUserProfilePopup}>
+                            <Avatar src={UserAvatar} />
+                          </IconButton>
+                        </Tooltip>
+                      </div>
 
-                                <Menu
-                                    className="navbar-profile-menu-popup"
-                                    anchorEl={this.state.userProfileAnchor}
-                                    keepMounted
-                                    open={Boolean(this.state.userProfileAnchor)}
-                                    onClose={this.closeUserProfilePopup}
-                                    getContentAnchorEl={null}
-                                    anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-                                    transformOrigin={{ vertical: "top", horizontal: "center" }}
-                                    PaperProps={{
-                                        style: {
-                                            borderRadius: 10
-                                        }
-                                    }}
+                      <Menu
+                        className="navbar-profile-menu-popup"
+                        anchorEl={this.state.userProfileAnchor}
+                        keepMounted
+                        open={Boolean(this.state.userProfileAnchor)}
+                        onClose={this.closeUserProfilePopup}
+                        getContentAnchorEl={null}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "center",
+                        }}
+                        PaperProps={{
+                          style: {
+                            borderRadius: 10,
+                          },
+                        }}
+                      >
+                        <Grid
+                          container
+                          direction="column"
+                          justify="center"
+                          alignItems="center"
+                          className="menu-design"
+                        >
+                          <Grid
+                            item
+                            style={{
+                              width: "100%",
+                              paddingLeft: 20,
+                              marginTop: 10,
+                            }}
+                          >
+                            <Grid
+                              container
+                              className="profile-popup-info"
+                              direction="row"
+                              alignItems="center"
+                              spacing={2}
+                            >
+                              <Grid item>
+                                <Box component="div" ml={2}>
+                                  <Avatar
+                                    src={UserAvatar}
+                                    className="avatar-large"
+                                  />
+                                </Box>
+                              </Grid>
+                              <Grid
+                                item
+                                justify="center"
+                                className="profile-padding"
+                              >
+                                <Box component="h2" className="profile-heading">
+                                  Joy Joseph
+                                </Box>
+                                <Box
+                                  component="p"
+                                  mt={-2.5}
+                                  mr={2}
+                                  className="profile-subheading"
                                 >
-                                    <Grid container direction="column" justify="center" alignItems="center" className="menu-design">
-                                        <Grid item style={{width: '100%', paddingLeft: 20, marginTop: 10}}>
-                                            <Grid container className="profile-popup-info" direction="row" alignItems="center" spacing={2}>
-                                                <Grid item>
-                                                    <Box component="div" ml={2}>
-                                                        <Avatar src={UserAvatar} className="avatar-large"/>
-                                                    </Box>
-                                                </Grid>
-                                                <Grid item justify="center" className="profile-padding">
-                                                    <Box component="h2" className="profile-heading">
-                                                        Joy Joseph
-                                                    </Box>
-                                                    <Box component="p" mt={-2.5} mr={2} className="profile-subheading">
-                                                        joy_joseph@example.com
-                                                    </Box>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item style={{width: '90%', paddingLeft: 20}}>
-                                            <LinearProgress
-                                                variant="determinate"
-                                                value={50}
-                                                className="profile-progress-bar"
-                                            />
+                                  joy_joseph@example.com
+                                </Box>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                          <Grid item style={{ width: "90%", paddingLeft: 20 }}>
+                            <LinearProgress
+                              variant="determinate"
+                              value={50}
+                              className="profile-progress-bar"
+                            />
 
-                                            <a
-                                                className="profile-subheading-small profile-progress-link"
-                                                href=""
-                                            >
-                                                <Box component="p" mt={1}>
-                                                    50% profile completed
-                                                    <ChevronRightIcon />
-                                                </Box>
-                                            </a>
-                                        </Grid>
-                                        <Grid item>
-                                            <Divider className="divider-profile"/>
-                                        </Grid>
-                                        <Grid container className="profile-popup-action-group" direction="row" alignItems="flex-end" justify="space-evenly">
-                                            <Grid item>
-                                                <Button onClick={this.toggleProfileEditDrawer}>
-                                                    <Grid  container direction="column" justify="center" alignItems="center">
-                                                        <Grid item><PencilIcon /></Grid>
-                                                        <Grid item><Box component="p" className="profile-subheading-small">Edit Profile</Box></Grid>
-                                                    </Grid>
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button>
-                                                    <Grid container direction="column" justify="center" alignItems="center">
-                                                        <Grid item><BriefcaseIcon /></Grid>
-                                                        <Grid item><Box component="p" className="profile-subheading-small">Add Resources</Box></Grid>
-                                                    </Grid>
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button>
-                                                    <Grid container direction="column" justify="center" alignItems="center">
-                                                        <Grid item><SignOutIcon /></Grid>
-                                                        <Grid item><Box component="p" className="profile-subheading-small" onClick={this.signOut}>Log Out</Box></Grid>
-                                                    </Grid>
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Menu>
-                                <Menu
-                                    className="navbar-notification-popup"
-                                    anchorEl={this.state.notificationAnchor}
-                                    keepMounted
-                                    open={Boolean(this.state.notificationAnchor)}
-                                    onClose={this.closeNotification}
-                                    getContentAnchorEl={null}
-                                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                                    transformOrigin={{ vertical: "top", horizontal: "center" }}
-                                    PaperProps={{
-                                        style: {
-                                            borderRadius: 10
-                                        }
-                                    }}
+                            <a
+                              className="profile-subheading-small profile-progress-link"
+                              href=""
+                            >
+                              <Box component="p" mt={1}>
+                                50% profile completed
+                                <ChevronRightIcon />
+                              </Box>
+                            </a>
+                          </Grid>
+                          <Grid item>
+                            <Divider className="divider-profile" />
+                          </Grid>
+                          <Grid
+                            container
+                            className="profile-popup-action-group"
+                            direction="row"
+                            alignItems="flex-end"
+                            justify="space-evenly"
+                          >
+                            <Grid item>
+                              <Button onClick={this.toggleProfileEditDrawer}>
+                                <Grid
+                                  container
+                                  direction="column"
+                                  justify="center"
+                                  alignItems="center"
                                 >
-                                    <Grid direction="column" alignContent="center" className="notification-menu">
-                                        <Grid item className="notification-popup-header" justify="center">
-                                            <Box component="p" style={{justifyContent: "center"}}>
-                                                You have
-                                            </Box>
-                                            <Box component="h3" mt={-1.5} style={{justifyContent: "center"}}>
-                                                {(this.getUnreadNotificationsCount)
-                                                    ? `${this.getUnreadNotificationsCount} Unread Notifications`
-                                                    : "No Unread Notifications"
-                                                }
-                                            </Box>
-                                        </Grid>
-                                        <List className="notification-list">
-                                            {dummyData.map(data => (
-                                                <NotificationListItem notificationData={data} />
-                                            ))}
-                                        </List>
-                                    </Grid>
-                                </Menu>
-                            </Toolbar>
-                        </AppBar>
-                    </Grid>
+                                  <Grid item>
+                                    <PencilIcon />
+                                  </Grid>
+                                  <Grid item>
+                                    <Box
+                                      component="p"
+                                      className="profile-subheading-small"
+                                    >
+                                      Edit Profile
+                                    </Box>
+                                  </Grid>
+                                </Grid>
+                              </Button>
+                            </Grid>
+                            <Grid item>
+                              <Button>
+                                <Grid
+                                  container
+                                  direction="column"
+                                  justify="center"
+                                  alignItems="center"
+                                >
+                                  <Grid item>
+                                    <BriefcaseIcon />
+                                  </Grid>
+                                  <Grid item>
+                                    <Box
+                                      component="p"
+                                      className="profile-subheading-small"
+                                    >
+                                      Add Resources
+                                    </Box>
+                                  </Grid>
+                                </Grid>
+                              </Button>
+                            </Grid>
+                            <Grid item>
+                              <Button>
+                                <Grid
+                                  container
+                                  direction="column"
+                                  justify="center"
+                                  alignItems="center"
+                                >
+                                  <Grid item>
+                                    <SignOutIcon />
+                                  </Grid>
+                                  <Grid item>
+                                    <Box
+                                      component="p"
+                                      className="profile-subheading-small"
+                                      onClick={this.signOut}
+                                    >
+                                      Log Out
+                                    </Box>
+                                  </Grid>
+                                </Grid>
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Menu>
+                      <Menu
+                        className="navbar-notification-popup"
+                        anchorEl={this.state.notificationAnchor}
+                        keepMounted
+                        open={Boolean(this.state.notificationAnchor)}
+                        onClose={this.closeNotification}
+                        getContentAnchorEl={null}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "center",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "center",
+                        }}
+                        PaperProps={{
+                          style: {
+                            borderRadius: 10,
+                          },
+                        }}
+                      >
+                        <Grid
+                          direction="column"
+                          alignContent="center"
+                          className="notification-menu"
+                        >
+                          <Grid
+                            item
+                            className="notification-popup-header"
+                            justify="center"
+                          >
+                            <Box
+                              component="p"
+                              style={{ justifyContent: "center" }}
+                            >
+                              You have
+                            </Box>
+                            <Box
+                              component="h3"
+                              mt={-1.5}
+                              style={{ justifyContent: "center" }}
+                            >
+                              {this.getUnreadNotificationsCount
+                                ? `${this.getUnreadNotificationsCount} Unread Notifications`
+                                : "No Unread Notifications"}
+                            </Box>
+                          </Grid>
+                          <List className="notification-list">
+                            {dummyData.map((data) => (
+                              <NotificationListItem notificationData={data} />
+                            ))}
+                          </List>
+                        </Grid>
+                      </Menu>
+                      <Menu
+                        className="navbar-notification-popup"
+                        anchorEl={this.state.documentsAnchor}
+                        keepMounted
+                        open={Boolean(this.state.documentsAnchor)}
+                        onClose={this.closeDocuments}
+                        getContentAnchorEl={null}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "center",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "center",
+                        }}
+                        PaperProps={{ style: { borderRadius: 10 } }}
+                      >
+                          <Grid direction="column" alignContent="center" className="notification-menu">
+                              <Grid item className="notification-popup-header" justify="center">
+                                  <Box component="p" style={{justifyContent: 'center'}}>
+                                      You have
+                                  </Box>
+                                  <Box component="h3" mt={-1.5} style={{justifyContent: 'center'}}>
+                                      {docData.length} Document
+                                  </Box>
+                              </Grid>
+                              <List className="notification-list">
+                                {docData.map((data) => (
+                                    <DocumentListItem documentData={data} />
+                                ))}
+                          </List>
+                          </Grid>
+                      </Menu>
+                      <Menu
+                        className="navbar-notification-popup"
+                        anchorEl={this.state.tasksAnchor}
+                        keepMounted
+                        open={Boolean(this.state.tasksAnchor)}
+                        onClose={this.closeTasks}
+                        getContentAnchorEl={null}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "center",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "center",
+                        }}
+                        PaperProps={{ style: { borderRadius: 10 } }}
+                      >
+                          <Grid direction="column" alignContent="center" className="notification-menu">
+                              <Grid item className="notification-popup-header" justify="center">
+                                  <Box component="p" style={{justifyContent: 'center'}}>
+                                      You have
+                                  </Box>
+                                  <Box component="h3" mt={-1.5} style={{justifyContent: 'center'}}>
+                                      {docData.length} Tasks
+                                  </Box>
+                              </Grid>
+                              <List className="notification-list">
+                                {tasksData.map((data) => (
+                                    <TaskListItem taskData={data} />
+                                ))}
+                          </List>
+                          </Grid>
+                      </Menu>
+                    </Toolbar>
+                  </AppBar>
+                </Grid>
 
-                    <ProfileEditDrawer
-                        dismissCallback={this.toggleProfileEditDrawer}
-                        visible={this.state.isProfileEditDrawerVisible}
-                    />
-                </div>
+                <ProfileEditDrawer
+                  dismissCallback={this.toggleProfileEditDrawer}
+                  visible={this.state.isProfileEditDrawerVisible}
+                />
+              </div>
             );
         }
     }
