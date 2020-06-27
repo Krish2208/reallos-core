@@ -112,7 +112,7 @@ class People extends Component{
                     <Grid key={data.id} container paddingLeft={6} direction="column" alignItems="center" justify="center" spacing={1}>
                         <Grid item paddingLeft={6} style={{width:'100%'}}>
                             <Box paddingLeft={6}>
-                                <Card elevation={3}>
+                                <Card elevation={3} style={{marginBottom: '5px'}}>
                                     <Grid container direction="row" alignItems="center" spacing={1} style={{color:'#150158'}}>
                                         <Grid item xs={1}>
                                             <Box marginY={1} paddingLeft={2}>
