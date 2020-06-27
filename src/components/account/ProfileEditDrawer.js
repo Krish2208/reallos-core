@@ -2,8 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './ProfileEditDrawer.css';
 import SideDrawer from '../shared/drawer/SideDrawer';
+import Modal from '../shared/modal/Modal';
 import UserAvatar from '../../assets/user.png';
 import { PencilIcon } from '@primer/octicons-react';
+
+import {
+    USER_ROLES,
+    getRoleLabel,
+    validateFormField
+} from '../../global_func_lib';
 
 import {
     ListItem,
@@ -14,7 +21,14 @@ import {
     Avatar,
     Badge,
     Fab,
-    Button
+    Button,
+    TextField,
+    Select,
+    MenuItem,
+    InputLabel,
+    FormControl,
+    FormGroup,
+    FormHelperText
 } from '@material-ui/core';
 
 /**
@@ -22,6 +36,36 @@ import {
  * @augments {React.Component<Props>}
  */
 class ProfileEditDrawer extends React.Component {
+    constructor() {
+        super();
+
+        this.updateModalTextValues = {
+            firstName: '',
+            lastName: '',
+            role: '',
+            email: '',
+            phone: ''
+        };
+
+        this.state = {
+            profilePic: '',
+            firstName: 'Joy',
+            lastName: 'Joseph',
+            role: 'seller',
+            email: 'joy_joseph@example.com',
+            phone: '9999999999',
+            isUpdateModalVisible: false,
+            updateModalType: '',
+            updateModalFieldErrors: {
+                firstName: validateFormField('', 'dummy'),
+                lastName: validateFormField('', 'dummy'),
+                role: validateFormField('', 'dummy'),
+                email: validateFormField('', 'dummy'),
+                phone: validateFormField('', 'dummy'),
+            }
+        };
+    }
+
     static propTypes = {
         /**
          * Set visibility of "Profile Edit" Side Drawer
@@ -33,6 +77,433 @@ class ProfileEditDrawer extends React.Component {
          * when clicked outside the drawer
          */
         dismissCallback: PropTypes.func
+    }
+
+    updateUserData(mode) {
+        this.setState({
+            isUpdateModalVisible: true,
+            updateModalType: mode
+        });
+    }
+
+    dismissUpdateModal(stateData) {
+        setTimeout(() => {
+            this.updateModalTextValues = {
+                firstName: '',
+                lastName: '',
+                role: '',
+                email: '',
+                phone: ''
+            };
+
+            this.setState({
+                updateModalType: 'NONE_TYPE'
+            });
+        }, 300);
+
+        this.setState({
+            isUpdateModalVisible: false,
+            ...stateData
+        });
+    }
+
+    renderUpdateUserDataModal(mode) {
+        let modalTitle;
+        let modalContent;
+        let _saveChanges;
+        let _handleChange;
+
+        switch (mode) {
+            case 'USER_NAME':
+                let _errors = {
+                    firstName: validateFormField('', 'dummy'),
+                    lastName: validateFormField('', 'dummy')
+                }
+
+                _saveChanges = () => {
+                    let validationFirstName = validateFormField(
+                        this.updateModalTextValues.firstName,
+                        'name'
+                    );
+
+                    let validationLastName = validateFormField(
+                        this.updateModalTextValues.lastName,
+                        'name'
+                    );
+
+                    _errors = {
+                        firstName: validationFirstName,
+                        lastName: validationLastName
+                    }
+
+                    if (!validationFirstName.hasError && !validationLastName.hasError) {
+                        this.dismissUpdateModal({
+                            firstName: this.updateModalTextValues.firstName.trim(),
+                            lastName: this.updateModalTextValues.lastName.trim()
+                        });
+                    }
+
+                    this.setState({
+                        updateModalFieldErrors: {
+                            ...this.state.updateModalFieldErrors,
+                            ..._errors
+                        }
+                    });
+                };
+
+                _handleChange = (e, fieldName) => {
+                    let fieldValidation = validateFormField(
+                        e.target.value,
+                        'name'
+                    );
+
+                    if (fieldName == 'firstName') {
+                        this.updateModalTextValues.firstName = e.target.value;
+
+                        _errors = {
+                            firstName: fieldValidation,
+                            lastName: _errors.lastName
+                        }
+                    }
+
+                    else {
+                        this.updateModalTextValues.lastName = e.target.value;
+
+                        _errors = {
+                            firstName: _errors.firstName,
+                            lastName: fieldValidation
+                        }
+                    }
+
+                    this.setState({
+                        updateModalFieldErrors: {
+                            ...this.state.updateModalFieldErrors,
+                            ..._errors
+                        }
+                    });
+                }
+
+                modalTitle = 'Update Name';
+                modalContent = (
+                    <div>
+                        <p style={{marginBottom: 30}}>
+                            Your current name is "<strong>
+                                {`${this.state.firstName} ${this.state.lastName}`}
+                            </strong>".
+
+                            Enter a new name to change your current name.
+                        </p>
+
+                        <FormGroup>
+                            <TextField
+                                variant="outlined"
+                                label="New First Name"
+                                style={{width: '100%'}}
+                                error={this.state.updateModalFieldErrors.firstName.hasError}
+                                helperText={this.state.updateModalFieldErrors.firstName.errorText}
+                                onChange={(e) => _handleChange(e, 'firstName')}
+                                onKeyPress={(e) => {
+                                    if (e.key == 'Enter') _saveChanges()
+                                }}
+                            />
+
+                            <TextField
+                                variant="outlined"
+                                label="New Last Name"
+                                style={{width: '100%', marginTop: 10}}
+                                error={this.state.updateModalFieldErrors.lastName.hasError}
+                                helperText={this.state.updateModalFieldErrors.lastName.errorText}
+                                onChange={(e) => _handleChange(e, 'lastName')}
+                                onKeyPress={(e) => {
+                                    if (e.key == 'Enter') _saveChanges()
+                                }}
+                            />
+                        </FormGroup>
+
+                        <div className="profile-edit-update-modal-action-group">
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => this.dismissUpdateModal()}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => _saveChanges()}
+                            >
+                                Done
+                            </Button>
+                        </div>
+                    </div>
+                );
+
+                break;
+
+            case 'USER_ROLE':
+                _saveChanges = () => {
+                    let fieldValidation = validateFormField(
+                        this.updateModalTextValues.role,
+                        'role'
+                    );
+
+                    if (!fieldValidation.hasError) {
+                        this.dismissUpdateModal({
+                            role: this.updateModalTextValues.role
+                        });
+                    }
+
+                    this.setState({
+                        updateModalFieldErrors: {
+                            ...this.state.updateModalFieldErrors,
+                            role: fieldValidation
+                        }
+                    });
+                };
+
+                _handleChange = (e) => {
+                    let fieldValidation = validateFormField(
+                        e.target.value,
+                        'role'
+                    );
+
+                    this.updateModalTextValues.role = e.target.value;
+
+                    this.setState({
+                        updateModalFieldErrors: {
+                            ...this.state.updateModalFieldErrors,
+                            role: fieldValidation
+                        }
+                    });
+                }
+
+                modalTitle = 'Update Role';
+                modalContent = (
+                    <div>
+                        <p style={{marginBottom: 30}}>
+                            Your current role is "<strong>{getRoleLabel(this.state.role)}</strong>".
+                            Select a new role to change your current role.
+                        </p>
+
+                        <FormControl variant="outlined" style={{width: '100%'}}>
+                            <InputLabel id="new-role">New Role</InputLabel>
+
+                            <Select
+                                labelId="new-role"
+                                label="New Role"
+                                variant="outlined"
+                                error={this.state.updateModalFieldErrors.role.hasError}
+                                onChange={(e) => _handleChange(e)}
+                            >
+                                {USER_ROLES.map(role => {
+                                    return (
+                                        <MenuItem value={role.value}>
+                                            {role.label}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
+
+                            <FormHelperText error>
+                                {this.state.updateModalFieldErrors.role.errorText}
+                            </FormHelperText>
+                        </FormControl>
+
+                        <div className="profile-edit-update-modal-action-group">
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => this.dismissUpdateModal()}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => _saveChanges()}
+                            >
+                                Done
+                            </Button>
+                        </div>
+                    </div>
+                );
+
+                break;
+
+            case 'USER_EMAIL':
+                _saveChanges = () => {
+                    let fieldValidation = validateFormField(
+                        this.updateModalTextValues.email,
+                        'email'
+                    );
+
+                    if (!fieldValidation.hasError) {
+                        this.dismissUpdateModal({
+                            email: this.updateModalTextValues.email
+                        });
+                    }
+
+                    this.setState({
+                        updateModalFieldErrors: {
+                            ...this.state.updateModalFieldErrors,
+                            email: fieldValidation
+                        }
+                    });
+                };
+
+                _handleChange = (e) => {
+                    let fieldValidation = validateFormField(
+                        e.target.value,
+                        'email'
+                    );
+
+                    this.updateModalTextValues.email = e.target.value;
+
+                    this.setState({
+                        updateModalFieldErrors: {
+                            ...this.state.updateModalFieldErrors,
+                            email: fieldValidation
+                        }
+                    });
+                }
+
+                modalTitle = 'Update Email';
+                modalContent = (
+                    <div>
+                        <p style={{marginBottom: 30}}>
+                            Your current email is "<strong>{this.state.email}</strong>".
+                            Enter a new email to change your current email.
+                        </p>
+
+                        <TextField
+                            variant="outlined"
+                            label="New Email"
+                            style={{width: '100%'}}
+                            error={this.state.updateModalFieldErrors.email.hasError}
+                            helperText={this.state.updateModalFieldErrors.email.errorText}
+                            onChange={(e) => _handleChange(e)}
+                            onKeyPress={(e) => {
+                                if (e.key == 'Enter') _saveChanges()
+                            }}
+                        />
+
+                        <div className="profile-edit-update-modal-action-group">
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => this.dismissUpdateModal()}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => _saveChanges()}
+                            >
+                                Done
+                            </Button>
+                        </div>
+                    </div>
+                );
+
+                break;
+
+            case 'USER_PHONE':
+                _saveChanges = () => {
+                    let fieldValidation = validateFormField(
+                        this.updateModalTextValues.phone,
+                        'phone'
+                    );
+
+                    if (!fieldValidation.hasError) {
+                        this.dismissUpdateModal({
+                            phone: this.updateModalTextValues.phone
+                        });
+                    }
+
+                    this.setState({
+                        updateModalFieldErrors: {
+                            ...this.state.updateModalFieldErrors,
+                            phone: fieldValidation
+                        }
+                    });
+                };
+
+                _handleChange = (e) => {
+                    let fieldValidation = validateFormField(
+                        e.target.value,
+                        'phone'
+                    );
+
+                    this.updateModalTextValues.phone = e.target.value;
+
+                    this.setState({
+                        updateModalFieldErrors: {
+                            ...this.state.updateModalFieldErrors,
+                            phone: fieldValidation
+                        }
+                    });
+                }
+
+                modalTitle = 'Update Phone Number';
+                modalContent = (
+                    <div>
+                        <p style={{marginBottom: 30}}>
+                            Your current phone number is "<strong>{this.state.phone}</strong>".
+                            Enter a new phone number to change the current one.
+                        </p>
+
+                        <TextField
+                            variant="outlined"
+                            label="New Phone Number"
+                            style={{width: '100%'}}
+                            error={this.state.updateModalFieldErrors.phone.hasError}
+                            helperText={this.state.updateModalFieldErrors.phone.errorText}
+                            onChange={(e) => _handleChange(e)}
+                            onKeyPress={(e) => {
+                                if (e.key == 'Enter') _saveChanges()
+                            }}
+                        />
+
+                        <div className="profile-edit-update-modal-action-group">
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => this.dismissUpdateModal()}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => _saveChanges()}
+                            >
+                                Done
+                            </Button>
+                        </div>
+                    </div>
+                );
+
+                break;
+
+            default:
+                modalTitle = 'No Title';
+                modalContent = (<></>);
+                break;
+        };
+
+        return (
+            <Modal
+                visible={this.state.isUpdateModalVisible}
+                title={modalTitle}
+                disableBackdropBlur={true}
+                dismissCallback={() => this.dismissUpdateModal()}
+                modalWidth={520}
+            >
+                {modalContent}
+            </Modal>
+        )
     }
 
     render() {
@@ -68,7 +539,7 @@ class ProfileEditDrawer extends React.Component {
                             }}
                         >
                             <Avatar
-                                alt="Joy Joseph"
+                                alt={`${this.state.firstName} ${this.state.lastName}`}
                                 src={UserAvatar}
                                 style={{width: 150, height: 150}}
                             />
@@ -77,11 +548,11 @@ class ProfileEditDrawer extends React.Component {
                     <ListItem>
                         <ListItemText
                             primary="Name"
-                            secondary="Joy Joseph"
+                            secondary={`${this.state.firstName} ${this.state.lastName}`}
                         />
 
                         <ListItemSecondaryAction>
-                            <IconButton>
+                            <IconButton onClick={() => this.updateUserData('USER_NAME')}>
                                 <PencilIcon />
                             </IconButton>
                         </ListItemSecondaryAction>
@@ -89,11 +560,11 @@ class ProfileEditDrawer extends React.Component {
                     <ListItem>
                         <ListItemText
                             primary="Role"
-                            secondary="Seller"
+                            secondary={getRoleLabel(this.state.role)}
                         />
 
                         <ListItemSecondaryAction>
-                            <IconButton>
+                            <IconButton onClick={() => this.updateUserData('USER_ROLE')}>
                                 <PencilIcon />
                             </IconButton>
                         </ListItemSecondaryAction>
@@ -101,11 +572,11 @@ class ProfileEditDrawer extends React.Component {
                     <ListItem>
                         <ListItemText
                             primary="Email"
-                            secondary="joy_joseph@example.com"
+                            secondary={this.state.email}
                         />
 
                         <ListItemSecondaryAction>
-                            <IconButton>
+                            <IconButton onClick={() => this.updateUserData('USER_EMAIL')}>
                                 <PencilIcon />
                             </IconButton>
                         </ListItemSecondaryAction>
@@ -113,11 +584,11 @@ class ProfileEditDrawer extends React.Component {
                     <ListItem>
                         <ListItemText
                             primary="Phone Number"
-                            secondary="+91 9999999999"
+                            secondary={`+91 ${this.state.phone}`}
                         />
 
                         <ListItemSecondaryAction>
-                            <IconButton>
+                            <IconButton onClick={() => this.updateUserData('USER_PHONE')}>
                                 <PencilIcon />
                             </IconButton>
                         </ListItemSecondaryAction>
@@ -131,6 +602,12 @@ class ProfileEditDrawer extends React.Component {
                         </Button>
                     </div>
                 </SideDrawer>
+
+                {
+                    this.renderUpdateUserDataModal(
+                        this.state.updateModalType
+                    )
+                }
             </div>
         )
     }

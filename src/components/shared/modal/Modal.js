@@ -48,7 +48,16 @@ class ReallosModal extends React.Component {
         modalHeight: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number
-        ])
+        ]),
+
+        /**
+         * Remove backdrop blur effect when rendering the
+         * modal. You might want to disable the blur
+         * effect for performance reasons.
+         * 
+         * (_Default: false_)
+         */
+        disableBackdropBlur: PropTypes.bool
     }
 
     render() {
@@ -58,12 +67,17 @@ class ReallosModal extends React.Component {
             dismissCallback,
             modalWidth,
             modalHeight,
+            disableBackdropBlur=false,
             children
         } = this.props;
 
         return (
             <>
-                <div className="modal-bg" visible={visible.toString()} aria-modal="true">
+                <div
+                    className={`modal-bg ${disableBackdropBlur ? 'modal-no-bg-blur' : ''}`}
+                    visible={visible.toString()}
+                    aria-modal="true"
+                >
                     <div className="modal" style={{'width': modalWidth, 'height': modalHeight}}>
                         <div className="modal-container">
                             {
