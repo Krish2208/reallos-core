@@ -1,5 +1,5 @@
 .modal-bg {
-    z-index: 1200;
+    z-index: 1300;
     visibility: hidden;
     position: fixed;
     top: 0;
@@ -17,6 +17,13 @@
     opacity: 0;
 
     transition: background 250ms ease-in, opacity 150ms ease-in, visibility 150ms ease-in;
+}
+
+.modal-no-bg-blur {
+    -webkit-backdrop-filter: none !important;
+    -moz-backdrop-filter: none !important;
+    -ms-backdrop-filter: none !important;
+    backdrop-filter: none !important;
 }
 
 .modal-close-btn {
