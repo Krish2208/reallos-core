@@ -3,6 +3,8 @@ import "./Transaction.css";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
+import {Button, Typography, TextField, Select, InputLabel,MenuItem, FormControl} from '@material-ui/core';
+import Modal from '../shared/modal/Modal'; 
 import NewTransactionButton from "./NewTransactionButtonComponent";
 import NavBar from "../shared/navbar/navbar";
 import SearchBar from "../shared/searchbar/SearchBarComponent";
@@ -26,7 +28,15 @@ class TransactionDasboard extends Component{
 
   constructor(props){
     super(props);
+    this.state = {
+      activeStep: 0,
+      socialModal: false,
+    };
     this.RenderTransactionBody = this.RenderTransactionBody.bind(this);
+    this.changeStep = this.changeStep.bind(this);
+    this.RenderStep = this.RenderStep.bind(this);
+    this.SocialDetailModal = this.SocialDetailModal.bind(this);
+    this.SocialDetailClose = this.SocialDetailClose.bind(this);
   }
 
   componentDidMount(){ // Component did mount is used to fetch the transactions of the user form the redux store
@@ -88,6 +98,96 @@ class TransactionDasboard extends Component{
     }
   }
 
+  changeStep() {
+    if (this.state.activeStep == 0) {
+      this.setState({
+        activeStep: 1,
+      });
+    } else if (this.state.activeStep == 1) {
+      this.setState({
+        activeStep: 0,
+      });
+    }
+  }
+
+  RenderStep() {
+    switch (this.state.activeStep) {
+      case 0:
+        return (
+          <Box>
+            <Box style={{width:'100%'}}>
+              <Grid container justify="center">
+                <img src={require("../../assets/social-details-form.png")} style={{width: '250px'}}/>
+              </Grid>
+            </Box>
+            <Box marginTop={2}>
+              <Grid container justify="flex-end">
+                <Button onClick={this.changeStep} className="next-button" style={{width:"20%"}}>Next</Button>
+              </Grid>
+            </Box>
+          </Box>
+        );
+      case 1:
+        return(
+          <Box>
+            <Grid style={{width:'100%'}}>
+              <Box paddingX={3}>
+                <Grid direction="column">
+                  <Grid item md={12} className="social-details-form-field">
+                    <TextField variant="outlined" fullWidth label="First Name"/>
+                  </Grid>
+                  <Grid item md={12} className="social-details-form-field">
+                    <TextField variant="outlined" fullWidth label="Last Name"/>
+                  </Grid>
+                  <Grid item md={12} className="social-details-form-field">
+                    <TextField variant="outlined" fullWidth label="Phone Number"/>
+                  </Grid>
+                  <FormControl variant="outlined" className="social-details-form-field">
+                    <InputLabel id="role">Role</InputLabel>
+                    <Select labelId="role" id="role_select" name="role" label="Role">
+                      <MenuItem value="Buyer">Buyer</MenuItem>
+                      <MenuItem value="Seller">Seller</MenuItem>
+                      <MenuItem value="Buyer Agent">Buyer Agent</MenuItem>
+                      <MenuItem value="Seller Agent">Seller Agent</MenuItem>
+                      <MenuItem value="Title Agent">Title Agent</MenuItem>
+                      <MenuItem value="Escrow Agent">Escrow Agent</MenuItem>
+                      <MenuItem value="Home Inspector">Home Inspector</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Box>
+            </Grid>
+            <Box marginTop={2}>
+            <Grid container justify="flex-start">
+              <Grid item md={6}>
+                <Button onClick={this.changeStep} className="cancel-back-button" style={{width:"20%"}}>Back</Button>
+              </Grid>
+              <Grid item md={6} justify="flex-end">
+                <Typography align="right">
+                  <Button onClick={this.SocialDetailClose} className="next-button" style={{width:"50%"}}>Confirm</Button>
+                </Typography>
+              </Grid>
+            </Grid>
+            </Box>
+          </Box>
+        );
+      default:
+    }
+  }
+
+  SocialDetailClose(){
+    this.setState({
+      socialModal: false,
+    })
+  }
+
+  SocialDetailModal(){
+    return (
+      <Modal title="Fill in Details" visible={this.state.socialModal} modalWidth={500}>
+        <this.RenderStep/>
+      </Modal>
+  );
+  }
 
   render(){
   //console.log(this.props.user); // To log the fact the user data that is stored during signup is available here
@@ -96,6 +196,7 @@ class TransactionDasboard extends Component{
       <Box component="div">
         <Container>
           <NavBar />
+          <this.SocialDetailModal/>
           <Grid
             container
             direction="row"
