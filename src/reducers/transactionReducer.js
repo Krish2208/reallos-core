@@ -45,6 +45,20 @@ function transactionReducer(state=initialState, action){
                 }
             }
         });
+        case actions.ADD_TO_TRANSACTION: // Adding a person to the transaction
+        return state.map((transaction)=>{
+            if(transaction.id === action.transId){
+                return{
+                    ...transaction,
+                    People: action.People
+                }
+            }   
+            else{
+                return{
+                    ...transaction
+                }
+            }
+        })
         default:
             return state;
     }

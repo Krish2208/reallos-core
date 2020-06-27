@@ -3,6 +3,7 @@ import NavBar from '../shared/navbar/navbar';
 import NavRail from '../shared/navigation_rail/TransactionNavRail';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {addToTransaction} from '../../actions/transactionActions';
 import {
     Container,
     Grid,
@@ -31,15 +32,20 @@ import {
 } from '@primer/octicons-react';
 import Modal from '../shared/modal/Modal';
 import './PeopleInvolved.css';
-import {PEOPLE} from './TestData';
 
 const mapStateToProps = (state)=>({
     transaction: state.transaction,
     user: state.user
 });
 
+const mapDispatchToProps = (dispatch)=>{
+    return bindActionCreators({
+        addToTransaction
+    },dispatch);
+};
 
-class PaperWork extends Component{
+
+class People extends Component{
     constructor(props){
         super(props);
         this.state={
@@ -54,6 +60,7 @@ class PaperWork extends Component{
         this.RenderPeopleInvolved = this.RenderPeopleInvolved.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.addPeople = this.addPeople.bind(this);
     }
 
     toggleModal(){
@@ -75,6 +82,20 @@ class PaperWork extends Component{
         this.setState({
             [name]: value
         })    
+    }
+
+    addPeople(){
+        let peopleArray = new Array(this.state.activeTransaction.People);
+        let newPerson = {
+            Name: this.state.Name,
+            Email: this.state.Email,
+            Role: this.state.Role,
+            Accepted: false
+        }; // creating a new person
+        peopleArray.push(newPerson);
+        this.props.addToTransaction(peopleArray, this.state.activeTransaction.id);
+        console.log(this.props.transaction);
+        this.toggleModal();
     }
 
     RenderPeopleInvolved(){
@@ -179,6 +200,7 @@ class PaperWork extends Component{
     }
 
     render(){
+        console.log();
         return(
             <div>
                 <Container>
@@ -226,7 +248,7 @@ class PaperWork extends Component{
                                     </Grid>
                                     <Grid container justify="flex-end">
                                         <Box marginTop={2}>
-                                            <Button variant='contained' style={{backgroundColor:'#150578', color:'white'}} startIcon={
+                                            <Button onClick={this.addPeople} variant='contained' style={{backgroundColor:'#150578', color:'white'}} startIcon={
                                                 <CheckIcon size={20}/>}
                                             >Invite</Button>
                                         </Box>
@@ -263,4 +285,4 @@ class PaperWork extends Component{
     }
 }
 
-export default connect(mapStateToProps)(PaperWork);
+export default connect(mapStateToProps,mapDispatchToProps)(People);
