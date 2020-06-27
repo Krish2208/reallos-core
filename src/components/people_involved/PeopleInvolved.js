@@ -13,7 +13,8 @@ import {
     Card,
     Avatar,
     IconButton,
-    FormGroup,
+    FormControl,
+    InputLabel,
     TextField,
     Select,
     MenuItem,
@@ -240,14 +241,26 @@ class People extends Component{
                                             <VerifiedIcon size={17}/>
                                         </Grid>
                                         <Grid xs={11}>
-                                            <Select value={this.state.Role} fullWidth variant="outlined" label="Role" name="Role" onChange={this.handleChange} className="modal-right-field" style={{height: '40px', marginTop: '10px'}}>
+                                            {/*<Select value={this.state.Role} fullWidth variant="outlined" label="Role" name="Role" onChange={this.handleChange} className="modal-right-field" style={{height: '40px', marginTop: '10px'}}>
                                                 <MenuItem value='Buyer'>Buyer</MenuItem>
                                                 <MenuItem value='Seller'>Seller</MenuItem>
                                                 <MenuItem value='Buyer Agent'>Buyer Agent</MenuItem>
                                                 <MenuItem value='Seller Agent'>Seller Agent</MenuItem>
                                                 <MenuItem value='Buyer'>Home Inspector</MenuItem>
                                                 <MenuItem value='Home Inspector'>Title Agent</MenuItem>
-                                            </Select>
+                                            </Select>*/}
+                                            <FormControl variant="outlined" className="modal-right-field" style={{ marginTop: '10px'}}>
+                                                <InputLabel id="role" style={{height: '40px'}}>Role</InputLabel>
+                                                <Select labelId="role" label="Role" variant="outlined" id="select" name="Role" value={this.state.Role} onChange={this.handleChange} style={{height: '40px'}}>
+                                                    <MenuItem value="Buyer">Buyer</MenuItem>
+                                                    <MenuItem value="Seller">Seller</MenuItem>
+                                                    <MenuItem value="Buyer Agent">Buyer Agent</MenuItem>
+                                                    <MenuItem value="Seller Agent">Seller Agent</MenuItem>
+                                                    <MenuItem value="Title Agent">Title Agent</MenuItem>
+                                                    <MenuItem value="Escrow Agent">Escrow Agent</MenuItem>
+                                                    <MenuItem value="Home Inspector">Home Inspector</MenuItem>
+                                                </Select>
+                                            </FormControl>
                                         </Grid>
                                     </Grid>
                                     <Grid container justify="flex-end">

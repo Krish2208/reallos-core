@@ -33,7 +33,8 @@ import {
     MenuItem,
     Card,
     CardContent,
-    Chip
+    Chip,
+    InputLabel
 } from '@material-ui/core';
 
 const mapStateToProps = (state) => ({
@@ -473,7 +474,7 @@ class NewTransactionButton extends Component {
                     </FormGroup>
                     <FormGroup row className="form-group">
                         <QuestionIcon size={25} className="location-icon" />
-                        <Select label="Role" variant="outlined" id="select" className="input-new-transaction-form" name="Role" value={this.state.Invite.Role} onChange={this.handleInviteChange}>
+                        {/*<Select label="Role" variant="outlined" id="select" className="input-new-transaction-form" name="Role" value={this.state.Invite.Role} onChange={this.handleInviteChange}>
                             <MenuItem value="Buyer">Buyer</MenuItem>
                             <MenuItem value="Seller">Seller</MenuItem>
                             <MenuItem value="Buyer Agent">Buyer Agent</MenuItem>
@@ -481,7 +482,19 @@ class NewTransactionButton extends Component {
                             <MenuItem value="Title Agent">Title Agent</MenuItem>
                             <MenuItem value="Escrow Agent">Escrow Agent</MenuItem>
                             <MenuItem value="Home Inspector">Home Inspector</MenuItem>
-                        </Select>
+                        </Select>*/}
+                        <FormControl variant="outlined">
+                            <InputLabel id="role">Role</InputLabel>
+                            <Select labelId="role" label="Role" variant="outlined" id="select" className="input-new-transaction-form" name="Role" value={this.state.Invite.Role} onChange={this.handleInviteChange}>
+                                <MenuItem value="Buyer">Buyer</MenuItem>
+                                <MenuItem value="Seller">Seller</MenuItem>
+                                <MenuItem value="Buyer Agent">Buyer Agent</MenuItem>
+                                <MenuItem value="Seller Agent">Seller Agent</MenuItem>
+                                <MenuItem value="Title Agent">Title Agent</MenuItem>
+                                <MenuItem value="Escrow Agent">Escrow Agent</MenuItem>
+                                <MenuItem value="Home Inspector">Home Inspector</MenuItem>
+                            </Select>
+                        </FormControl>
                     </FormGroup>
 
                     <div className="button-group">
