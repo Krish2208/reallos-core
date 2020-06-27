@@ -3,7 +3,7 @@ import NavBar from '../shared/navbar/navbar';
 import NavRail from '../shared/navigation_rail/TransactionNavRail';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {addToTransaction} from '../../actions/transactionActions';
+import {addToTransaction, removeFromTransaction} from '../../actions/transactionActions';
 import {
     Container,
     Grid,
@@ -40,7 +40,8 @@ const mapStateToProps = (state)=>({
 
 const mapDispatchToProps = (dispatch)=>{
     return bindActionCreators({
-        addToTransaction
+        addToTransaction,
+        removeFromTransaction
     },dispatch);
 };
 
@@ -51,7 +52,6 @@ class People extends Component{
         this.state={
             people:1,
             isModalOpen: false,
-            activeTransaction: this.props.transaction.filter(transaction => transaction.active === true)[0], // Gets the active transaction that is open
             Name: '',
             Email: '',
             Role: '',
@@ -61,6 +61,7 @@ class People extends Component{
         this.toggleModal = this.toggleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.addPeople = this.addPeople.bind(this);
+        this.deletePeople = this.deletePeople.bind(this);
     }
 
     toggleModal(){
@@ -85,7 +86,7 @@ class People extends Component{
     }
 
     addPeople(){
-        let peopleArray = new Array(this.state.activeTransaction.People);
+        let peopleArray = this.props.transaction.filter(transaction => transaction.active === true)[0].People;
         let newPerson = {
             Name: this.state.Name,
             Email: this.state.Email,
@@ -93,15 +94,19 @@ class People extends Component{
             Accepted: false
         }; // creating a new person
         peopleArray.push(newPerson);
-        this.props.addToTransaction(peopleArray, this.state.activeTransaction.id);
-        console.log(this.props.transaction);
+        this.props.addToTransaction(peopleArray,this.props.transaction.filter(transaction => transaction.active === true)[0].id);
         this.toggleModal();
     }
 
+    deletePeople(email){
+        let peopleArray = this.props.transaction.filter(transaction => transaction.active === true)[0].People.filter(person => person.Email != email);
+        this.props.removeFromTransaction(peopleArray, this.props.transaction.filter(transaction => transaction.active === true)[0].id);
+    }
+
     RenderPeopleInvolved(){
-        if(this.state.activeTransaction.People.length) // If there are people involved in the transaction
+        if(this.props.transaction.filter(transaction => transaction.active === true)[0].People.length) // If there are people involved in the transaction
         {
-            const card = this.state.activeTransaction.People.map((data) =>{
+            const card = this.props.transaction.filter(transaction => transaction.active === true)[0].People.map((data) =>{
                 return(
                     <Grid key={data.id} container paddingLeft={6} direction="column" alignItems="center" justify="center" spacing={1}>
                         <Grid item paddingLeft={6} style={{width:'100%'}}>
@@ -147,7 +152,7 @@ class People extends Component{
                                                 )
                                                 :
                                                 (
-                                                    <IconButton style={{color:"#565656"}} >
+                                                    <IconButton onClick={()=>this.deletePeople(data.Email)} style={{color:"#565656"}} >
                                                         <XIcon/>
                                                     </IconButton>
                                                 ))}
@@ -200,7 +205,6 @@ class People extends Component{
     }
 
     render(){
-        console.log();
         return(
             <div>
                 <Container>

@@ -37,6 +37,7 @@ function transactionReducer(state=initialState, action){
             if(transaction.id === action.transId){ // Still have to figure out a way to do this
                 return{
                     ...transaction,
+                    People: action.People
                 }
             }
             else{
