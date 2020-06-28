@@ -100,7 +100,7 @@ class Todo extends Component{
                     <Box component="div" marginTop={2}>
                         <Card elevation={3}>
                             <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
-                                <div onClick={()=>this.expandTask(todo)} style={{ width: '91.6%', cursor: 'pointer' }}>
+                                <div onClick={()=>this.expandTask(todo)} style={{ width: '91.6%', cursor: 'pointer', marginTop: '5px', marginBottom: '5px' }}>
                                     <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
                                         <Grid item>
                                             <Box paddingLeft={2}>
