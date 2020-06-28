@@ -1,4 +1,14 @@
-.welcomeDiv {
-  font-size: 50px !important;
-  color: #150578 !important;
+.chat-empty-image {
+  width: 400px;
+  height: 300px;
+}
+
+.chat-heading {
+  font-size: 51px !important;
+  color: #274060;
+}
+
+.chat-subheading {
+  font-size: 26px !important;
+  color: #274060;
 }
