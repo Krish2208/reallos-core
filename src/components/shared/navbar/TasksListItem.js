@@ -9,13 +9,17 @@ class TaskItem extends Component {
             <Grid item style={{width: '100%'}}>
                 <ListItem button style={{backgroundColor: (this.props.taskData.id % 2 == 0)? 'white' : '#eaf5ff'}}>
                     <ListItemText
-                        primary={this.props.taskData.transaction}
+                        primary={
+                            <Typography noWrap style={{color: '#150578', fontWeight:700}}>
+                                {this.props.taskData.transaction}
+                            </Typography>
+                            }
                         secondary={
                             <Box>
-                                <Typography noWrap>
+                                <Typography noWrap style={{color: '#150578', fontSize: '13px'}}>
                                     {this.props.taskData.TaskName}
                                 </Typography>
-                            <   Typography noWrap>
+                            <   Typography noWrap style={{color: '#150578', fontSize: '13px'}}>
                                     {this.props.taskData.Date}
                                 </Typography>
                             </Box>

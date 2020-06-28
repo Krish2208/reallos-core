@@ -9,9 +9,12 @@ class DocumentsItem extends Component {
             <Grid item style={{width: '100%'}}>
                 <ListItem button style={{backgroundColor: (this.props.documentData.id % 2 == 0)? 'white' : '#eaf5ff'}}>
                     <ListItemText
-                        primary={this.props.documentData.transaction}
+                        primary={
+                            <Typography noWrap style={{color: '#150578', fontWeight:700}}>
+                                {this.props.documentData.transaction}
+                            </Typography>}
                         secondary={
-                            <Typography noWrap>
+                            <Typography noWrap style={{color: '#150578', fontSize: '13px'}}>
                                 {this.props.documentData.DocName}
                             </Typography>
                         }

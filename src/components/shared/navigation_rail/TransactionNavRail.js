@@ -23,6 +23,7 @@ import {
   PersonIcon,
   ChecklistIcon,
   CommentDiscussionIcon,
+  HomeIcon,
 } from "@primer/octicons-react";
 
 const navRailWidth = 260;
@@ -86,6 +87,12 @@ export default function NavRail() {
   const routerLocation = useLocation();
 
   let listItems = [
+    {
+      icon: (<HomeIcon size={24} />),
+      label: 'Transaction Dashboard',
+      isActiveRoute: routerLocation.pathname.startsWith('/transaction'),
+      linkTo: '/transaction'
+    },
     {
       icon: (<PackageIcon size={24} />),
       label: 'Transaction Assist',
