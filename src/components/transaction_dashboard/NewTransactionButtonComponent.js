@@ -403,13 +403,11 @@ class NewTransactionButton extends Component {
                         </Grid>
                     </Grid>
                     <Grid item>
-                        <h2>People involved</h2> {/* Still have to perform the styling when no one is involved */}
+                        {this.state.Invites.length !== 0 ? <h2>People involved</h2> : <h4>To add People go to step 2</h4>} {/* Still have to perform the styling when no one is involved */}
                         <Grid item className="people-involved-grid">
                             <Grid direction="row">
                             {this.state.Invites.map((Invite)=>(
-                                    <Grid item>
                                         <Chip onDelete={()=>this.deleteInvite(Invite.Email)} className="third-step-person-chip" color='primary'  variant='outlined' label={Invite.Name}/>
-                                    </Grid>
                             ))}
                             </Grid>
                         </Grid>
