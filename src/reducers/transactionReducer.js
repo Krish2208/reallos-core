@@ -6,7 +6,16 @@ const initialState = [ // this intitial state represents all the transaction is 
 function transactionReducer(state=initialState, action){
     switch(action.type){
         case actions.FETCH_TRANSACTION: // This will return a state with the transaction belonging to the particular user 
-            return state.filter(transaction => transaction.id === action.userId)
+            return state.map((transaction)=>{
+                let i = 0;
+                for(; i<action.transId.length; i++){
+                    if(transaction.id === action.transId[i]){
+                        return{
+                            ...transaction
+                        }
+                    }
+                }
+            })
         case actions.ADD_TRANSACTION: // Adding a transaction for a particular user
             return [
                 ...state,{

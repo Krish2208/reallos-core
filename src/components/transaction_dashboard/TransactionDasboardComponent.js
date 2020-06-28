@@ -11,8 +11,9 @@ import SearchBar from "../shared/searchbar/SearchBarComponent";
 import TransactionCardGroup from "./TransactionCardGroup";
 import {connect} from 'react-redux';
 import {fetchTransaction} from '../../actions/transactionActions';
+import {editUser} from '../../actions/userActions';
 import {bindActionCreators} from 'redux';
-
+import { CheckIcon } from "@primer/octicons-react";
 const mapStateToProps = (state)=>({
   user: state.user,
   transaction: state.transaction
@@ -20,7 +21,8 @@ const mapStateToProps = (state)=>({
 
 const mapDispatchToProps = (dispatch)=>{
   return bindActionCreators({
-    fetchTransaction
+    fetchTransaction,
+    editUser
   },dispatch);
 }
 
@@ -40,8 +42,13 @@ class TransactionDasboard extends Component{
   }
 
   componentDidMount(){ // Component did mount is used to fetch the transactions of the user form the redux store
-    if(this.props.user.id != null) // if the user id is not null
-    this.props.fetchTransaction(this.props.user.id); // dispatching the action to fetch the transactions that belong to the user from the store
+    if(this.props.user.firstName === null || this.props.user.lastName === null || this.props.user.phone === null || this.props.user.role === null || this.props.user.state === null) // If any of these fields are empty then open the fill in details modal
+      this.setState({
+        socialModal: true
+      });
+
+    if(this.props.user.transactionID != null) // if the user id is not null
+    this.props.fetchTransaction(this.props.user.transactionID); // dispatching the action to fetch the transactions that belong to the user from the store
   }
 
 
@@ -103,11 +110,7 @@ class TransactionDasboard extends Component{
       this.setState({
         activeStep: 1,
       });
-    } else if (this.state.activeStep == 1) {
-      this.setState({
-        activeStep: 0,
-      });
-    }
+    } 
   }
 
   RenderStep() {
@@ -154,17 +157,23 @@ class TransactionDasboard extends Component{
                       <MenuItem value="Home Inspector">Home Inspector</MenuItem>
                     </Select>
                   </FormControl>
+                  <FormControl variant="outlined" className="social-details-form-field">
+                    <InputLabel id="role">State</InputLabel>
+                    <Select labelId="role" id="role_select" name="role" label="Role">
+                      <MenuItem value="TX">Texas</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Box>
             </Grid>
             <Box marginTop={2}>
-            <Grid container justify="flex-start">
-              <Grid item md={6}>
-                <Button onClick={this.changeStep} className="cancel-back-button" style={{width:"20%"}}>Back</Button>
-              </Grid>
+            <Grid container justify="flex-end">
               <Grid item md={6} justify="flex-end">
                 <Typography align="right">
-                  <Button onClick={this.SocialDetailClose} className="next-button" style={{width:"50%"}}>Confirm</Button>
+                  <Button onClick={this.SocialDetailClose} className="next-button" style={{width:"50%"}}>
+                    <CheckIcon />
+                    Confirm
+                    </Button>
                 </Typography>
               </Grid>
             </Grid>
@@ -176,6 +185,7 @@ class TransactionDasboard extends Component{
   }
 
   SocialDetailClose(){
+   // this.props.editUser(); // Call editUser here
     this.setState({
       socialModal: false,
     })

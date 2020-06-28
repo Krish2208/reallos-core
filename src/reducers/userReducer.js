@@ -35,6 +35,16 @@ function userReducer(state = initialState, action){
                 ...state,
                 transactionID: action.payload
             }
+        case actions.EDIT_USER:
+            return{
+                ...state,
+                firstName: action.firstName,
+                lastName: action.lastName,
+                email: action.email,
+                phone: action.phone,
+                role: action.role,
+                state: action.state
+            }
         default: 
         return state;
     }

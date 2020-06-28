@@ -5,10 +5,10 @@ export const REMOVE_FROM_TRANSACTION = 'REMOVE_FROM_TRANSACTION'; // Removing th
 export const ADD_TO_TRANSACTION = 'ADD_TO_TRANSACTION'; // Adding a person to the transaction
 let id = 0; // to mimic the assignment of a primary key by the database
 
-export function fetchTransaction(userId){ // This is where an asynchronous call will be made to fetch the transactions from the database
+export function fetchTransaction(transId){ // This is where an asynchronous call will be made to fetch the transactions from the database
     return({
         type: FETCH_TRANSACTION,
-        userId
+        transId
     });
 }
 

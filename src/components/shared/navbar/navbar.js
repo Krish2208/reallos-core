@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import Auth from '../../account/Authenticate';
 import { withStyles } from '@material-ui/core/styles';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import {
   AppBar,
@@ -110,6 +112,10 @@ let tasksData = [
   }
 ];
 
+const mapStateToProps = (state) =>({
+  user: state.user
+});
+
 class RenderNav extends Component {
     constructor(props) {
         super(props);
@@ -131,6 +137,7 @@ class RenderNav extends Component {
         this.closeTasks = this.closeTasks.bind(this);
         this.toggleProfileEditDrawer = this.toggleProfileEditDrawer.bind(this);
         this.signOut = this.signOut.bind(this);
+        this.calculateCompleted = this.calculateCompleted.bind(this);
     }
 
   /* To open the profile popup */
@@ -194,6 +201,27 @@ class RenderNav extends Component {
       tasksAnchor: null,
     });
   };
+
+  calculateCompleted() { // calculating the percentage of the profile || Can be edited in the future
+    let score = 2;// assuming 20% of the application is already completed
+    if(this.props.user.phone!=null){
+      score+=2;
+    }
+    if(this.props.user.role!=null){
+      score+=1;
+    }
+    if(this.props.user.state!=null){
+      score+=1;
+    }
+    if(this.props.user.eSignature!=null){
+      score+=2;
+    }
+    if(this.props.user.initials!=null){
+      score+=2;
+    }
+    let percentage = (score/10)*100;
+    return percentage;
+  }
 
   /**
    * Computes number of unread notifications from
@@ -322,7 +350,7 @@ class RenderNav extends Component {
                                 className="profile-padding"
                               >
                                 <Box component="h2" className="profile-heading">
-                                  Joy Joseph
+                                  {this.props.user.Name}
                                 </Box>
                                 <Box
                                   component="p"
@@ -330,7 +358,7 @@ class RenderNav extends Component {
                                   mr={2}
                                   className="profile-subheading"
                                 >
-                                  joy_joseph@example.com
+                                  {this.props.user.email}
                                 </Box>
                               </Grid>
                             </Grid>
@@ -338,7 +366,7 @@ class RenderNav extends Component {
                           <Grid item style={{ width: "90%", paddingLeft: 20 }}>
                             <LinearProgress
                               variant="determinate"
-                              value={50}
+                              value={this.calculateCompleted()}
                               className="profile-progress-bar"
                             />
 
@@ -347,7 +375,7 @@ class RenderNav extends Component {
                               href=""
                             >
                               <Box component="p" mt={1}>
-                                50% profile completed
+                              {this.calculateCompleted()}% profile completed
                                 <ChevronRightIcon />
                               </Box>
                             </a>
@@ -566,4 +594,4 @@ class RenderNav extends Component {
     }
 }
 
-export default withStyles(styles)(RenderNav);
+export default connect(mapStateToProps)(withStyles(styles)(RenderNav));
