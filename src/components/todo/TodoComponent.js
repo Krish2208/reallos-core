@@ -79,7 +79,6 @@ class Todo extends Component{
     RenderToDo(){
         let transId = this.props.transaction.filter(transaction => transaction.active === true)[0].id; // getting the id of the active transaction
         let todos = this.props.todo.filter(todo=> todo.Transaction_id === transId); // Gettting only those todos that are part of that transaction
-        console.log(todos);
         if(todos.length === 0){ // If no todo exists in the server || have to replace this with an image
             return(
                 <Box style={{width:'100%'}}>

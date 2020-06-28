@@ -85,7 +85,6 @@ class NewTransactionButton extends Component {
     componentDidUpdate(){ // whenever the component is updated
         if(this.props.transaction.length && this.props.transaction.length > this.props.user.transactionID.length){ // If the number of transactions are greater than the ones stored for the user
             let transId = this.props.transaction.map((transaction)=>transaction.id); // getting all the ids of the transactions that were created
-            console.log(transId);
             this.props.addTransactionUser(transId);
         }
     }

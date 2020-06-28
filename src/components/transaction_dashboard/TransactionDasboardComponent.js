@@ -33,22 +33,40 @@ class TransactionDasboard extends Component{
     this.state = {
       activeStep: 0,
       socialModal: false,
+      firstName: '',
+      lastName: '',
+      phone: '',
+      state: '',
+      role: ''
     };
     this.RenderTransactionBody = this.RenderTransactionBody.bind(this);
     this.changeStep = this.changeStep.bind(this);
     this.RenderStep = this.RenderStep.bind(this);
     this.SocialDetailModal = this.SocialDetailModal.bind(this);
     this.SocialDetailClose = this.SocialDetailClose.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount(){ // Component did mount is used to fetch the transactions of the user form the redux store
     if(this.props.user.firstName === null || this.props.user.lastName === null || this.props.user.phone === null || this.props.user.role === null || this.props.user.state === null) // If any of these fields are empty then open the fill in details modal
       this.setState({
-        socialModal: true
+        socialModal: true,
+        firstName: this.props.user.firstName,
+        lastName: this.props.user.lastName,
+        phone: this.props.user.phone,
+        role: this.props.user.role,
+        state: this.props.user.state
       });
 
     if(this.props.user.transactionID != null) // if the user id is not null
     this.props.fetchTransaction(this.props.user.transactionID); // dispatching the action to fetch the transactions that belong to the user from the store
+  }
+
+  handleChange(event){
+    const {name, value} = event.target;
+    this.setState({
+      [name]: value
+    });
   }
 
 
@@ -137,29 +155,29 @@ class TransactionDasboard extends Component{
               <Box paddingX={3}>
                 <Grid direction="column">
                   <Grid item md={12} className="social-details-form-field">
-                    <TextField variant="outlined" fullWidth label="First Name"/>
+                    <TextField variant="outlined" fullWidth label="First Name" name="firstName" onChange={this.handleChange} value={this.state.firstName}/>
                   </Grid>
                   <Grid item md={12} className="social-details-form-field">
-                    <TextField variant="outlined" fullWidth label="Last Name"/>
+                    <TextField variant="outlined" fullWidth label="Last Name" name="lastName" onChange={this.handleChange} value={this.state.lastName}/>
                   </Grid>
                   <Grid item md={12} className="social-details-form-field">
-                    <TextField variant="outlined" fullWidth label="Phone Number"/>
+                    <TextField variant="outlined" fullWidth label="Phone Number" name="phone" onChange={this.handleChange} value={this.state.phone}/>
                   </Grid>
                   <FormControl variant="outlined" className="social-details-form-field">
                     <InputLabel id="role">Role</InputLabel>
-                    <Select labelId="role" id="role_select" name="role" label="Role">
-                      <MenuItem value="Buyer">Buyer</MenuItem>
-                      <MenuItem value="Seller">Seller</MenuItem>
-                      <MenuItem value="Buyer Agent">Buyer Agent</MenuItem>
-                      <MenuItem value="Seller Agent">Seller Agent</MenuItem>
-                      <MenuItem value="Title Agent">Title Agent</MenuItem>
-                      <MenuItem value="Escrow Agent">Escrow Agent</MenuItem>
+                    <Select labelId="role" id="role_select" name="role" label="Role"  onChange={this.handleChange} value={this.state.role}>
+                      <MenuItem value="buyer">Buyer</MenuItem>
+                      <MenuItem value="seller">Seller</MenuItem>
+                      <MenuItem value="buyer-agent">Buyer Agent</MenuItem>
+                      <MenuItem value="seller-agent">Seller Agent</MenuItem>
+                      <MenuItem value="title-agent">Title Agent</MenuItem>
+                      <MenuItem value="Escrow-agent">Escrow Agent</MenuItem>
                       <MenuItem value="Home Inspector">Home Inspector</MenuItem>
                     </Select>
                   </FormControl>
                   <FormControl variant="outlined" className="social-details-form-field">
                     <InputLabel id="role">State</InputLabel>
-                    <Select labelId="role" id="role_select" name="role" label="Role">
+                    <Select labelId="role" id="role_select" name="state" label="State"  onChange={this.handleChange} value={this.state.state}>
                       <MenuItem value="TX">Texas</MenuItem>
                     </Select>
                   </FormControl>
@@ -171,7 +189,7 @@ class TransactionDasboard extends Component{
               <Grid item md={6} justify="flex-end">
                 <Typography align="right">
                   <Button onClick={this.SocialDetailClose} className="next-button" style={{width:"50%"}}>
-                    <CheckIcon />
+                    <CheckIcon /> &nbsp;
                     Confirm
                     </Button>
                 </Typography>
@@ -185,9 +203,14 @@ class TransactionDasboard extends Component{
   }
 
   SocialDetailClose(){
-   // this.props.editUser(); // Call editUser here
+   this.props.editUser(this.state.firstName,this.state.lastName,this.props.user.email,this.state.role,this.state.phone,this.state.state); // Call editUser here
     this.setState({
       socialModal: false,
+      firstName: '',
+      lastName: '',
+      phone: '',
+      role: '',
+      state: ''
     })
   }
 
@@ -200,8 +223,6 @@ class TransactionDasboard extends Component{
   }
 
   render(){
-  //console.log(this.props.user); // To log the fact the user data that is stored during signup is available here
-  //console.log(this.props.transaction); // To log the transaction state after fetching it from the user
     return (
       <Box component="div">
         <Container>

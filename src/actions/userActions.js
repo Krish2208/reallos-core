@@ -26,9 +26,10 @@ export function addTransactionUser(payload){
     });
 }
 
-export function editUser(firstName, lastName, email, role, phone, state){
+export function editUser(firstName, lastName, email, role, phone, state){ // Editing the user 
     return({
         type: EDIT_USER,
+        Name: firstName+" "+lastName,
         firstName,
         lastName,
         email,
