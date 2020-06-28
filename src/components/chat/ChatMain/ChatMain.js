@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactLoading from "react-loading";
 import { withRouter } from "react-router-dom";
 import { myFirestore } from "../../../Config/MyFirebase";
 import WelcomeBoard from "../WelcomeBoard/WelcomeBoard";
@@ -8,23 +7,24 @@ import ChatBoard from "../ChatBoard/ChatBoard";
 import NavBar from "../../shared/navbar/navbar";
 import NavRail from "../../shared/navigation_rail/TransactionNavRail";
 import { AppString } from "../Const";
-import { Container, Box } from "@material-ui/core";
 import {
-  List,
+  Container,
+  Box,
   Grid,
-  Divider,
+  List,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Button,
+  IconButton,
   Typography,
 } from "@material-ui/core";
+import { KebabHorizontalIcon, SearchIcon } from "@primer/octicons-react";
 
 class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
-      isOpenDialogConfirmLogout: false,
       currentPeerUser: null,
     };
     this.currentUserId = localStorage.getItem(AppString.ID);
@@ -47,55 +47,78 @@ class Chat extends Component {
 
   renderListUser = () => {
     if (this.listUser.length > 0) {
-      let viewListUser = [
-        <ListItem>
-          <Typography className="logo" variant="h6">
-            Reallos
-          </Typography>
-        </ListItem>,
-      ];
+      let viewListUser = [];
       this.listUser.forEach((item, index) => {
         if (item.data().id !== this.currentUserId) {
           viewListUser.push(
-            <List>
-              <ListItem
-                button
-                key={index}
-                className={
-                  this.state.currentPeerUser &&
-                  this.state.currentPeerUser.id === item.data().id
-                    ? "viewWrapItemFocused"
-                    : "viewWrapItem"
-                }
-                onClick={() => {
-                  this.setState({ currentPeerUser: item.data() });
-                }}
-              >
-                <ListItemAvatar>
-                  <img
-                    className="viewAvatarItem"
-                    src={item.data().photoUrl}
-                    alt="icon avatar"
-                  ></img>
-                </ListItemAvatar>
-                <ListItemText
-                  className="viewWrapContentItem"
-                  primary={`${item.data().name}`}
-                />
-              </ListItem>
-              <Divider />
-            </List>
+            <ListItem
+              button
+              key={index}
+              className={
+                this.state.currentPeerUser &&
+                this.state.currentPeerUser.id === item.data().id
+                  ? "viewWrapItemFocused"
+                  : "viewWrapItem"
+              }
+              onClick={() => {
+                this.setState({ currentPeerUser: item.data() });
+              }}
+            >
+              <ListItemAvatar>
+                <img src={item.data().photoUrl} alt="icon avatar"></img>
+              </ListItemAvatar>
+              <ListItemText primary={`${item.data().name}`} />
+            </ListItem>
           );
         }
       });
       return viewListUser;
     } else {
       return (
-        <List>
-          <ListItem>
-            <ListItemText primary="Empty List" />
-          </ListItem>
-        </List>
+        <ListItem>
+          <Box paddingTop={19} paddingBottom={19}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <Grid item>
+                <img
+                  src={this.currentUserAvatar}
+                  alt="icon avatar"
+                  className="emptyList-img"
+                />
+                <img
+                  src={this.currentUserAvatar}
+                  alt="icon avatar"
+                  className="emptyList-img-bg"
+                />
+              </Grid>
+              <Grid item>
+                <Box paddingTop={2}>
+                  <Typography className="large-text">
+                    It's quiet lonely
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item>
+                <Box paddingTop={1}>
+                  <Typography className="small-text">
+                    Add some people to the
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item>
+                <Box paddingTop={-3}>
+                  <Typography className="small-text">
+                    transaction to start discussion
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </ListItem>
       );
     }
   };
@@ -109,9 +132,39 @@ class Chat extends Component {
           <Box component="div" paddingTop={5} paddingBottom={3}>
             <Grid container>
               <Grid item xs={4}>
-                <Box component="div" className="listDiv">
-                  <List></List>
-                  {this.renderListUser()}
+                <Box className="listDiv">
+                  <List className="listHeader">
+                    <ListItem>
+                      <Grid
+                        container
+                        direction="row"
+                        justify="space-between"
+                        alignItems="center"
+                      >
+                        <Grid item>
+                          <Button>
+                            <img
+                              src={require("../../../assets/reallos-logo.svg")}
+                              className="Innerlogo"
+                            />
+                          </Button>
+                        </Grid>
+                        <Grid item>
+                          <IconButton size="medium">
+                            <img
+                              src={this.currentUserAvatar}
+                              alt="icon avatar"
+                              className="profilePhoto"
+                            ></img>
+                          </IconButton>
+                          <IconButton>
+                            <KebabHorizontalIcon size={24} />
+                          </IconButton>
+                        </Grid>
+                      </Grid>
+                    </ListItem>
+                  </List>
+                  <List>{this.renderListUser()}</List>
                 </Box>
               </Grid>
               <Grid item xs={8}>
