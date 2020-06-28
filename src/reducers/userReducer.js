@@ -21,6 +21,7 @@ function userReducer(state = initialState, action){
             return{
                 ...state, 
                 id: action.id,
+                Name: action.firstName+" "+action.lastName,
                 firstName: action.firstName,
                 lastName: action.lastName,
                 email: action.email,

@@ -1,7 +1,7 @@
 import React ,{Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { addTodo, deleteTodo } from '../../actions/todoActions';
+import { addTodo, deleteTodo, editTodo } from '../../actions/todoActions';
 import {
     Container,
     Grid,
@@ -39,7 +39,8 @@ const mapStateToProps = (state)=>{ // mapping the state of the store to the prop
 const mapDispatchToProps = (dispatch)=>{ // This is to map the actions to the props of the component
     return bindActionCreators({
         addTodo,
-        deleteTodo
+        deleteTodo,
+        editTodo
     },dispatch);
 }
 
@@ -52,21 +53,21 @@ class Todo extends Component{
             title: '',
             description:'',
             date: '',
-            to: '',
+            to: null,
+            to_Person: null, // js object that contains the person object
+            todo: null,
             expandedTask:{
                 title: '',
                 description: '',
                 date: '',
-                to: ''
+                to: {},
+                from: {}
             }
         }
         
         this.RenderToDo = this.RenderToDo.bind(this);
         this.toggleNewTaskForm = this.toggleNewTaskForm.bind(this); // binding it to the particular instance of the class
-        this.handleTitleChange = this.handleTitleChange.bind(this);
-        this.handlleDescriptionChange = this.handlleDescriptionChange.bind(this);
-        this.handleDateChange = this.handleDateChange.bind(this);
-        this.handleAssignChange = this.handleAssignChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.cancelAddTask = this.cancelAddTask.bind(this);
         this.addNewTask = this.addNewTask.bind(this);
         this.editTask = this.editTask.bind(this);
@@ -76,7 +77,10 @@ class Todo extends Component{
     }
 
     RenderToDo(){
-        if(this.props.todo === null){ // If no todo exists in the server || have to replace this with an image
+        let transId = this.props.transaction.filter(transaction => transaction.active === true)[0].id; // getting the id of the active transaction
+        let todos = this.props.todo.filter(todo=> todo.Transaction_id === transId); // Gettting only those todos that are part of that transaction
+        console.log(todos);
+        if(todos.length === 0){ // If no todo exists in the server || have to replace this with an image
             return(
                 <Box style={{width:'100%'}}>
                     <Box paddingLeft={5}>
@@ -96,7 +100,7 @@ class Todo extends Component{
                     <Box paddingLeft={5}>
                     <h1>Tasks</h1>
                     <SearchBar />
-                    {this.props.todo.map((todo)=>(
+                    {todos.map((todo)=>(
                     <Box component="div" marginTop={2}>
                         <Card elevation={3}>
                             <Grid container direction="row" alignItems="center" justify="space-around" spacing={1}>
@@ -109,7 +113,13 @@ class Todo extends Component{
                                         </Grid>
                                         <Grid item>
                                             <Box marginY={2}>
-                                                <Avatar style={{ backgroundColor: '#150578' }}></Avatar>
+                                             { todo.From.img ? 
+                                                (
+                                                    <Avatar src={process.env.PUBLIC_URL + todo.From.img}></Avatar>
+                                                    ) : (
+                                                    <Avatar style={{backgroundColor: '#150578'}}>{todo.From.Name[0]}</Avatar>
+                                                )
+                                            }
                                             </Box>
                                         </Grid>
                                         <Grid item>
@@ -117,31 +127,47 @@ class Todo extends Component{
                                         </Grid>
                                         <Grid item>
                                             <Box marginY={2}>
-                                                <Avatar style={{ backgroundColor: '#150578' }}></Avatar>
+                                            { todo.To.img ? 
+                                                (
+                                                    <Avatar src={process.env.PUBLIC_URL + todo.to.img}></Avatar>
+                                                    ) : (
+                                                    <Avatar style={{backgroundColor: '#150578'}}>{todo.To.Name[0]}</Avatar>
+                                                )
+                                            }
                                             </Box>
                                         </Grid>
                                         <Grid item xs={2}>
                                             <Typography noWrap align='center' style={{ color: '#150578', fontWeight: 800, fontSize: '20px' }}>
-                                                {todo.title}
+                                                {todo.Title}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={5}>
                                             <Box textOverflow="ellipsis">
                                                 <Typography noWrap align='center' style={{ color: '#150578', fontWeight: 500, fontSize: '17px' }}>
-                                                    {todo.description}
+                                                    {todo.Description}
                                                 </Typography>
                                             </Box>
                                         </Grid>
                                         <Grid item xs={1}>
                                             <Typography align='left' style={{ color: '#150578', fontSize: '16px' }}>
-                                                {todo.date}
+                                                {todo.Date}
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                 </div>
                                 <Grid item xs={1}>
-                                    <IconButton onClick={()=>this.editTask(todo)}><PencilIcon /></IconButton>
-                                    <IconButton onClick={()=>this.props.deleteTodo(todo.title)}><XIcon /></IconButton>
+                                    { 
+                                        todo.From.id === this.props.user.id ? (  // ternary operator used to make sure only the person assiging the task has the right to edit it
+                                            <>
+                                            <IconButton onClick={()=>this.editTask(todo)}><PencilIcon /></IconButton>
+                                            <IconButton onClick={()=>this.props.deleteTodo(todo.id)}><XIcon /></IconButton>
+                                            </>
+                                        ):(
+                                            <>
+                                             <IconButton onClick={()=>this.props.deleteTodo(todo.id)}><XIcon /></IconButton>
+                                            </>
+                                        )
+                                    }
                                 </Grid>       
                             </Grid> 
                         </Card>
@@ -190,12 +216,26 @@ class Todo extends Component{
                         <Box marginTop={2}>
                             <table>
                                 <tr>
-                                    <td><Avatar>JD</Avatar></td>
-                                    <td style={{paddingLeft:'15px'}}>Assigned to <strong>{this.state.expandedTask.to}</strong></td>
+                                    <td>
+                                    { this.state.expandedTask.to.img ? 
+                                    (
+                                        <Avatar src={process.env.PUBLIC_URL + this.state.expandedTask.to.img}></Avatar>
+                                        ) : (
+                                        <Avatar style={{backgroundColor: '#150578'}}>{this.state.expandedTask.to.Name ? (this.state.expandedTask.to.Name[0]) : (<></>)}</Avatar>
+                                    )}
+                                    </td>
+                                    <td style={{paddingLeft:'15px'}}>Assigned to <strong>{this.state.expandedTask.to.Name}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td style={{paddingTop:'10px'}}><Avatar>PY</Avatar></td>
-                                    <td style={{paddingLeft:'15px',paddingTop:'10px'}}>Assigned by <strong>Paxton Yoshida</strong></td> {/* This field should be edited with the user's name */}
+                                    <td style={{paddingTop:'10px'}}>
+                                    { this.state.expandedTask.from.img ? 
+                                    (
+                                        <Avatar src={process.env.PUBLIC_URL + this.state.expandedTask.from.img}></Avatar>
+                                        ) : (
+                                        <Avatar style={{backgroundColor: '#150578'}}>{this.state.expandedTask.from.Name ? (this.state.expandedTask.from.Name[0]) : (<></>)}</Avatar>
+                                    )}
+                                    </td>
+                                    <td style={{paddingLeft:'15px',paddingTop:'10px'}}>Assigned by <strong>{this.state.expandedTask.from.Name}</strong></td> {/* This field should be edited with the user's name */}
                                 </tr>
                             </table>
                         </Box>
@@ -224,17 +264,11 @@ class Todo extends Component{
         }
     }
 
-    handleTitleChange(event){ // for handling the change in the title 
-        this.setState({title:event.target.value})
-    }
-    handlleDescriptionChange(event){ // for handling the change in the description
-        this.setState({description:event.target.value})
-    }
-    handleDateChange(event){ // for handling the change in the date
-        this.setState({date: event.target.value})
-    }
-    handleAssignChange(event){ // for handling the change in the Assigned Person
-        this.setState({to:event.target.value})
+    handleChange(event){
+        const {name, value} = event.target;
+            this.setState({
+                [name]: value
+        });
     }
 
     cancelAddTask(){ // To cancel the task and set the values of the fields to null
@@ -242,39 +276,57 @@ class Todo extends Component{
             title:'',
             description:'',
             date:'',
-            to:'',
-            isNewTaskFormOpen:false
+            to: null,
+            isNewTaskFormOpen:false,
+            todo: null
         });
     }
 
     addNewTask(){ // Adding new task to the redux store
-        this.props.addTodo(this.state.title,this.state.description,this.state.date,this.state.to);
-        this.setState({
-            title:'',
-            description:'',
-            date:'',
-            to:'',
-            isNewTaskFormOpen:false
-        });
+        if(this.state.todo != null){
+            let todo = this.state.todo;
+            this.props.editTodo(todo.id, this.state.title, this.state.description, this.state.date,this.state.to);
+            this.setState({
+                title:'',
+                description:'',
+                date:'',
+                to: null,
+                todo: null,
+                isNewTaskFormOpen:false
+            });
+        }
+        else{
+            let transId = this.props.transaction.filter(transaction => transaction.active === true)[0].id; // Getting the id of the active transaction
+            this.props.addTodo(transId,this.state.title, this.state.description, this.state.date,this.state.to,this.props.user); 
+            this.setState({
+                title:'',
+                description:'',
+                date:'',
+                to: null,
+                isNewTaskFormOpen:false
+            });
+        }
     }
 
     editTask(todo){ // Editing task that already exist
         this.setState({
-            title: todo.title,
-            description: todo.description,
-            date: todo.date,
-            to: todo.to,
-            isNewTaskFormOpen:true
+            title: todo.Title,
+            description: todo.Description,
+            date: todo.Date,
+            to: todo.To,
+            isNewTaskFormOpen:true,
+            todo: todo
         });
     }
 
     expandTask(todo){ // opens the modal for that particular task
         this.setState({
             expandedTask:{
-                title: todo.title,
-                description: todo.description,
-                date: todo.date,
-                to: todo.to
+                title: todo.Title,
+                description: todo.Description,
+                date: todo.Date,
+                to: todo.To,
+                from: todo.From
             }
         });
         this.toggleModal();
@@ -292,28 +344,39 @@ class Todo extends Component{
                     </Typography>
                     <FormGroup row className="form-group">
                         <TagIcon size={30} className="tag-icon"/>
-                        <TextField variant="outlined" label="title" className="form-fields" value={this.state.title} onChange={this.handleTitleChange}/>
+                        <TextField variant="outlined" label="title" className="form-fields" value={this.state.title} name="title" onChange={this.handleChange}/>
                     </FormGroup>
                     <FormGroup row className="form-group">
                         <PencilIcon size={30} className="tag-icon"/>
                         <TextField variant="outlined" label="description" className="form-fields"
                         value={this.state.description}
                         multiline
-                        rows={8} onChange={this.handlleDescriptionChange}/>
+                        name="description"
+                        rows={8} onChange={this.handleChange}/>
                     </FormGroup>
                     <FormGroup row className="form-group">
                         <CalendarIcon size={30} className="tag-icon"/>
-                        <TextField variant="outlined" type="date" className="form-fields" value={this.state.date} onChange={this.handleDateChange}/>
+                        <TextField variant="outlined" type="date" className="form-fields" value={this.state.date} onChange={this.handleChange} name="date"/>
                     </FormGroup>
                     <Typography className="sub-heading-task-form-2">
                         Assign to Someone
                     </Typography>
                     <FormGroup row className="form-group">
                         <PersonIcon size={30} className="tag-icon" />
-                        <Select id="person_select" label="Select a person" className="form-fields" onChange={this.handleAssignChange} value={this.state.to}>
-                            <MenuItem value="Person 1">Person 1</MenuItem>
-                            <MenuItem value="Person 2">Person 2</MenuItem>
-                        </Select>
+                        {
+                            // Checking to see if the people dropdown should be disabled or not
+                            this.props.transaction.filter(transaction=>transaction.active === true)[0].People.length ? (
+                                <Select id="person_select" label="Select a person" className="form-fields" onChange={this.handleChange} value={this.state.to} name="to">
+                                    {this.props.transaction.filter(transaction=>transaction.active === true)[0].People.map((person)=>(
+                                        <MenuItem value={person}>{person.Name}</MenuItem>
+                                    ))}
+                                </Select>
+                            )
+                            :
+                            (
+                                <Select className="form-fields" disabled="true" />
+                            )
+                        }
                     </FormGroup>
                     <Grid container direction="row" justify="flex-end">
                         <Grid item>
