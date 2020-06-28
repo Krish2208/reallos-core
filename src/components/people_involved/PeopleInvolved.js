@@ -112,10 +112,10 @@ class People extends Component{
                     <Grid key={data.id} container paddingLeft={6} direction="column" alignItems="center" justify="center" spacing={1}>
                         <Grid item paddingLeft={6} style={{width:'100%'}}>
                             <Box paddingLeft={6}>
-                                <Card elevation={3} style={{marginBottom: '5px'}}>
+                                <Card elevation={3} style={{marginBottom: '10px'}}>
                                     <Grid container direction="row" alignItems="center" spacing={1} style={{color:'#150158'}}>
                                         <Grid item xs={1}>
-                                            <Box marginY={1} paddingLeft={2}>
+                                            <Box marginY={2} paddingLeft={2}>
                                                 { data.img ? (
                                                     <Avatar src={process.env.PUBLIC_URL + data.img}></Avatar>
                                                 ) : (
@@ -124,7 +124,7 @@ class People extends Component{
                                             </Box>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <Box marginY={1}>
+                                            <Box marginY={2}>
                                                 <Typography style={{fontWeight:800}}>
                                                     {data.Name}
                                                     <span style={{paddingLeft: 12, fontWeight:200}}><DotFillIcon size={12}/></span>

@@ -81,7 +81,8 @@ body {
 }
 .third-step-person-chip{
     font-weight: 700;
-    margin-bottom: 20px !important;
+    margin-bottom: 10px !important;
+    margin-right: 10px !important;
 }
 .people-involved-grid{
     margin-left: 28px !important;
