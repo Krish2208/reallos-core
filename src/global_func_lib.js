@@ -1,40 +1,40 @@
 /**
  * List of maps containing user roles in the form:
- * 
+ *
  * ```
  * {value: '...', label: '...'}
  * ```
  */
 export const USER_ROLES = [
-    {value: 'buyer', label: 'Buyer'},
-    {value: 'seller', label: 'Seller'},
-    {value: 'buyer-agent', label: 'Buyer Agent'},
-    {value: 'seller-agent', label: 'Seller Agent'},
-    {value: 'title-agent', label: 'Title Agent'},
-    {value: 'escrow-agent', label: 'Escrow Agent'},
-    {value: 'home-inspector', label: 'Home Inspector'}
-]
+  { value: "buyer", label: "Buyer" },
+  { value: "seller", label: "Seller" },
+  { value: "buyer-agent", label: "Buyer Agent" },
+  { value: "seller-agent", label: "Seller Agent" },
+  { value: "title-agent", label: "Title Agent" },
+  { value: "escrow-agent", label: "Escrow Agent" },
+  { value: "home-inspector", label: "Home Inspector" },
+];
 
 /**
  * Returns role label of a user based on `roleValue`
- * 
- * @param {"buyer" | "seller" | "buyer-agent" | "seller-agent" | "title-agent" | "escrow-agent" | "home-inspector"} roleValue 
+ *
+ * @param {"buyer" | "seller" | "buyer-agent" | "seller-agent" | "title-agent" | "escrow-agent" | "home-inspector"} roleValue
  * Role Value
- * 
+ *
  * @returns {string}
  * Role label
  */
 export const getRoleLabel = (roleValue) => {
-    let roleLabel = null;
+  let roleLabel = null;
 
-    USER_ROLES.map(role => {
-        if (role.value == roleValue) {
-            roleLabel = role.label;
-        }
-    });
+  USER_ROLES.map((role) => {
+    if (role.value == roleValue) {
+      roleLabel = role.label;
+    }
+  });
 
-    return roleLabel;
-}
+  return roleLabel;
+};
 
 /**
  * Regex to validate email.
@@ -49,102 +49,154 @@ export const phoneNumberValidationRegex = /^[0-9]{10}$/;
 /**
  * Validates a form field value based on the type
  * of field.
- * 
+ *
  * @param {string} textValue
  * The value to validate.
- * 
- * @param {"name" | "role" | "email" | "phone" | "password"} fieldType
+ *
+ * @param {"firstname" | "lastname" | "email" | "phone" | "role" | "stateopt" | "password"} fieldType
  * Type of form field that needs to be validated.
- * 
+ *
  * @returns {{hasError: boolean, errorText: string}}
  * Map containing `hasError` and `errorText`. If the field
  * is valid or `fieldType` is invalid, `errorText` will be `null`.
  */
 export const validateFormField = (textValue, fieldType) => {
-    let formFieldError = {
-        hasError: false,
-        errorText: null
-    }
+  let formFieldError = {
+    hasError: false,
+    errorText: null,
+  };
 
-    switch (fieldType) {
-        case 'name':
-            if (textValue.trim() === '') {
-                formFieldError = {
-                    hasError: true,
-                    errorText: "Name cannot be empty"
-                }
-            }
+  switch (fieldType) {
+    case "name":
+      if (textValue.trim() === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "Name cannot be empty",
+        };
+      }
 
-            break;
+      break;
 
-        case 'email':
-            if (textValue === '') {
-                formFieldError = {
-                    hasError: true,
-                    errorText: "Email cannot be empty"
-                }
-            }
+    case "title":
+      if (textValue.trim() === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "Title cannot be empty",
+        };
+      }
 
-            else if (!emailValidationRegex.test(textValue)) {
-                formFieldError = {
-                    hasError: true,
-                    errorText: "Email is invalid"
-                }
-            }
+      break;
 
-            break;
+    case "firstName":
+      if (textValue.trim() === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "This field cannot be empty",
+        };
+      }
 
-        case 'phone':
-            if (textValue === '') {
-                formFieldError = {
-                    hasError: true,
-                    errorText: "Phone number cannot be empty"
-                }
-            }
+      break;
 
-            else if (!phoneNumberValidationRegex.test(textValue)) {
-                formFieldError = {
-                    hasError: true,
-                    errorText: "Phone number is invalid"
-                }
-            }
+    case "lastName":
+      if (textValue.trim() === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "This field cannot be empty",
+        };
+      }
 
-            break;
+      break;
 
-        case 'role':
-            if (textValue === '') {
-                formFieldError = {
-                    hasError: true,
-                    errorText: "Role cannot be left unselected"
-                }
-            }
+    case "email":
+      if (textValue === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "Email cannot be empty",
+        };
+      } else if (!emailValidationRegex.test(textValue)) {
+        formFieldError = {
+          hasError: true,
+          errorText: "Email is invalid",
+        };
+      }
 
-            else if (getRoleLabel(textValue) === null) {
-                formFieldError = {
-                    hasError: true,
-                    errorText: "Role is invalid"
-                }
-            }
+      break;
 
-            break;
+    case "phone":
+      if (textValue === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "Phone number cannot be empty",
+        };
+      } else if (!phoneNumberValidationRegex.test(textValue)) {
+        formFieldError = {
+          hasError: true,
+          errorText: "Phone number is invalid",
+        };
+      }
 
-        case 'password':
-            if (textValue === '') {
-                formFieldError = {
-                    hasError: true,
-                    errorText: 'Password cannot be empty'
-                }
-            }
+      break;
 
-            else if (textValue.length < 8) {
-                formFieldError = {
-                    hasError: true,
-                    errorText: 'Password must be atleast 8 characters long!'
-                }
-            }
+    case "address":
+      if (textValue.trim() === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "Address cannot be empty",
+        };
+      }
 
-            break;
-    }
+      break;
 
-    return formFieldError;
-}
+    case "description":
+      if (textValue.trim() === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "Description cannot be empty",
+        };
+      }
+
+      break;
+
+    case "role":
+      if (textValue === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "Role cannot be left unselected",
+        };
+      } else if (getRoleLabel(textValue) === "null") {
+        formFieldError = {
+          hasError: true,
+          errorText: "Role is invalid",
+        };
+      }
+
+      break;
+
+    case "state":
+      if (textValue === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "State cannot be left unselected",
+        };
+      }
+
+      break;
+
+    case "password":
+      if (textValue === "") {
+        formFieldError = {
+          hasError: true,
+          errorText: "Password cannot be empty",
+        };
+      } else if (textValue.length < 8) {
+        formFieldError = {
+          hasError: true,
+          errorText: "Password must be atleast 8 characters long!",
+        };
+      }
+
+      break;
+  }
+
+  return formFieldError;
+};

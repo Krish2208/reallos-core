@@ -23,7 +23,7 @@ export class FormStep1 extends Component {
             onBlur={handleChange}
             defaultValue={values.firstName}
             helperText={errors.firstName}
-            error={errors.firstName !== ""}
+            error={errors.firstName !== null}
           />
           <TextField
             className="input-item"
@@ -34,7 +34,7 @@ export class FormStep1 extends Component {
             onBlur={handleChange}
             defaultValue={values.lastName}
             helperText={errors.lastName}
-            error={errors.lastName !== ""}
+            error={errors.lastName !== null}
           />
           <TextField
             className="input-item"
@@ -45,7 +45,7 @@ export class FormStep1 extends Component {
             onBlur={handleChange}
             defaultValue={values.email}
             helperText={errors.email}
-            error={errors.email !== ""}
+            error={errors.email !== null}
           />
           <TextField
             className="input-item"
@@ -56,7 +56,7 @@ export class FormStep1 extends Component {
             onBlur={handleChange}
             defaultValue={values.phone}
             helperText={errors.phone}
-            error={errors.phone !== ""}
+            error={errors.phone !== null}
           />
           <Button
             variant="contained"
@@ -69,8 +69,8 @@ export class FormStep1 extends Component {
         </FormGroup>
 
         <div id="signin-link-footer">
-            Already have an account? &nbsp;
-            <a href="#">Sign In</a>
+          Already have an account? &nbsp;
+          <a href="#">Sign In</a>
         </div>
       </>
     );

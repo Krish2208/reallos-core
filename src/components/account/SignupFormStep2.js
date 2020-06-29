@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./SignUpModal.css";
-import {ChevronLeftIcon, CheckIcon } from "@primer/octicons-react";
+import { ChevronLeftIcon, CheckIcon } from "@primer/octicons-react";
 import {
   FormGroup,
   InputLabel,
@@ -9,7 +9,7 @@ import {
   Select,
   FormControl,
   Grid,
-  MenuItem
+  MenuItem,
 } from "@material-ui/core";
 
 export class FormStep2 extends Component {
@@ -25,7 +25,16 @@ export class FormStep2 extends Component {
         <FormGroup>
           <FormControl variant="outlined" className="input-item">
             <InputLabel id="role">Role</InputLabel>
-            <Select labelId="role" id="role_select" name="role" label="Role" defaultValue={values.role} onChange={handleChange}>
+            <Select
+              labelId="role"
+              id="role_select"
+              name="role"
+              label="Role"
+              defaultValue={values.role}
+              onChange={handleChange}
+              helperText={errors.role}
+              error={errors.role !== null}
+            >
               <MenuItem value="buyer">Buyer</MenuItem>
               <MenuItem value="seller">Seller</MenuItem>
               <MenuItem value="buyer-agent">Buyer Agent</MenuItem>
@@ -37,7 +46,16 @@ export class FormStep2 extends Component {
           </FormControl>
           <FormControl variant="outlined" className="input-item">
             <InputLabel id="state">State</InputLabel>
-            <Select labelId="sate" id="state_select" label="State" name="state" defaultValue={values.state} onChange={handleChange}>
+            <Select
+              labelId="sate"
+              id="state_select"
+              label="State"
+              name="state"
+              defaultValue={values.state}
+              onChange={handleChange}
+              helperText={errors.state}
+              error={errors.state !== null}
+            >
               <MenuItem value="TX">Texas</MenuItem>
             </Select>
           </FormControl>
@@ -51,7 +69,7 @@ export class FormStep2 extends Component {
             onBlur={handleChange}
             defaultValue={values.password}
             helperText={errors.password}
-            error={errors.password !== ""}
+            error={errors.password !== null}
           />
           <TextField
             className="input-item"
@@ -63,7 +81,7 @@ export class FormStep2 extends Component {
             onBlur={handleChange}
             defaultValue={values.confirm}
             helperText={errors.confirm}
-            error={errors.confirm !== ""}
+            error={errors.confirm !== null}
           />
           <Grid
             container
@@ -94,8 +112,8 @@ export class FormStep2 extends Component {
         </FormGroup>
 
         <div id="signin-link-footer">
-            Already have an account? &nbsp;
-            <a href="#">Sign In</a>
+          Already have an account? &nbsp;
+          <a href="#">Sign In</a>
         </div>
       </>
     );
