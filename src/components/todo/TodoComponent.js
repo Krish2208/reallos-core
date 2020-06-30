@@ -30,7 +30,8 @@ import {
   AlertIcon,
   ArrowRightIcon,
   IssueOpenedIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  CheckCircleFillIcon
 } from "@primer/octicons-react";
 import SideDrawer from "../shared/drawer/SideDrawer";
 import NavBar from "../shared/navbar/navbar";
@@ -414,6 +415,11 @@ class Todo extends Component {
                 </tr>
               </table>
             </Box>
+            <Typography align="right">
+              <Button startIcon={<CheckCircleFillIcon/>} style={{backgroundColor:'#150578', color: '#fff'}}>
+                Completed
+              </Button>
+            </Typography>
           </Grid>
         </Grid>
       </Modal>
