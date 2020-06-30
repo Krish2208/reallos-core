@@ -60,14 +60,14 @@ class NewTransactionButton extends Component {
       isModalOpen: false, // To store the state of the modal
       activeStep: 0,
       isInsideModalOpen: false,
-      Name: null,
-      Address: null,
-      Description: null,
+      Name: "",
+      Address: "",
+      Description: "",
       Invite: {
         // Holding the temprorary state of the invites
-        Name: null,
-        Email: null,
-        Role: null,
+        Name: "",
+        Email: "",
+        Role: "",
         Accepted: false,
       },
       errors: {
@@ -122,9 +122,9 @@ class NewTransactionButton extends Component {
     this.setState({
       activeStep: 0,
       isModalOpen: !this.state.isModalOpen,
-      Name: null,
-      Address: null,
-      Description: null,
+      Name: "",
+      Address: "",
+      Description: "",
       Invites: [],
     });
   }
@@ -214,10 +214,11 @@ class NewTransactionButton extends Component {
     }
 
     this.setState({ errors });
+
     if (
-      this.state.Name != null &&
-      this.state.Address != null &&
-      this.state.Description != null
+      this.state.Name != "" &&
+      this.state.Address != "" &&
+      this.state.Description != ""
     ) {
       this.setState({ validatedForm: true });
     } else {
@@ -247,8 +248,6 @@ class NewTransactionButton extends Component {
       default:
     }
 
-    this.setState({ errors });
-
     let Invite = this.state.Invite; // Intitalizing Invite with the state Invite
     Invite.Accepted = false; // Always setting the accepted value to false
     if (name === "name") {
@@ -260,12 +259,12 @@ class NewTransactionButton extends Component {
     if (name === "role") {
       Invite.Role = value;
     }
-    this.setState({ Invite: Invite }); // Setting the state of the invite
+    this.setState({ Invite, errors }); // Setting the state of the invite
 
     if (
-      this.state.Invite.Name != null &&
-      this.state.Invite.Email != null &&
-      this.state.Invite.Role != null
+      this.state.Invite.Name != "" &&
+      this.state.Invite.Email != "" &&
+      this.state.Invite.Role != ""
     ) {
       this.setState({ validatedInvite: true });
     } else {
@@ -331,7 +330,7 @@ class NewTransactionButton extends Component {
                 className="input-new-transaction-form"
                 name="name"
                 onChange={this.handleChange}
-                defaultValue={this.state.Name}
+                value={this.state.Name}
                 onBlur={this.handleChange}
                 helperText={this.state.errors.Name}
                 error={this.state.errors.Name !== null}
@@ -345,7 +344,7 @@ class NewTransactionButton extends Component {
                 className="input-new-transaction-form"
                 name="address"
                 onChange={this.handleChange}
-                defaultValue={this.state.Address}
+                value={this.state.Address}
                 onBlur={this.handleChange}
                 helperText={this.state.errors.Address}
                 error={this.state.errors.Address !== null}
@@ -360,7 +359,7 @@ class NewTransactionButton extends Component {
                 multiline
                 rows={4}
                 name="description"
-                defaultValue={this.state.Description}
+                value={this.state.Description}
                 onChange={this.handleChange}
                 onBlur={this.handleChange}
                 helperText={this.state.errors.Description}
@@ -376,7 +375,7 @@ class NewTransactionButton extends Component {
                   onClick={this.toggleModal}
                   className="cancel-back-button"
                 >
-                  cancel
+                  Cancel
                 </Button>
               </Grid>
               <Grid item>
@@ -384,8 +383,9 @@ class NewTransactionButton extends Component {
                   variant="contained"
                   onClick={this.validStep}
                   className="next-button"
+                  disabled={!this.state.validatedForm}
                 >
-                  next
+                  Next
                 </Button>
               </Grid>
             </Grid>
@@ -463,7 +463,7 @@ class NewTransactionButton extends Component {
                   onClick={this.toggleModal}
                   className="cancel-back-button"
                 >
-                  cancel
+                  Cancel
                 </Button>
               </Grid>
               <Grid item>
@@ -474,7 +474,7 @@ class NewTransactionButton extends Component {
                       onClick={this.prevSteps}
                       className="cancel-back-button"
                     >
-                      back
+                      Back
                     </Button>
                   </Grid>
                   <Grid item>
@@ -483,7 +483,7 @@ class NewTransactionButton extends Component {
                       onClick={this.nextSteps}
                       className="next-button"
                     >
-                      next
+                      Next
                     </Button>
                   </Grid>
                 </Grid>
@@ -755,7 +755,7 @@ class NewTransactionButton extends Component {
               label="Name"
               className="input-new-transaction-form"
               name="name"
-              defaultValue={this.state.Invite.Name}
+              value={this.state.Invite.Name}
               onChange={this.handleInviteChange}
               onBlur={this.handleInviteChange}
               helperText={this.state.errors.Name}
@@ -769,7 +769,7 @@ class NewTransactionButton extends Component {
               label="E-mail"
               className="input-new-transaction-form"
               name="email"
-              defaultValue={this.state.Invite.Email}
+              value={this.state.Invite.Email}
               onChange={this.handleInviteChange}
               onBlur={this.handleInviteChange}
               helperText={this.state.errors.Email}
@@ -787,7 +787,7 @@ class NewTransactionButton extends Component {
                 id="select"
                 className="input-new-transaction-form"
                 name="role"
-                defaultValue={this.state.Invite.Role}
+                value={this.state.Invite.Role}
                 onChange={this.handleInviteChange}
                 onBlur={this.handleInviteChange}
                 helperText={this.state.errors.Role}
@@ -812,7 +812,7 @@ class NewTransactionButton extends Component {
                   onClick={this.toggleInsideModal}
                   className="cancel-back-button"
                 >
-                  cancel
+                  Cancel
                 </Button>
               </Grid>
               <Grid item>
@@ -820,6 +820,7 @@ class NewTransactionButton extends Component {
                   variant="contained"
                   onClick={this.addInvite}
                   className="next-button"
+                  disabled={!this.state.validatedInvite}
                 >
                   <CheckIcon /> &nbsp; Invite
                 </Button>
