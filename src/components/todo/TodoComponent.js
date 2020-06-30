@@ -594,7 +594,7 @@ class Todo extends Component {
               variant="outlined"
               label="Title"
               className="form-fields"
-              DefaultValue={this.state.title}
+              value={this.state.title}
               name="title"
               onChange={this.handleChange}
               onBlur={this.handleChange}
@@ -608,7 +608,7 @@ class Todo extends Component {
               variant="outlined"
               label="Description"
               className="form-fields"
-              DefaultValue={this.state.description}
+              value={this.state.description}
               multiline
               name="description"
               rows={8}
@@ -625,7 +625,7 @@ class Todo extends Component {
               variant="outlined"
               type="date"
               className="form-fields"
-              DefaultValue={this.state.date}
+              value={this.state.date}
               onChange={this.handleChange}
               onBlur={this.handleChange}
               name="date"

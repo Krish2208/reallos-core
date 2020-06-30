@@ -331,7 +331,7 @@ class NewTransactionButton extends Component {
                 className="input-new-transaction-form"
                 name="name"
                 onChange={this.handleChange}
-                defaultValue={this.state.Name}
+                value={this.state.Name}
                 onBlur={this.handleChange}
                 helperText={this.state.errors.Name}
                 error={this.state.errors.Name !== null}
@@ -345,7 +345,7 @@ class NewTransactionButton extends Component {
                 className="input-new-transaction-form"
                 name="address"
                 onChange={this.handleChange}
-                defaultValue={this.state.Address}
+                value={this.state.Address}
                 onBlur={this.handleChange}
                 helperText={this.state.errors.Address}
                 error={this.state.errors.Address !== null}
@@ -360,7 +360,7 @@ class NewTransactionButton extends Component {
                 multiline
                 rows={4}
                 name="description"
-                defaultValue={this.state.Description}
+                value={this.state.Description}
                 onChange={this.handleChange}
                 onBlur={this.handleChange}
                 helperText={this.state.errors.Description}
@@ -755,7 +755,7 @@ class NewTransactionButton extends Component {
               label="Name"
               className="input-new-transaction-form"
               name="name"
-              defaultValue={this.state.Invite.Name}
+              value={this.state.Invite.Name}
               onChange={this.handleInviteChange}
               onBlur={this.handleInviteChange}
               helperText={this.state.errors.Name}
@@ -769,7 +769,7 @@ class NewTransactionButton extends Component {
               label="E-mail"
               className="input-new-transaction-form"
               name="email"
-              defaultValue={this.state.Invite.Email}
+              value={this.state.Invite.Email}
               onChange={this.handleInviteChange}
               onBlur={this.handleInviteChange}
               helperText={this.state.errors.Email}
@@ -787,7 +787,7 @@ class NewTransactionButton extends Component {
                 id="select"
                 className="input-new-transaction-form"
                 name="role"
-                defaultValue={this.state.Invite.Role}
+                value={this.state.Invite.Role}
                 onChange={this.handleInviteChange}
                 onBlur={this.handleInviteChange}
                 helperText={this.state.errors.Role}

@@ -21,7 +21,7 @@ export class FormStep1 extends Component {
             name="firstName"
             onChange={handleChange}
             onBlur={handleChange}
-            defaultValue={values.firstName}
+            value={values.firstName}
             helperText={errors.firstName}
             error={errors.firstName !== null}
           />
@@ -32,7 +32,7 @@ export class FormStep1 extends Component {
             name="lastName"
             onChange={handleChange}
             onBlur={handleChange}
-            defaultValue={values.lastName}
+            value={values.lastName}
             helperText={errors.lastName}
             error={errors.lastName !== null}
           />
@@ -43,7 +43,7 @@ export class FormStep1 extends Component {
             name="email"
             onChange={handleChange}
             onBlur={handleChange}
-            defaultValue={values.email}
+            value={values.email}
             helperText={errors.email}
             error={errors.email !== null}
           />
@@ -54,7 +54,7 @@ export class FormStep1 extends Component {
             name="phone"
             onChange={handleChange}
             onBlur={handleChange}
-            defaultValue={values.phone}
+            value={values.phone}
             helperText={errors.phone}
             error={errors.phone !== null}
           />

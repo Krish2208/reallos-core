@@ -30,7 +30,7 @@ export class FormStep2 extends Component {
               id="role_select"
               name="role"
               label="Role"
-              defaultValue={values.role}
+              value={values.role}
               onChange={handleChange}
               helperText={errors.role}
               error={errors.role !== null}
@@ -51,7 +51,7 @@ export class FormStep2 extends Component {
               id="state_select"
               label="State"
               name="state"
-              defaultValue={values.state}
+              value={values.state}
               onChange={handleChange}
               helperText={errors.state}
               error={errors.state !== null}
@@ -67,7 +67,7 @@ export class FormStep2 extends Component {
             name="password"
             onChange={handleChange}
             onBlur={handleChange}
-            defaultValue={values.password}
+            value={values.password}
             helperText={errors.password}
             error={errors.password !== null}
           />
@@ -79,7 +79,7 @@ export class FormStep2 extends Component {
             name="confirm"
             onChange={handleChange}
             onBlur={handleChange}
-            defaultValue={values.confirm}
+            value={values.confirm}
             helperText={errors.confirm}
             error={errors.confirm !== null}
           />
