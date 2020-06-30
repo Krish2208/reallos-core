@@ -29,6 +29,9 @@ import {
   XIcon,
   AlertIcon,
   ArrowRightIcon,
+  IssueOpenedIcon,
+  CheckCircleIcon,
+  CheckCircleFillIcon
 } from "@primer/octicons-react";
 import SideDrawer from "../shared/drawer/SideDrawer";
 import NavBar from "../shared/navbar/navbar";
@@ -97,7 +100,59 @@ class Todo extends Component {
     this.RenderToDoModal = this.RenderToDoModal.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.expandTask = this.expandTask.bind(this);
+    this.getIcon = this.getIcon.bind(this);
+    this.getDeadlineText = this.getDeadlineText.bind(this);
   }
+
+  getIcon(deadline_date){
+    var d = new Date();
+    var currentDate = d.getTime();
+    var deadlineDate = Date.parse(deadline_date);
+    var diff = (deadlineDate-currentDate)/(1000*60*60*24)
+    if (diff<=3 && diff>=1){
+      return(
+        <AlertIcon className="alert-color" size={20} />
+      );
+    }
+    else if (diff<1){
+      return(
+        <IssueOpenedIcon className="danger-color" size={20} />
+      );
+    }
+    else if(diff>3){
+      return(
+        <CheckIcon className="success-color" size={20} />
+      );
+    }
+  };
+
+  getDeadlineText(deadline_date){
+    var d = new Date();
+    var currentDate = d.getTime();
+    var deadlineDate = Date.parse(deadline_date);
+    var diff = (deadlineDate-currentDate)/(1000*60*60*24)
+    if (diff<=3 && diff>=1){
+      return(
+        <Typography className="alert-color">
+          This Task is going to hit the deadline soon!
+        </Typography>
+      );
+    }
+    else if (diff<1){
+      return(
+        <Typography className="danger-color" >
+          This Task is going to hit the deadline soon!
+        </Typography>
+      );
+    }
+    else if(diff>3){
+      return(
+        <Typography className="success-color" >
+          This Task is going to hit the deadline soon!
+        </Typography>
+      );
+    }
+  };
 
   RenderToDo() {
     let transId = this.props.transaction.filter(
@@ -157,7 +212,7 @@ class Todo extends Component {
                       >
                         <Grid item>
                           <Box paddingLeft={2}>
-                            <AlertIcon className="alert-color" size={20} />
+                            {this.getIcon(todo.Date)}
                           </Box>
                         </Grid>
                         <Grid item>
@@ -270,14 +325,14 @@ class Todo extends Component {
       >
         <Grid direction="column" container spacing={1} justify="flex-start">
           <Grid item>
-            <Box className="alert-color">
+            <Box>
               <table>
                 <tr>
                   <td>
-                    <AlertIcon />
+                    {this.getIcon(this.state.expandedTask.date)}
                   </td>
                   <td style={{ paddingLeft: "10px", paddingTop: "4px" }}>
-                    This Task is going to hit the deadline soon!
+                  {this.getDeadlineText(this.state.expandedTask.date)}
                   </td>
                 </tr>
               </table>
@@ -360,6 +415,11 @@ class Todo extends Component {
                 </tr>
               </table>
             </Box>
+            <Typography align="right">
+              <Button startIcon={<CheckCircleFillIcon/>} style={{backgroundColor:'#150578', color: '#fff'}}>
+                Completed
+              </Button>
+            </Typography>
           </Grid>
         </Grid>
       </Modal>
