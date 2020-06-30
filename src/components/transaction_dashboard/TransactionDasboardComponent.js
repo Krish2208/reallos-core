@@ -319,6 +319,7 @@ class TransactionDasboard extends Component {
                       onClick={this.CheckValidity}
                       className="next-button"
                       style={{ width: "50%" }}
+                      disabled={!this.state.validated}
                     >
                       <CheckIcon /> &nbsp; Confirm
                     </Button>

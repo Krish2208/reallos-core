@@ -94,6 +94,7 @@ export class FormStep2 extends Component {
                 variant="contained"
                 className="signup-contained-button small-next-button"
                 onClick={this.props.submit}
+                disabled={!values.validatedForm2}
               >
                 Confirm &nbsp;
                 <CheckIcon sixe={25} />

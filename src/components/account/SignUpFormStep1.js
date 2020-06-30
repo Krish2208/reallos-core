@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./SignUpModal.css";
 import { ChevronRightIcon } from "@primer/octicons-react";
 import { FormGroup, TextField, Button } from "@material-ui/core";
+import { validateFormField } from "../../global_func_lib";
 
 export class FormStep1 extends Component {
   continue = (e) => {
@@ -62,6 +63,7 @@ export class FormStep1 extends Component {
             variant="contained"
             className="signup-contained-button"
             onClick={this.continue}
+            disabled={!values.validatedForm1}
           >
             Next &nbsp;
             <ChevronRightIcon size={25} />

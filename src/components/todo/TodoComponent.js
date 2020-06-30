@@ -68,16 +68,17 @@ class Todo extends Component {
     this.state = {
       isNewTaskFormOpen: false,
       isModalOpen: false, // To make sure the task modal is open or not
-      title: null,
-      description: null,
-      date: null,
-      to: null,
-      to_Person: null, // js object that contains the person object
+      title: "",
+      description: "",
+      date: "",
+      to: "",
+      to_Person: "", // js object that contains the person object
       todo: null,
       errors: {
         title: null,
         description: null,
         date: null,
+        to: null,
       },
       expandedTask: {
         title: "",
@@ -464,29 +465,21 @@ class Todo extends Component {
       case "date":
         errors.date = formFieldError.errorText;
         break;
+      case "to":
+        errors.to = formFieldError.errorText;
+        break;
       default:
     }
 
     this.setState({ errors, [name]: value });
     if (
-      this.state.title != null &&
-      this.state.description != null &&
-      this.state.date != null
+      this.state.title != "" &&
+      this.state.description != "" &&
+      this.state.date != "" &&
+      this.state.to != ""
     ) {
       this.setState({ validated: true });
     }
-  }
-
-  cancelAddTask() {
-    // To cancel the task and set the values of the fields to null
-    this.setState({
-      title: "",
-      description: "",
-      date: "",
-      to: null,
-      isNewTaskFormOpen: false,
-      todo: null,
-    });
   }
 
   validForm = (errors) => {
@@ -506,6 +499,19 @@ class Todo extends Component {
     }
   }
 
+  cancelAddTask() {
+    // To cancel the task and set the values of the fields to null
+    this.setState({
+      title: "",
+      description: "",
+      date: "",
+      to: "",
+      isNewTaskFormOpen: false,
+      todo: null,
+      validated: false,
+    });
+  }
+
   addNewTask() {
     // Adding new task to the redux store
     if (this.state.todo != null) {
@@ -521,9 +527,10 @@ class Todo extends Component {
         title: "",
         description: "",
         date: "",
-        to: null,
+        to: "",
         todo: null,
         isNewTaskFormOpen: false,
+        validated: false,
       });
     } else {
       let transId = this.props.transaction.filter(
@@ -541,8 +548,9 @@ class Todo extends Component {
         title: "",
         description: "",
         date: "",
-        to: null,
+        to: "",
         isNewTaskFormOpen: false,
+        validated: false,
       });
     }
   }
@@ -556,6 +564,7 @@ class Todo extends Component {
       to: todo.To,
       isNewTaskFormOpen: true,
       todo: todo,
+      validated: false,
     });
   }
 
@@ -648,6 +657,7 @@ class Todo extends Component {
                   label="Select a person"
                   className="form-fields"
                   onChange={this.handleChange}
+                  onBlur={this.handleChange}
                   value={this.state.to}
                   name="to"
                 >
@@ -678,7 +688,7 @@ class Todo extends Component {
                   <Button
                     variant="contained"
                     onClick={this.validTask}
-                    diabled
+                    disabled={!this.state.validated}
                     className="next-button"
                   >
                     <CheckIcon /> &nbsp; Add Task
