@@ -85,12 +85,12 @@ class Chat extends Component {
             >
               <Grid item>
                 <img
-                  src={this.currentUserAvatar}
+                  src={require("../../../assets/icon-avatar.png")}
                   alt="icon avatar"
                   className="emptyList-img"
                 />
                 <img
-                  src={this.currentUserAvatar}
+                  src={require("../../../assets/icon-avatar.png")}
                   alt="icon avatar"
                   className="emptyList-img-bg"
                 />
@@ -152,7 +152,7 @@ class Chat extends Component {
                         <Grid item>
                           <IconButton size="medium">
                             <img
-                              src={this.currentUserAvatar}
+                              src={require("../../../assets/icon-avatar.png")}
                               alt="icon avatar"
                               className="profilePhoto"
                             ></img>
