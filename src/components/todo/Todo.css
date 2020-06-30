@@ -23,3 +23,9 @@
 .alert-color{
     color: #ffaa00;
 }
+.danger-color{
+    color: #dc3545;
+}
+.success-color{
+    color: #28a745;
+}

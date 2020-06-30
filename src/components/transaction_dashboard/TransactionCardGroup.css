@@ -3,11 +3,11 @@
 }
 
 .transaction-card-item {
-    min-height: 280px;
+    min-height: 290px;
 }
 
 .transaction-card {
-    min-height: 280px;
+    min-height: 290px;
 }
 
 /*.transaction-card-heading{
@@ -40,4 +40,7 @@
     margin-left: 60px;
     padding-left: 12px !important;
     font-size: 16px !important;
+}
+.color-danger{
+    color: #dc3545;
 }

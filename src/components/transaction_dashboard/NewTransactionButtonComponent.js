@@ -629,7 +629,7 @@ class NewTransactionButton extends Component {
                     </Grid>
                     <Grid item>
                       <div className="invite-people-text-subheading">
-                        Transaction 1
+                        {this.state.Name}
                       </div>
                     </Grid>
                   </Grid>
@@ -642,7 +642,7 @@ class NewTransactionButton extends Component {
                     </Grid>
                     <Grid item>
                       <div className="invite-people-text-subheading">
-                        Mountain View, California, United States
+                        {this.state.Address}
                       </div>
                     </Grid>
                   </Grid>
