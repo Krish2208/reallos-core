@@ -5,7 +5,7 @@ import PaperWork from "./paperwork/PaperWorkComponent";
 import DummyPage from "./dummy/DummyPage";
 import PeopleInvolved from "./people_involved/PeopleInvolved";
 import Todo from "./todo/TodoComponent";
-import ChatMain from "./chat/ChatMain/ChatMain";
+import DiscussionsMain from "./discussions/DiscussionsMain/DiscussionsMain";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import Auth from "./account/Authenticate";
 
@@ -36,7 +36,7 @@ function Main(props) {
         <PrivateRoute path="/paperwork" component={PaperWork} />
         <PrivateRoute path="/people" component={PeopleInvolved} />
         <PrivateRoute path="/todo" component={Todo} />
-        <PrivateRoute path="/chat" component={ChatMain} />
+        <PrivateRoute path="/discussions" component={DiscussionsMain} />
         <Redirect to="/dummy" />
       </Switch>
     </div>

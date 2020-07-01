@@ -1,0 +1,46 @@
+.discussions-root {
+  box-shadow: #00000040 0 3px 6px;
+  border-radius: 10px;
+}
+
+.list-div {
+  background-color: #ffffff;
+  border-radius: 10px 0 0 10px;
+  height: 92vh;
+}
+
+.list-header {
+  background-color: #e5e5e5;
+  border-radius: 10px 0 0 0px;
+}
+
+.discussions-reallos-logo {
+  height: 20px;
+}
+
+.large-text {
+  font-size: 35px !important;
+  font-weight: 600 !important;
+  color: #150578;
+}
+
+.small-text {
+  font-size: 18px !important;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  color: #150578;
+}
+
+.discussions-div {
+  background-color: #d0cde4;
+  border-radius: 0 10px 10px 0;
+  height: 92vh;
+}
+
+.discussions-empty-avatar-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 150px;
+}

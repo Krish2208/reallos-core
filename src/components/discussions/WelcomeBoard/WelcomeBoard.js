@@ -10,28 +10,29 @@ export default class WelcomeBoard extends Component {
           <Box paddingTop={13}>
             <img
               src={require("../../../assets/chat-empty.png")}
-              className="chat-empty-image"
+              className="discussions-empty-image"
             />
           </Box>
         </Grid>
         <Grid item>
           <Box paddingTop={2}>
-            <Typography className="chat-heading">
-              Reallos Discussions
-            </Typography>
+            <div className="discussions-heading">
+              <span style={{fontFamily: 'Gilroy', fontWeight: 900}}>
+                Reallos
+              </span>
+
+              &nbsp;
+
+              <span>
+                Discussions
+              </span>
+            </div>
           </Box>
         </Grid>
         <Grid item>
-          <Box paddingTop={1}>
-            <Typography className="chat-subheading">
-              Start a conversation with anyone
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item>
-          <Box paddingTop={-3}>
-            <Typography className="chat-subheading">
-              involved in your transaction
+          <Box mt={3}>
+            <Typography className="discussions-subheading">
+              Start a conversation with anyone involved in your transaction
             </Typography>
           </Box>
         </Grid>

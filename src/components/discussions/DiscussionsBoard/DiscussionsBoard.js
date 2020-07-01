@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import ReactLoading from "react-loading";
 import { myFirestore, myStorage } from "../../../Config/MyFirebase";
 import images from "../Themes/Images";
-import "./ChatBoard.css";
-import { AppString } from "./../Const";
+import "./DiscussionsBoard.css";
+import { AppString } from "../Const";
 
 export default class ChatBoard extends Component {
   constructor(props) {

@@ -1,0 +1,17 @@
+.discussions-empty-image {
+  width: 400px;
+  /* height: 300px; */
+}
+
+.discussions-heading {
+  font-size: 35px !important;
+  color: #274060;
+}
+
+.discussions-subheading {
+  font-family: 'Roboto Slab' !important;
+  font-size: 20px !important;
+  text-align: center;
+  width: 450px;
+  color: #274060;
+}
