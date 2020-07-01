@@ -6,7 +6,7 @@
     height: 24px;
     display: flex;
     align-items: center;
-    margin-right: 7px;
+    margin-right: 12px;
 }
 
 .nav-rail-indicator-active, .nav-rail-indicator-inactive {

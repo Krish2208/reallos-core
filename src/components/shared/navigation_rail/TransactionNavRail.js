@@ -26,11 +26,11 @@ import {
   HomeIcon,
 } from "@primer/octicons-react";
 
-const navRailWidth = 260;
+const navRailWidth = 300;
 
 const listItemTextProperties = {
   color: "#150578",
-  marginLeft: 10,
+  marginLeft: 12,
   fontSize: 16
 }
 
@@ -119,9 +119,9 @@ export default function NavRail() {
     },
     {
       icon: (<CommentDiscussionIcon size={24} />),
-      label: 'Chat',
-      isActiveRoute: routerLocation.pathname.startsWith('/chat'),
-      linkTo: '/chat'
+      label: 'Discussions',
+      isActiveRoute: routerLocation.pathname.startsWith('/discussions'),
+      linkTo: '/discussions'
     },
   ];
 
@@ -154,7 +154,7 @@ export default function NavRail() {
     return (
       <ListItem
         button
-        style={{marginTop: 15, paddingLeft: 10}}
+        style={{marginTop: 15, paddingLeft: 6}}
         component="a"
         key={label}
         onClick={()=>(
