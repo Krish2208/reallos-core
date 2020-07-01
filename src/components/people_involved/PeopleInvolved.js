@@ -34,6 +34,7 @@ import {
   VerifiedIcon,
 } from "@primer/octicons-react";
 import Modal from "../shared/modal/Modal";
+import { validateFormField } from "../../global_func_lib";
 import "./PeopleInvolved.css";
 
 const mapStateToProps = (state) => ({
