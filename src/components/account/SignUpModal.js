@@ -206,8 +206,26 @@ class SignUpModal extends Component {
   };
 
   RenderStepsForm() {
-    const { firstName, lastName, email, phone, password, confirm } = this.state;
-    const values = { firstName, lastName, email, phone, password, confirm };
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      confirm,
+      validatedForm1,
+      validatedForm2,
+    } = this.state;
+    const values = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      confirm,
+      validatedForm1,
+      validatedForm2,
+    };
 
     switch (this.state.activeStep) {
       case 0:

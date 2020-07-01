@@ -29,6 +29,9 @@ import {
   XIcon,
   AlertIcon,
   ArrowRightIcon,
+  IssueOpenedIcon,
+  CheckCircleIcon,
+  CheckCircleFillIcon
 } from "@primer/octicons-react";
 import SideDrawer from "../shared/drawer/SideDrawer";
 import NavBar from "../shared/navbar/navbar";
@@ -65,16 +68,17 @@ class Todo extends Component {
     this.state = {
       isNewTaskFormOpen: false,
       isModalOpen: false, // To make sure the task modal is open or not
-      title: null,
-      description: null,
-      date: null,
-      to: null,
-      to_Person: null, // js object that contains the person object
+      title: "",
+      description: "",
+      date: "",
+      to: "",
+      to_Person: "", // js object that contains the person object
       todo: null,
       errors: {
         title: null,
         description: null,
         date: null,
+        to: null,
       },
       expandedTask: {
         title: "",
@@ -97,7 +101,59 @@ class Todo extends Component {
     this.RenderToDoModal = this.RenderToDoModal.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.expandTask = this.expandTask.bind(this);
+    this.getIcon = this.getIcon.bind(this);
+    this.getDeadlineText = this.getDeadlineText.bind(this);
   }
+
+  getIcon(deadline_date){
+    var d = new Date();
+    var currentDate = d.getTime();
+    var deadlineDate = Date.parse(deadline_date);
+    var diff = (deadlineDate-currentDate)/(1000*60*60*24)
+    if (diff<=3 && diff>=1){
+      return(
+        <AlertIcon className="alert-color" size={20} />
+      );
+    }
+    else if (diff<1){
+      return(
+        <IssueOpenedIcon className="danger-color" size={20} />
+      );
+    }
+    else if(diff>3){
+      return(
+        <CheckIcon className="success-color" size={20} />
+      );
+    }
+  };
+
+  getDeadlineText(deadline_date){
+    var d = new Date();
+    var currentDate = d.getTime();
+    var deadlineDate = Date.parse(deadline_date);
+    var diff = (deadlineDate-currentDate)/(1000*60*60*24)
+    if (diff<=3 && diff>=1){
+      return(
+        <Typography className="alert-color">
+          This Task is going to hit the deadline soon!
+        </Typography>
+      );
+    }
+    else if (diff<1){
+      return(
+        <Typography className="danger-color" >
+          This Task is going to hit the deadline soon!
+        </Typography>
+      );
+    }
+    else if(diff>3){
+      return(
+        <Typography className="success-color" >
+          This Task is going to hit the deadline soon!
+        </Typography>
+      );
+    }
+  };
 
   RenderToDo() {
     let transId = this.props.transaction.filter(
@@ -157,7 +213,7 @@ class Todo extends Component {
                       >
                         <Grid item>
                           <Box paddingLeft={2}>
-                            <AlertIcon className="alert-color" size={20} />
+                            {this.getIcon(todo.Date)}
                           </Box>
                         </Grid>
                         <Grid item>
@@ -270,14 +326,14 @@ class Todo extends Component {
       >
         <Grid direction="column" container spacing={1} justify="flex-start">
           <Grid item>
-            <Box className="alert-color">
+            <Box>
               <table>
                 <tr>
                   <td>
-                    <AlertIcon />
+                    {this.getIcon(this.state.expandedTask.date)}
                   </td>
                   <td style={{ paddingLeft: "10px", paddingTop: "4px" }}>
-                    This Task is going to hit the deadline soon!
+                  {this.getDeadlineText(this.state.expandedTask.date)}
                   </td>
                 </tr>
               </table>
@@ -360,6 +416,11 @@ class Todo extends Component {
                 </tr>
               </table>
             </Box>
+            <Typography align="right">
+              <Button startIcon={<CheckCircleFillIcon/>} style={{backgroundColor:'#150578', color: '#fff'}}>
+                Completed
+              </Button>
+            </Typography>
           </Grid>
         </Grid>
       </Modal>
@@ -404,29 +465,21 @@ class Todo extends Component {
       case "date":
         errors.date = formFieldError.errorText;
         break;
+      case "to":
+        errors.to = formFieldError.errorText;
+        break;
       default:
     }
 
     this.setState({ errors, [name]: value });
     if (
-      this.state.title != null &&
-      this.state.description != null &&
-      this.state.date != null
+      this.state.title != "" &&
+      this.state.description != "" &&
+      this.state.date != "" &&
+      this.state.to != ""
     ) {
       this.setState({ validated: true });
     }
-  }
-
-  cancelAddTask() {
-    // To cancel the task and set the values of the fields to null
-    this.setState({
-      title: "",
-      description: "",
-      date: "",
-      to: null,
-      isNewTaskFormOpen: false,
-      todo: null,
-    });
   }
 
   validForm = (errors) => {
@@ -446,6 +499,19 @@ class Todo extends Component {
     }
   }
 
+  cancelAddTask() {
+    // To cancel the task and set the values of the fields to null
+    this.setState({
+      title: "",
+      description: "",
+      date: "",
+      to: "",
+      isNewTaskFormOpen: false,
+      todo: null,
+      validated: false,
+    });
+  }
+
   addNewTask() {
     // Adding new task to the redux store
     if (this.state.todo != null) {
@@ -461,9 +527,10 @@ class Todo extends Component {
         title: "",
         description: "",
         date: "",
-        to: null,
+        to: "",
         todo: null,
         isNewTaskFormOpen: false,
+        validated: false,
       });
     } else {
       let transId = this.props.transaction.filter(
@@ -481,8 +548,9 @@ class Todo extends Component {
         title: "",
         description: "",
         date: "",
-        to: null,
+        to: "",
         isNewTaskFormOpen: false,
+        validated: false,
       });
     }
   }
@@ -496,6 +564,7 @@ class Todo extends Component {
       to: todo.To,
       isNewTaskFormOpen: true,
       todo: todo,
+      validated: false,
     });
   }
 
@@ -534,7 +603,7 @@ class Todo extends Component {
               variant="outlined"
               label="Title"
               className="form-fields"
-              DefaultValue={this.state.title}
+              value={this.state.title}
               name="title"
               onChange={this.handleChange}
               onBlur={this.handleChange}
@@ -548,7 +617,7 @@ class Todo extends Component {
               variant="outlined"
               label="Description"
               className="form-fields"
-              DefaultValue={this.state.description}
+              value={this.state.description}
               multiline
               name="description"
               rows={8}
@@ -565,7 +634,7 @@ class Todo extends Component {
               variant="outlined"
               type="date"
               className="form-fields"
-              DefaultValue={this.state.date}
+              value={this.state.date}
               onChange={this.handleChange}
               onBlur={this.handleChange}
               name="date"
@@ -588,6 +657,7 @@ class Todo extends Component {
                   label="Select a person"
                   className="form-fields"
                   onChange={this.handleChange}
+                  onBlur={this.handleChange}
                   value={this.state.to}
                   name="to"
                 >
@@ -618,7 +688,7 @@ class Todo extends Component {
                   <Button
                     variant="contained"
                     onClick={this.validTask}
-                    diabled
+                    disabled={!this.state.validated}
                     className="next-button"
                   >
                     <CheckIcon /> &nbsp; Add Task
