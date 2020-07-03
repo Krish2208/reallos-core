@@ -1,13 +1,13 @@
 import firebase from "firebase";
 
 const config = {
-  apiKey: "AIzaSyC1shuTRVSO8C4fFCKYbT_wYJk0wtH1lAA",
-  authDomain: "chatzy-2c0a7.firebaseapp.com",
-  databaseURL: "https://chatzy-2c0a7.firebaseio.com",
-  projectId: "chatzy-2c0a7",
-  storageBucket: "chatzy-2c0a7.appspot.com",
-  messagingSenderId: "579453515181",
-  appId: "1:579453515181:web:44e4da825d3a8fe5571d24",
+  apiKey: "AIzaSyCoMC83X66Ax_eDjQcTKtYd9eTbkiDzp58",
+  authDomain: "reallos-test.firebaseapp.com",
+  databaseURL: "https://reallos-test.firebaseio.com",
+  projectId: "reallos-test",
+  storageBucket: "reallos-test.appspot.com",
+  messagingSenderId: "361319907913",
+  appId: "1:361319907913:web:51c50386396e2f8b6bf598"
 };
 
 firebase.initializeApp(config);
