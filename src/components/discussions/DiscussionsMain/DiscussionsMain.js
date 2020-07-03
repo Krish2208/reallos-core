@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { withStyles } from '@material-ui/core/styles';
-import { myFirestore } from "../../../Config/MyFirebase";
+import { withStyles } from "@material-ui/core/styles";
+import { myFirestore } from "../../../Config/ChatFirebase";
 import WelcomeBoard from "../WelcomeBoard/WelcomeBoard";
 import "./DiscussionsMain.css";
 import DiscussionsBoard from "../DiscussionsBoard/DiscussionsBoard";
 import NavRail from "../../shared/navigation_rail/TransactionNavRail";
 import { AppString } from "../Const";
-
 import {
   Container,
   Box,
@@ -18,24 +17,20 @@ import {
   ListItemText,
   IconButton,
   Button,
-  Avatar
+  Avatar,
 } from "@material-ui/core";
 
-import { AvatarGroup } from '@material-ui/lab';
+import { AvatarGroup } from "@material-ui/lab";
 
-import {
-  KebabHorizontalIcon,
-  PersonIcon,
-  SearchIcon
-} from "@primer/octicons-react";
+import { KebabHorizontalIcon, PersonIcon } from "@primer/octicons-react";
 
-const styles = theme => ({
+const styles = (theme) => ({
   avatarNoParticipants: {
     width: theme.spacing(10),
     height: theme.spacing(10),
     background: theme.palette.secondary.main,
-    color: theme.palette.primary.main
-  }
+    color: theme.palette.primary.main,
+  },
 });
 
 class Chat extends Component {
@@ -46,9 +41,9 @@ class Chat extends Component {
       currentPeerUser: null,
     };
 
-    this.currentUserId = localStorage.getItem(AppString.ID);
-    this.currentUserAvatar = localStorage.getItem(AppString.PHOTO_URL);
-    this.currentUserNickname = localStorage.getItem(AppString.NICKNAME);
+    //To be set using redux store
+    this.currentUserId = AppString.ID;
+    this.currentUserName = AppString.NAME;
     this.listUser = [];
   }
 
@@ -66,7 +61,6 @@ class Chat extends Component {
 
   renderListUser = () => {
     const { classes } = this.props;
-    console.log(classes)
 
     if (this.listUser.length > 0) {
       let viewListUser = [];
@@ -85,12 +79,16 @@ class Chat extends Component {
               }
               onClick={() => {
                 this.setState({
-                  currentPeerUser: item.data()
+                  currentPeerUser: item.data(),
                 });
               }}
             >
               <ListItemAvatar>
-                <img src={item.data().photoUrl} alt="icon avatar"></img>
+                <img
+                  src={require("../../../assets/user.png")}
+                  className={"avatar"}
+                  alt="icon avatar"
+                ></img>
               </ListItemAvatar>
               <ListItemText primary={`${item.data().name}`} />
             </ListItem>
@@ -99,9 +97,7 @@ class Chat extends Component {
       });
 
       return viewListUser;
-    }
-
-    else {
+    } else {
       return (
         <ListItem>
           <Box paddingTop={15} paddingBottom={19}>
@@ -125,14 +121,12 @@ class Chat extends Component {
               </div>
               <Grid item>
                 <Box mt={5}>
-                  <div className="large-text">
-                    It's quiet lonely...
-                  </div>
+                  <div className="large-text">It's quiet lonely...</div>
                 </Box>
               </Grid>
               <Grid item>
                 <Box paddingTop={2}>
-                  <div className="small-text" style={{textAlign: 'center'}}>
+                  <div className="small-text" style={{ textAlign: "center" }}>
                     Add some people to the transaction to start discussion
                   </div>
                 </Box>
@@ -174,7 +168,7 @@ class Chat extends Component {
                         alignItems="center"
                       >
                         <Grid item>
-                          <Box ml={2} component='a' href='#'>
+                          <Box ml={2} component="a" href="#">
                             <img
                               src={require("../../../assets/reallos-logo.svg")}
                               className="discussions-reallos-logo"
@@ -198,10 +192,12 @@ class Chat extends Component {
               <Grid item xs={8}>
                 <Box component="div" className="discussions-div">
                   {this.state.currentPeerUser ? (
-                    <DiscussionsBoard currentPeerUser={this.state.currentPeerUser} />
+                    <DiscussionsBoard
+                      currentPeerUser={this.state.currentPeerUser}
+                    />
                   ) : (
                     <WelcomeBoard
-                      currentUserNickname={this.currentUserNickname}
+                      currentUserName={this.currentUserName}
                       currentUserAvatar={this.currentUserAvatar}
                     />
                   )}
