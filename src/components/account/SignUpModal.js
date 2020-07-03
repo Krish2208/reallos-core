@@ -11,6 +11,7 @@ import { bindActionCreators } from "redux";
 import { addUser } from "../../actions/userActions";
 import Auth from "./Authenticate";
 import { validateFormField } from "../../global_func_lib";
+import axios from 'axios';
 
 const mapStateToProps = (state) => ({
   user: state.user,
@@ -80,6 +81,24 @@ class SignUpModal extends Component {
 
   submitSignUp() {
     // function to submit the values in the signup form and move the form to the next step
+    let token; // intializing a token
+    axios.post('https://us-central1-reallos-test.cloudfunctions.net/api/signup',{
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      email: this.state.email,
+      phone: this.state.phone,
+      state : this.state.state,
+      role: this.state.role,
+      password: this.state.password
+    })
+    .then(response =>{
+      console.log(response);
+      token = response.data;
+    })
+    .catch(err=>{
+      console.error(err);
+    });
+    
     this.props.addUser(
       this.state.firstName,
       this.state.lastName,
