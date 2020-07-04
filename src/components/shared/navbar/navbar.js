@@ -236,6 +236,7 @@ class RenderNav extends Component {
         this.setState({
             authenticated: Auth.getAuth()
         })
+        window.location.href = '/'; // redirecting to the home page with public access
     }
 
     render() {

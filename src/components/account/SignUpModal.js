@@ -92,8 +92,7 @@ class SignUpModal extends Component {
       password: this.state.password
     })
     .then(response =>{
-      console.log(response);
-      token = response.data;
+      localStorage.setItem('FBIdToken',response.data.token);  // getting the token and soting it in local storage
     })
     .catch(err=>{
       console.error(err);

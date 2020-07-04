@@ -17,6 +17,7 @@
     "date-fns": "^2.14.0",
     "firebase": "^7.15.4",
     "font-awesome": "^4.7.0",
+    "jwt-decode": "^2.2.0",
     "moment": "^2.27.0",
     "pdfjs-dist": "^2.4.456",
     "react": "^16.13.1",
