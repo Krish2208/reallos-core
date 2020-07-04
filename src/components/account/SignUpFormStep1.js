@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./SignUpModal.css";
 import { ChevronRightIcon } from "@primer/octicons-react";
 import { FormGroup, TextField, Button } from "@material-ui/core";
-import { validateFormField } from "../../global_func_lib";
 
 export class FormStep1 extends Component {
   continue = (e) => {

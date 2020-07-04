@@ -100,21 +100,24 @@ class People extends Component {
     switch (name) {
       case "name":
         errors.Name = formFieldError.errorText;
+        this.setState({ Name: value });
         break;
       case "email":
         errors.Email = formFieldError.errorText;
+        this.setState({ Email: value });
         break;
       case "role":
         errors.Role = formFieldError.errorText;
+        this.setState({ Role: value });
         break;
       default:
     }
 
     this.setState({ [name]: value, errors });
     if (
-      this.state.Name != "" &&
-      this.state.Email != "" &&
-      this.state.Role != ""
+      this.state.Name !== "" &&
+      this.state.Email !== "" &&
+      this.state.Role !== ""
     ) {
       this.setState({ validated: true });
     }

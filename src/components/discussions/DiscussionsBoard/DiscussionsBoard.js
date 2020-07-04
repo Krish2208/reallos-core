@@ -1,10 +1,11 @@
 import moment from "moment";
 import React, { Component } from "react";
 import ReactLoading from "react-loading";
-import { myFirestore, myStorage } from "../../../Config/MyFirebase";
+import { myFirestore, myStorage } from "../../../Config/ChatFirebase";
 import images from "../Themes/Images";
 import "./DiscussionsBoard.css";
 import { AppString } from "../Const";
+import { Typography, Box } from "@material-ui/core";
 
 export default class ChatBoard extends Component {
   constructor(props) {
@@ -14,9 +15,8 @@ export default class ChatBoard extends Component {
       isShowSticker: false,
       inputValue: "",
     };
-    this.currentUserId = localStorage.getItem(AppString.ID);
-    this.currentUserAvatar = localStorage.getItem(AppString.PHOTO_URL);
-    this.currentUserNickname = localStorage.getItem(AppString.NICKNAME);
+    this.currentUserId = AppString.ID;
+    this.currentUserName = AppString.NAME;
     this.listMessage = [];
     this.currentPeerUser = this.props.currentPeerUser;
     this.groupChatId = null;
@@ -178,32 +178,35 @@ export default class ChatBoard extends Component {
 
   render() {
     return (
-      <div className="viewChatBoard">
+      <Box className="viewChatBoard">
         {/* Header */}
-        <div className="headerChatBoard">
+        <Box className="headerChatBoard">
           <img
-            className="viewAvatarItem"
-            src={this.currentPeerUser.photoUrl}
+            className="avatar"
+            src={
+              require("../../../assets/user.png")
+              //this.currentPeerUser.photoUrl
+            }
             alt="icon avatar"
           />
-          <span className="textHeaderChatBoard">
-            {this.currentPeerUser.nickname}
-          </span>
-        </div>
+          <Typography className="textHeaderChatBoard">
+            {this.currentPeerUser.name}
+          </Typography>
+        </Box>
 
         {/* List message */}
-        <div className="viewListContentChat">
+        <Box className="viewListContentChat">
           {this.renderListMessage()}
-          <div
+          <Box
             style={{ float: "left", clear: "both" }}
             ref={(el) => {
               this.messagesEnd = el;
             }}
           />
-        </div>
+        </Box>
 
         {/* View bottom */}
-        <div className="viewBottom">
+        <Box className="viewBottom">
           <img
             className="icOpenGallery"
             src={images.ic_photo}
@@ -235,20 +238,20 @@ export default class ChatBoard extends Component {
             alt="icon send"
             onClick={() => this.onSendMessage(this.state.inputValue, 0)}
           />
-        </div>
+        </Box>
 
         {/* Loading */}
         {this.state.isLoading ? (
-          <div className="viewLoading">
+          <Box className="viewLoading">
             <ReactLoading
               type={"spin"}
               color={"#203152"}
               height={"3%"}
               width={"3%"}
             />
-          </div>
+          </Box>
         ) : null}
-      </div>
+      </Box>
     );
   }
 
@@ -372,16 +375,7 @@ export default class ChatBoard extends Component {
       });
       return viewListMessage;
     } else {
-      return (
-        <div className="viewWrapSayHi">
-          <span className="textSayHi">Say hi to new friend</span>
-          <img
-            className="imgWaveHand"
-            src={images.ic_wave_hand}
-            alt="wave hand"
-          />
-        </div>
-      );
+      return <div></div>;
     }
   };
 
