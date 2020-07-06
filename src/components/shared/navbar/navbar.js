@@ -260,7 +260,7 @@ class RenderNav extends Component {
                         Reallos
                       </Typography>
                       <div className="navbar-btn-group">
-                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Notifications</Typography>} arrow TransitionComponent={Zoom}>
+                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Notifications</Typography>} TransitionComponent={Zoom}>
                           <IconButton onClick={this.openNotification}>
                             <Badge
                               variant="dot"
@@ -276,17 +276,17 @@ class RenderNav extends Component {
                             </Badge>
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Documents</Typography>} arrow TransitionComponent={Zoom}>
+                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Documents</Typography>} TransitionComponent={Zoom}>
                           <IconButton onClick={this.openDocuments}>
                             <InboxIcon size={20} />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Tasks</Typography>} arrow TransitionComponent={Zoom}>
+                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Tasks</Typography>} TransitionComponent={Zoom}>
                           <IconButton onClick={this.openTasks}>
                             <ChecklistIcon size={20} />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Profile</Typography>} arrow TransitionComponent={Zoom}>
+                        <Tooltip title={<Typography style={{fontSize: '15px'}}>Profile</Typography>} TransitionComponent={Zoom}>
                           <IconButton onClick={this.openUserProfilePopup}>
                             <Avatar src={UserAvatar} />
                           </IconButton>
