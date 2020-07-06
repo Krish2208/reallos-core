@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router-dom';
-import Auth from './Authenticate';
+import { withRouter } from 'react-router-dom';
 import { FormGroup, FormControlLabel, TextField, Checkbox, Button, Fab } from '@material-ui/core';
+import {connect} from 'react-redux';
+import { login } from '../../actions/userActions';
+import {bindActionCreators} from 'redux';
 import GoogleLogo from '../../assets/google-logo.svg';
 import FacebookLogo from '../../assets/fb-logo.svg';
 import Modal from '../shared/modal/Modal';
 import './SignInModal.css';
-import axios from 'axios';
+
+const mapDispatchToProps = (dispatch)=>{
+    return bindActionCreators({
+        login
+    },dispatch);
+}
 
 class SignIn extends Component{
     constructor(props){
@@ -27,16 +34,14 @@ class SignIn extends Component{
     }
 
     loginUser(){
-        axios.post('https://us-central1-reallos-test.cloudfunctions.net/api/login',{
+        let user = {
             email: this.state.email,
             password: this.state.password
-        })
-        .then(response =>{
-            localStorage.setItem('FBIdToken',response.data.token); // Getting the token and storing it in local storage
-        })
-        .catch(err =>{
-            console.error(err);
-        })
+        }
+        setTimeout(() => {
+          }, 1000); // To add a delay to mimic the Server behavio
+          
+        this.props.login(user,this.props.history);
     }
 
     render(){
@@ -115,4 +120,4 @@ class SignIn extends Component{
 }
 
 
-export default SignIn;
+export default connect(null,mapDispatchToProps)(withRouter(SignIn));
