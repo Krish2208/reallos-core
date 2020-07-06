@@ -20,6 +20,7 @@ import {
     TextSelection,
     Annotation,
     TextSearch,
+    FormFields,
     Inject
 } from '@syncfusion/ej2-react-pdfviewer';
 
@@ -199,7 +200,7 @@ class PaperworkViewer extends React.Component {
                         documentPath={null}
                         serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/pdfviewer" style={{ 'height': '640px' }}
                     >
-                        <Inject services={[ Toolbar, Magnification, Navigation, Annotation, TextSearch, LinkAnnotation, BookmarkView, ThumbnailView, Print, TextSelection ]} />
+                        <Inject services={[ FormFields, Toolbar, Magnification, Navigation, Annotation, TextSearch, LinkAnnotation, BookmarkView, ThumbnailView, Print, TextSelection ]} />
                     </PdfViewerComponent>
                     <Modal
                         title="Saving Changes"
