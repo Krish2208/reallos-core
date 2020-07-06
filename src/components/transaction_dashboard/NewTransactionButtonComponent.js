@@ -4,7 +4,7 @@ import "./Transaction.css";
 import TransactionNoPeople from "../../assets/transaction-no-people.png";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addTransaction } from "../../actions/transactionActions";
+import { createTransaction } from "../../actions/transactionActions";
 import { addTransactionUser } from "../../actions/userActions";
 import { validateFormField } from "../../global_func_lib";
 import {
@@ -45,7 +45,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      addTransaction,
+      createTransaction,
       addTransactionUser,
     },
     dispatch
@@ -102,18 +102,6 @@ class NewTransactionButton extends Component {
     Object.values(errors).forEach((val) => val !== null && (valid = false));
     return valid;
   };
-
-  componentDidUpdate() {
-    // whenever the component is updated
-    if (
-      this.props.transaction.length &&
-      this.props.transaction.length > this.props.user.transactionID.length
-    ) {
-      // If the number of transactions are greater than the ones stored for the user
-      let transId = this.props.transaction.map((transaction) => transaction.id); // getting all the ids of the transactions that were created
-      this.props.addTransactionUser(transId);
-    }
-  }
 
   /**
    * Toggle the state of modal
@@ -306,12 +294,14 @@ class NewTransactionButton extends Component {
 
   createTransaction() {
     this.toggleModal(); // Closing the modal
-    this.props.addTransaction(
-      this.state.Name,
-      this.state.Address,
-      this.state.Description,
-      this.state.Invites
-    ); // dispatching an action with the appropriate payload
+    let newTransaction = {
+      name: this.state.Name,
+      address: this.state.Address,
+      desc: this.state.Description,
+      people: this.state.Invites,
+      admin: null
+    };
+    this.props.createTransaction(newTransaction); // dispatching an action with the appropriate payload
   }
 
   /**

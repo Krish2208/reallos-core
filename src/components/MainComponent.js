@@ -10,6 +10,7 @@ import DiscussionsMain from "./discussions/DiscussionsMain/DiscussionsMain";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import Auth from "./account/Authenticate";
 
+
 const PrivateRoute = (
   { component: Component, ...rest } // Component that protects all the routing if the user is not autenticated
 ) => (

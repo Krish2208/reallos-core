@@ -1,19 +1,35 @@
-export const FETCH_TRANSACTION = 'FETCH_TRANSACTION'; // fetching the transaction for the user
+import axios from 'axios';
+
 export const ADD_TRANSACTION = 'ADD_TRANSACTION'; // Adding the transaction to the reducer
 export const SET_ACTIVE_TRANSACTION = 'SET_ACTIVE_TRANSACTION' // Setting the active transaction which will be used to fetch data fro other functionalities
 export const REMOVE_FROM_TRANSACTION = 'REMOVE_FROM_TRANSACTION'; // Removing the person from the transaction
 export const ADD_TO_TRANSACTION = 'ADD_TO_TRANSACTION'; // Adding a person to the transaction
-let id = 0; // to mimic the assignment of a primary key by the database
+export const CREATE_TRANSACTION = 'CREATE_TRANSACTION'; // Creating a new transaction 
 
-export function fetchTransaction(transId){ // This is where an asynchronous call will be made to fetch the transactions from the database
-    return({
-        type: FETCH_TRANSACTION,
-        transId
-    });
+
+
+export function createTransaction(newTransaction){
+    console.log(newTransaction);
+    return (dispatch) =>{
+        let token = localStorage.getItem('FBIdToken'); // getting the jwt
+        let id; // getting the new id
+        axios.post('https://us-central1-reallos-test.cloudfunctions.net/api/create-transaction',newTransaction,{
+            headers: { Authorization: 'Bearer ' + token}
+        })
+        .then(res =>{
+            id = res.data.id;
+           dispatch(addTransaction(id,newTransaction.name,newTransaction.address,newTransaction.desc,newTransaction.people)) // dispatching an action to create a new transaction
+        })
+        .catch(err =>{
+            console.error(err)
+        });
+    }
 }
 
-export function addTransaction(Name, Address, Description, People){
-    id++;
+
+
+
+export function addTransaction(id, Name, Address, Description, People){
     return({
         type: ADD_TRANSACTION,
         id: id,

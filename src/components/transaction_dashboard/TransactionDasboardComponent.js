@@ -8,7 +8,6 @@ import NavBar from "../shared/navbar/navbar";
 import SearchBar from "../shared/searchbar/SearchBarComponent";
 import TransactionCardGroup from "./TransactionCardGroup";
 import { connect } from "react-redux";
-import { fetchTransaction } from "../../actions/transactionActions";
 import { editUser } from "../../actions/userActions";
 import { validateFormField } from "../../global_func_lib";
 import { bindActionCreators } from "redux";
@@ -31,7 +30,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      fetchTransaction,
       editUser,
     },
     dispatch
@@ -86,10 +84,6 @@ class TransactionDasboard extends Component {
         role: this.props.user.role,
         state: this.props.user.state,
       });
-
-    if (this.props.user.transactionID != null)
-      // if the user id is not null
-      this.props.fetchTransaction(this.props.user.transactionID); // dispatching the action to fetch the transactions that belong to the user from the store
   }
 
   handleChange(event) {

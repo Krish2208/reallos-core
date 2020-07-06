@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
 import Modal from "../shared/modal/Modal";
 import SignupFormStep1 from "./SignUpFormStep1";
 import SignupFormStep2 from "./SignupFormStep2";
@@ -8,10 +7,9 @@ import "./SignUpModal.css";
 import { Stepper, Step, StepLabel } from "@material-ui/core";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addUser } from "../../actions/userActions";
-import Auth from "./Authenticate";
+import { signupUser } from "../../actions/userActions";
 import { validateFormField } from "../../global_func_lib";
-import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state) => ({
   user: state.user,
@@ -20,7 +18,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      addUser,
+      signupUser
     },
     dispatch
   );
@@ -80,41 +78,19 @@ class SignUpModal extends Component {
   }
 
   submitSignUp() {
-    // function to submit the values in the signup form and move the form to the next step
-    let token; // intializing a token
-    axios.post('https://us-central1-reallos-test.cloudfunctions.net/api/signup',{
+    this.addStep(); // Moving to the next step
+    let newUser = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       email: this.state.email,
       phone: this.state.phone,
-      state : this.state.state,
       role: this.state.role,
+      state: this.state.state,
       password: this.state.password
-    })
-    .then(response =>{
-      console.log(response);
-      token = response.data;
-    })
-    .catch(err=>{
-      console.error(err);
-    });
-    
-    this.props.addUser(
-      this.state.firstName,
-      this.state.lastName,
-      this.state.email,
-      this.state.phone,
-      this.state.role,
-      this.state.state,
-      this.state.password
-    ); // Dispatching a function to add the values of the state to the user
-    this.addStep(); // moving the form to the next step
-    Auth.authenticate(); // Authenticating the user
+    }
     setTimeout(() => {
-      this.setState({
-        authenticated: Auth.getAuth(),
-      });
-    }, 2000); // To add a delay to mimic the Server behavior
+    }, 2000); // To add a delay to mimic the Server behavior */
+    this.props.signupUser(newUser,this.props.history);
   }
 
   handleChange = (event) => {
@@ -274,10 +250,7 @@ class SignUpModal extends Component {
   }
 
   render() {
-    if (this.state.authenticated === true) {
-      // If the user is authenticated then automatically redirect to transaction
-      return <Redirect to="/transaction" />;
-    } else {
+  {
       return (
         <Modal
           title="Sign Up"
@@ -302,4 +275,4 @@ class SignUpModal extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpModal);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUpModal));
