@@ -15,16 +15,20 @@
     font-family: 'Roboto Slab', serif;
 }
 
-a {
+.link {
+  color: #0088ff;
+}
+
+a, .link {
   text-decoration: none;
   transition: opacity 150ms ease-in;
 }
 
-a:hover {
+a:hover, .link:hover {
   opacity: 0.6;
 }
 
-a:active {
+a:active, .link:active {
   opacity: 0.8;
 }
 
