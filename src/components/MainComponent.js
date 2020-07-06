@@ -1,7 +1,8 @@
 import React from "react";
 import TransactionDashbaord from "./transaction_dashboard/TransactionDasboardComponent";
 import TransactionAssist from "./transaction_assist/TransactionAssistComponent";
-import PaperWork from "./paperwork/PaperWorkComponent";
+import PaperWork from "./paperwork/PaperWork";
+import PaperworkViewer from "./paperwork/PaperworkViewer";
 import DummyPage from "./dummy/DummyPage";
 import PeopleInvolved from "./people_involved/PeopleInvolved";
 import Todo from "./todo/TodoComponent";
@@ -34,6 +35,7 @@ function Main(props) {
         <Route path="/dummy" component={DummyPage} />
         <PrivateRoute path="/transaction" component={TransactionDashbaord} />
         <PrivateRoute path="/assist" component={TransactionAssist} />
+        <PrivateRoute path="/paperwork/*" component={PaperworkViewer} />
         <PrivateRoute path="/paperwork" component={PaperWork} />
         <PrivateRoute path="/people" component={PeopleInvolved} />
         <PrivateRoute path="/todo" component={Todo} />
