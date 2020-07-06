@@ -1,4 +1,5 @@
 import axios from 'axios'; // Importing axios to make endpoint request
+import { addTransaction } from './transactionActions';
 
 export const ADD_USER = 'ADD_USER'; // Action to add the user to the database
 export const ADD_TRANSACTION_USER = 'ADD_TRANSACTION_USER'; // Action to add the transaction to the user
@@ -23,9 +24,37 @@ export function signupUser(newUser,history){ // Still have to dispatch actions t
                     res.data.email,
                     res.data.phone,
                     res.data.role,
-                    res.data.state
+                    res.data.state,
+                    res.data.transactions
                     ));
-                    history.push("/transaction"); // redirect to the transaction dashboard
+
+                    if (res.data.transactions && res.data.transactions.length) { // if the user has any transactions
+
+                        let transactions = res.data.transactions.map(transaction => {
+                            return transaction.trim();
+                        }); // gettting all the ids with the space removed
+    
+                        transactions.map(transaction => {
+                            axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/get-transaction/${transaction}`)
+                            .then(res =>{
+                                dispatch(addTransaction(
+                                    transaction,
+                                    res.data.name,
+                                    res.data.address,
+                                    res.data.desc,
+                                    res.data.people
+                                ));
+                                history.push("/transaction"); // redirect to the transaction dashboard
+                            })
+                            .catch(err =>{
+                                console.error(err);
+                                })
+                            })
+                    }
+
+                    else { // Else move to the transaction page
+                        history.push("/transaction"); 
+                    }
             })
             .catch(err =>{
                 console.log(err)
@@ -58,9 +87,35 @@ export function login(user,history){ // still have to dispatch actions that upda
                     res.data.phone,
                     res.data.role,
                     res.data.state,
-                    //res.data.transactions
+                    res.data.transactions
                     ));
-                    history.push("/transaction"); // redirect to the transaction dashboard
+
+                    if (res.data.transactions && res.data.transactions.length) { // if the user has transactions
+
+                        let transactions = res.data.transactions.map(transaction => {
+                            return transaction.trim();
+                        }); // gettting all the ids with the space removed
+    
+                        transactions.map(transaction => {
+                            axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/get-transaction/${transaction}`)
+                            .then(res =>{
+                                dispatch(addTransaction(
+                                    transaction,
+                                    res.data.name,
+                                    res.data.address,
+                                    res.data.desc,
+                                    res.data.people
+                                ));
+                                history.push("/transaction"); // redirect to the transaction dashboard
+                            })
+                            .catch(err =>{
+                                console.error(err);
+                                })
+                            })
+                    }
+                    else { // else move to the transactions page
+                        history.push("/transaction"); 
+                    }
             })
             .catch(err =>{
                 console.log(err)

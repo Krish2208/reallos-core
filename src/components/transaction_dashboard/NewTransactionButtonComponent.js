@@ -103,18 +103,6 @@ class NewTransactionButton extends Component {
     return valid;
   };
 
-  componentDidUpdate() {
-    // whenever the component is updated
-    if (
-      this.props.transaction.length &&
-      this.props.transaction.length > this.props.user.transactionID.length
-    ) {
-      // If the number of transactions are greater than the ones stored for the user
-      let transId = this.props.transaction.map((transaction) => transaction.id); // getting all the ids of the transactions that were created
-      this.props.addTransactionUser(transId);
-    }
-  }
-
   /**
    * Toggle the state of modal
    */
@@ -307,6 +295,7 @@ class NewTransactionButton extends Component {
   createTransaction() {
     this.toggleModal(); // Closing the modal
     this.props.addTransaction(
+      1, // should be replaced with id afterwards
       this.state.Name,
       this.state.Address,
       this.state.Description,
