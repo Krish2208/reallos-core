@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import 'font-awesome/css/font-awesome.min.css';
 import * as serviceWorker from './serviceWorker';
 // Importing modules for Redux
 import {createStore, applyMiddleware} from 'redux';
