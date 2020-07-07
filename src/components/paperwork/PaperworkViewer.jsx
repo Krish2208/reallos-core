@@ -37,6 +37,12 @@ import {
 
 import './PaperworkViewer.css';
 
+/**
+ * Component for viewing, editing & saving
+ * paperworks
+ * 
+ * @augments React.Component<Props>
+ */
 class PaperworkViewer extends React.Component {
     constructor() {
         super();
@@ -133,14 +139,19 @@ class PaperworkViewer extends React.Component {
         })
     }
 
+    /**
+     * Set `isLoadingDocument` state to false when
+     * document is loaded in the viewer.
+     */
     setDocumentLoaded() {
-        console.log("DOCUMENT LOADED!!")
-
         this.setState({
             isLoadingDocument: false
         })
     }
 
+    /**
+     * Set `hasChanges` state when document changed.
+     */
     setDocumentChanges() {
         if (this.viewer && this.state.hasChanges !== this.viewer.isDocumentEdited) {
             this.setState({

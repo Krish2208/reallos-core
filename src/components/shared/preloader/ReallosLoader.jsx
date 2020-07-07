@@ -17,43 +17,62 @@ class ReallosLoader extends React.Component {
 
         /**
          * Specify the size of preloader.
-         * 
+         *
          * (_Default: 380 for full logo | 90 for short logo_)
          */
         size: PropTypes.number,
 
         /**
+         * Specify the background color to be applied.
+         * 
+         * (_Default: rgba(0, 0, 0, 0.25) | "#00000040"_)
+         */
+        backgroundColor: PropTypes.string,
+
+        /**
+         * Specify the stroke color of preloader.
+         * 
+         * (_Default: rgb(21, 5, 120) | "#150578"_)
+         */
+        strokeColor: PropTypes.string,
+
+        /**
          * Remove backdrop blur effect when rendering the
          * preloader. You might want to disable the blur
          * effect for performance reasons.
-         * 
+         *
          * (_Default: false_)
          */
         disableBackdropBlur: PropTypes.bool,
 
         /**
          * Specify whether to show a full logo or short logo.
-         * 
+         *
          * (_Default: true_)
          */
         shouldUseFullLogo: PropTypes.bool
     }
-    
+
     render() {
         let {
             visible,
             size,
+            backgroundColor,
+            strokeColor,
             disableBackdropBlur=false,
             shouldUseFullLogo=true
         } = this.props;
-        
+
         return (
             <div className="reallos-preloader-root" visible={visible.toString()}>
-                <div className={`reallos-backdrop ${disableBackdropBlur ? 'backdrop-no-blur' : ''}`}></div>
+                <div
+                    className={`reallos-backdrop ${disableBackdropBlur ? 'backdrop-no-blur' : ''}`}
+                    style={{ backgroundColor }}
+                ></div>
                 <div className="r-logo-container">
                     {shouldUseFullLogo
-                        ? <ReallosStrokeLogo full-logo="true" style={{width: size}} />
-                        : <RStrokeLogo style={{width: size}} />
+                        ? <ReallosStrokeLogo full-logo="true" style={{width: size, stroke: strokeColor}} />
+                        : <RStrokeLogo style={{width: size, stroke: strokeColor}} />
                     }
                 </div>
             </div>
