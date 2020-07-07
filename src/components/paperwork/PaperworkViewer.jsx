@@ -7,6 +7,7 @@ import StampIcon from '../../assets/stamp_icon.svg';
 import Modal from '../shared/modal/Modal';
 import DocUploadStatus from './uploader/DocUploadStatus';
 import { myStorage } from '../../Config/MyFirebase.js';
+import ReallosLoader from '../shared/preloader/ReallosLoader';
 
 import {
     PdfViewerComponent,
@@ -42,6 +43,7 @@ class PaperworkViewer extends React.Component {
 
         this.state = {
             hasChanges: false,
+            isLoadingDocument: true,
             isUploadModalVisible: false,
             isSnackbarVisible: false,
             snackbarMessage: null,
@@ -61,13 +63,6 @@ class PaperworkViewer extends React.Component {
      */
     showSignaturePanel() {
         this.viewer.toolbar.annotationToolbarModule.showSignaturepanel();
-
-        // @TODO: Remove the following line after adding event listener for
-        // document changes
-
-        this.setState({
-            hasChanges: true
-        })
     }
 
     /**
@@ -138,6 +133,22 @@ class PaperworkViewer extends React.Component {
         })
     }
 
+    setDocumentLoaded() {
+        console.log("DOCUMENT LOADED!!")
+
+        this.setState({
+            isLoadingDocument: false
+        })
+    }
+
+    setDocumentChanges() {
+        if (this.viewer && this.state.hasChanges !== this.viewer.isDocumentEdited) {
+            this.setState({
+                hasChanges: this.viewer.isDocumentEdited
+            })
+        }
+    }
+
     /**
      * Getter which returns the state information (document metadata)
      * from props.
@@ -198,7 +209,10 @@ class PaperworkViewer extends React.Component {
                             if (this.viewer) this.setDocument(docData.path);
                         }}
                         documentPath={null}
-                        serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/pdfviewer" style={{ 'height': '640px' }}
+                        documentLoad={() => this.setDocumentLoaded()}
+                        pageMouseover={() => this.setDocumentChanges()}
+                        serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/pdfviewer"
+                        style={{ 'height': '640px' }}
                     >
                         <Inject services={[ FormFields, Toolbar, Magnification, Navigation, Annotation, TextSearch, LinkAnnotation, BookmarkView, ThumbnailView, Print, TextSelection ]} />
                     </PdfViewerComponent>
@@ -226,6 +240,7 @@ class PaperworkViewer extends React.Component {
                         anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
                         message={this.state.snackbarMessage}
                     />
+                    <ReallosLoader visible={this.state.isLoadingDocument} />
                     <Fab
                         variant="extended"
                         className="reallos-fab"
