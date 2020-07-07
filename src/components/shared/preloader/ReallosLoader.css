@@ -28,9 +28,16 @@
     align-items: center;
 }
 
+.reallos-preloader-root[visible="true"] svg {
+    transform: scale(1);
+}
+
 .r-logo-container > svg {
     height: 120px;
     width: 90px;
+    transform: scale(0.75);
+
+    transition: all 250ms ease;
 }
 
 .r-logo-container > svg[full-logo="true"] {
