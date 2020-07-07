@@ -54,6 +54,10 @@ function DocUploadStatus({
     const pauseUpload = () => {
         uploadStatus.uploadTask.pause();
     }
+
+    const resumeUpload = () => {
+        uploadStatus.uploadTask.resume()
+    }
     
     const _getUploadStatusColor = (uploadStatus, opacity=1) => {
         return (uploadStatus.progress >= 100)
@@ -131,7 +135,7 @@ function DocUploadStatus({
                     color="primary"
                     onClick={() => {
                         let uploadCancelled = uploadStatus.uploadTask.cancel();
-                        if (uploadCancelled) showSnackbarCallback(
+                        if (uploadCancelled || uploadStatus.isPaused) showSnackbarCallback(
                             isSavingDocument
                                 ? "Document was not saved. Action Cancelled"
                                 : "Document Upload Cancelled"
@@ -147,10 +151,11 @@ function DocUploadStatus({
                     variant="outlined"
                     color="primary"
                     onClick={() => {
-                        pauseUpload()
+                        if (!uploadStatus.isPaused) pauseUpload();
+                        else resumeUpload();
                     }}
                 >
-                    Pause
+                    {!uploadStatus.isPaused ? "Pause" : "Resume"}
                 </Button>
             </div>
         </>
