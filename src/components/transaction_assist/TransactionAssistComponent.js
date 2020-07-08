@@ -338,6 +338,7 @@ class TransactionAssist extends Component{
     }
 
     render(){
+        console.log(this.props.match.params)
         return(
             <Box component="div">
                 <Container>

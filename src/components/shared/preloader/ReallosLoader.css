@@ -50,31 +50,31 @@
 }
 
 .r-logo-container > svg > path:nth-child(1) {
-    animation: preloader-animation 2s ease-out infinite;
+    animation: preloader-animation 3s ease-out infinite;
 }
 
 .r-logo-container > svg > path:nth-child(2) {
-    animation: preloader-animation 2s ease-out infinite 0.2s;
+    animation: preloader-animation 3s ease-out infinite 0.2s;
 }
 
 .r-logo-container > svg > path:nth-child(3) {
-    animation: preloader-animation 2s ease-out infinite 0.4s;
+    animation: preloader-animation 3s ease-out infinite 0.4s;
 }
 
 .r-logo-container > svg > path:nth-child(4) {
-    animation: preloader-animation 2s ease-out infinite 0.6s;
+    animation: preloader-animation 3s ease-out infinite 0.6s;
 }
 
 .r-logo-container > svg > path:nth-child(5) {
-    animation: preloader-animation 2s ease-out infinite 0.8s;
+    animation: preloader-animation 3s ease-out infinite 0.8s;
 }
 
 .r-logo-container > svg > path:nth-child(6) {
-    animation: preloader-animation 2s ease-out infinite 1.0s;
+    animation: preloader-animation 3s ease-out infinite 1.0s;
 }
 
 .r-logo-container > svg > path:nth-child(7) {
-    animation: preloader-animation 2s ease-out infinite 1.2s;
+    animation: preloader-animation 3s ease-out infinite 1.2s;
 }
 
 @keyframes preloader-animation {

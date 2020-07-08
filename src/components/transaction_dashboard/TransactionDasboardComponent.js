@@ -7,8 +7,10 @@ import NewTransactionButton from "./NewTransactionButtonComponent";
 import NavBar from "../shared/navbar/navbar";
 import SearchBar from "../shared/searchbar/SearchBarComponent";
 import TransactionCardGroup from "./TransactionCardGroup";
+import ReallosLoader from '../shared/preloader/ReallosLoader';
 import { connect } from "react-redux";
 import { editUser } from "../../actions/userActions";
+import { getTransaction } from '../../actions/transactionActions';
 import { validateFormField } from "../../global_func_lib";
 import { bindActionCreators } from "redux";
 import {
@@ -25,12 +27,14 @@ import { CheckIcon } from "@primer/octicons-react";
 const mapStateToProps = (state) => ({
   user: state.user,
   transaction: state.transaction,
+  utils: state.utils
 });
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       editUser,
+      getTransaction
     },
     dispatch
   );
@@ -68,22 +72,7 @@ class TransactionDasboard extends Component {
 
   componentDidMount() {
     // Component did mount is used to fetch the transactions of the user form the redux store
-    if (
-      this.props.user.firstName === null ||
-      this.props.user.lastName === null ||
-      this.props.user.phone === null ||
-      this.props.user.role === null ||
-      this.props.user.state === null
-    )
-      // If any of these fields are empty then open the fill in details modal
-      this.setState({
-        socialModal: true,
-        firstName: this.props.user.firstName,
-        lastName: this.props.user.lastName,
-        phone: this.props.user.phone,
-        role: this.props.user.role,
-        state: this.props.user.state,
-      });
+    this.props.getTransaction(); // Fetching all the transactions of that particular user
   }
 
   handleChange(event) {
@@ -378,8 +367,10 @@ class TransactionDasboard extends Component {
   }
 
   render() {
+      // If any of these fields are empty then open the fill in details modal
     return (
       <Box component="div">
+          <ReallosLoader visible={this.props.utils.Loading} />
         <Container>
           <NavBar />
           <this.SocialDetailModal />
@@ -407,6 +398,7 @@ class TransactionDasboard extends Component {
       </Box>
     );
   }
+
 }
 
 export default connect(

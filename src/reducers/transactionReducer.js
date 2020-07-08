@@ -16,48 +16,36 @@ function transactionReducer(state=initialState, action){
                     active:false
                 }
             ]
-        case actions.SET_ACTIVE_TRANSACTION: // returning one transaction as active
+        case actions.REMOVE_FROM_TRANSACTION: // Removing a person from the transaction
             return state.map((transaction)=>{
-                if(transaction.id === action.transId){
-                    return {
-                        ...transaction,
-                        active: true // Used to set which transaction is open
-                    }
-                }
-                else
+                if(transaction.id === action.transId){ // Still have to figure out a way to do this
                     return{
                         ...transaction,
-                        active: false
+                        People: action.People
                     }
+                }
+                else{
+                    return{
+                        ...transaction
+                    }
+                }
             });
-        case actions.REMOVE_FROM_TRANSACTION: // Removing a person from the transaction
-        return state.map((transaction)=>{
-            if(transaction.id === action.transId){ // Still have to figure out a way to do this
-                return{
-                    ...transaction,
-                    People: action.People
-                }
-            }
-            else{
-                return{
-                    ...transaction
-                }
-            }
-        });
         case actions.ADD_TO_TRANSACTION: // Adding a person to the transaction
-        return state.map((transaction)=>{
-            if(transaction.id === action.transId){
-                return{
-                    ...transaction,
-                    People: action.People
+            return state.map((transaction)=>{
+                if(transaction.id === action.transId){
+                    return{
+                        ...transaction,
+                        People: action.People
+                    }
+                }   
+                else{
+                    return{
+                        ...transaction
+                    }
                 }
-            }   
-            else{
-                return{
-                    ...transaction
-                }
-            }
-        })
+            })
+        case actions.CLEAR_TRANSACTION_STORE: // clearing the redux store
+            return initialState;
         default:
             return state;
     }

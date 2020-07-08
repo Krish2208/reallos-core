@@ -4,7 +4,7 @@ import './TransactionCardGroup.css';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { setActiveTransaction } from '../../actions/transactionActions';
+import {  } from '../../actions/transactionActions';
 
 import {
   VersionsIcon,
@@ -33,7 +33,6 @@ import {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    setActiveTransaction
   }, dispatch);
 }
 
@@ -64,8 +63,7 @@ function RenderCard(props) {
   // mapping the transactions
   const history = useHistory();
   const routeToTransaction = (id) => {
-    props.setActiveTransaction(id);
-    let path = '/assist';
+    let path = `/transaction/${id}/assist`;
     history.push(path);
   }
   return (
