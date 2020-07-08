@@ -103,4 +103,52 @@ class ReallosModal extends React.Component {
     }
 }
 
+/**
+ * Component to render action footer bar for modal.
+ * @augments React.Component<Props>
+ */
+class ModalActionFooter extends React.Component {
+    static propTypes = {
+        /**
+         * Specify where to align the action items.
+         * The allowed values are `left` & `right`.
+         * 
+         * (_Default: "right"_)
+         */
+        actionPlacement: PropTypes.oneOf([
+            'left',
+            'right'
+        ]),
+
+        /**
+         * Top margin for this component
+         * 
+         * (_Default: 30_)
+         */
+        marginTop: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.string
+        ])
+    }
+    
+    render() {
+        let {
+            actionPlacement,
+            marginTop,
+            children
+        } = this.props;
+
+        return (
+            <div
+                className="modal-action-group"
+                actionPlacement={actionPlacement}
+                style={{marginTop}}
+            >
+                {children}
+            </div>
+        )
+    }
+}
+
 export default ReallosModal;
+export { ModalActionFooter };
