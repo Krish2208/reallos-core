@@ -5,10 +5,10 @@ import { ReactComponent as ReallosStrokeLogo } from '../../../assets/reallos-str
 import './ReallosLoader.css';
 
 /**
- * Display a preloader
+ * Display a preloader with backdrop overlay.
  * @augments {React.Component<Props>}
  */
-class ReallosLoader extends React.Component {
+class ReallosLoaderWithOverlay extends React.Component {
     static propTypes = {
         /**
          * Specify whether the preloader is visible.
@@ -37,6 +37,13 @@ class ReallosLoader extends React.Component {
         strokeColor: PropTypes.string,
 
         /**
+         * Specify the stroke width of preloader.
+         * 
+         * (_Default: 3_)
+         */
+        strokeWidth: PropTypes.number,
+
+        /**
          * Remove backdrop blur effect when rendering the
          * preloader. You might want to disable the blur
          * effect for performance reasons.
@@ -59,8 +66,10 @@ class ReallosLoader extends React.Component {
             size,
             backgroundColor,
             strokeColor,
+            strokeWidth,
             disableBackdropBlur=false,
-            shouldUseFullLogo=true
+            shouldUseFullLogo=true,
+            children
         } = this.props;
 
         return (
@@ -69,15 +78,78 @@ class ReallosLoader extends React.Component {
                     className={`reallos-backdrop ${disableBackdropBlur ? 'backdrop-no-blur' : ''}`}
                     style={{ backgroundColor }}
                 ></div>
-                <div className="r-logo-container">
-                    {shouldUseFullLogo
-                        ? <ReallosStrokeLogo full-logo="true" style={{width: size, stroke: strokeColor}} />
-                        : <RStrokeLogo style={{width: size, stroke: strokeColor}} />
-                    }
-                </div>
+                <ReallosLoader
+                    size={size}
+                    strokeColor={strokeColor}
+                    strokeWidth={strokeWidth}
+                    shouldUseFullLogo={shouldUseFullLogo}
+                />
+
+                {children}
+            </div>
+        )
+    }
+}
+
+/**
+ * Display a preloader
+ * @augments {React.Component<Props>}
+ */
+class ReallosLoader extends React.Component {
+    static propTypes = {
+        /**
+         * Specify the size of preloader.
+         *
+         * (_Default: 380 for full logo | 90 for short logo_)
+         */
+        size: PropTypes.number,
+
+        /**
+         * Specify the stroke color of preloader.
+         * 
+         * (_Default: rgb(21, 5, 120) | "#150578"_)
+         */
+        strokeColor: PropTypes.string,
+
+        /**
+         * Specify the stroke width of preloader.
+         * 
+         * (_Default: 3_)
+         */
+        strokeWidth: PropTypes.number,
+
+        /**
+         * Specify whether to show a full logo or short logo.
+         *
+         * (_Default: true_)
+         */
+        shouldUseFullLogo: PropTypes.bool
+    }
+
+    render() {
+        let {
+            size,
+            strokeColor,
+            strokeWidth,
+            shouldUseFullLogo=true,
+        } = this.props;
+
+        const style = {
+            width: size,
+            stroke: strokeColor,
+            strokeWidth: strokeWidth
+        }
+
+        return (
+            <div className="r-logo-container">
+                {shouldUseFullLogo
+                    ? <ReallosStrokeLogo full-logo="true" style={style} />
+                    : <RStrokeLogo style={style} />
+                }
             </div>
         )
     }
 }
 
 export default ReallosLoader;
+export { ReallosLoaderWithOverlay };
