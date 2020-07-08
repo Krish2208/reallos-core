@@ -17,13 +17,16 @@ import './DocUploadModal.css';
  * @param {(message: string) => void} props.showSnackbarCallback
  * Callback to show snackbar.
  * 
+ * @param {Function} props.onSuccessCallback
+ * Callback called after an upload is successful.
+ * 
  * @param {Function} props.dismissCallback
  * Callback to dismiss the upload modal.
  * 
  * @returns {JSX.Element}
  * Document Upload Modal
  */
-function DocUploadModal({ visible, dismissCallback, showSnackbarCallback }) {
+function DocUploadModal({ visible, dismissCallback, showSnackbarCallback, onSuccessCallback }) {
     let [ isUploading, setUploadState ]  = useState(false);
     let [ uploadTaskStatus, setUploadTaskStatus ] = useState({
         progress: 0,
@@ -53,6 +56,7 @@ function DocUploadModal({ visible, dismissCallback, showSnackbarCallback }) {
                 let isPaused = snapshot.state == 'paused';
 
                 let newUploadTaskDetails = {
+                    filename: acceptedFiles[0].name,
                     progress,
                     isPaused,
                     uploadTask
@@ -93,6 +97,7 @@ function DocUploadModal({ visible, dismissCallback, showSnackbarCallback }) {
                         resetUploadStateCallback={resetUploadState}
                         dismissCallback={dismissCallback}
                         showSnackbarCallback={showSnackbarCallback}
+                        onSuccessCallback={onSuccessCallback}
                     />
             }
         </Modal>
