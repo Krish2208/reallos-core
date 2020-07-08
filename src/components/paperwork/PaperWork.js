@@ -2,8 +2,12 @@ import React from 'react';
 import NavBar from '../shared/navbar/navbar';
 import NavRail from '../shared/navigation_rail/TransactionNavRail';
 import DocUploadModal from './uploader/DocUploadModal';
+import ReallosLoader from '../shared/preloader/ReallosLoader';
+import Modal, { ModalActionFooter } from '../shared/modal/Modal';
 import UserAvatar from '../../assets/user.png';
+import PdfLogo from '../../assets/pdf_icon_duotone.svg';
 import { NavLink } from 'react-router-dom';
+import { myStorage } from '../../Config/MyFirebase';
 import { withStyles } from '@material-ui/core/styles';
 
 import {
@@ -17,13 +21,18 @@ import {
     CardMedia,
     CardContent,
     IconButton,
-    Snackbar
+    Button,
+    Snackbar,
+    Menu,
+    MenuItem
 } from '@material-ui/core';
 
 import {
     ArchiveIcon,
     ArrowUpIcon,
-    KebabHorizontalIcon
+    KebabHorizontalIcon,
+    XIcon,
+    ShieldIcon
 } from '@primer/octicons-react';
 
 import './PaperWork.css';
@@ -38,67 +47,31 @@ const styles = theme => ({
 class PaperWork extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             isUploadModalVisible: false,
             isSnackbarVisible: false,
             snackbarMessage: null,
-            documents: [
-                {
-                    // Name of Document
-                    name: 'Document 1',
-
-                    // ID of the User (used to fetch user profile pic and name)
-                    // @TODO: To be replaced with User ID
-                    creator: 'John Doe',
-
-                    // Assigned when uploading
-                    doc_id: 'QWERTY-1234',
-
-                    // Path to the document
-                    path: '/TRANSACTION_ID/paperworks/Reallos - TODO FUNCTIONALITY.pdf',
-
-                    // User ID of members having access to the document
-                    // @TODO: User names to be replaced by User ID
-                    members: [
-                        'Joseph John'
-                    ]
-                },
-                {
-                    name: 'Document 2',
-                    creator: 'John Doe',
-                    doc_id: 'ASDFG-9780',
-                    path: '/TRANSACTION_ID/paperworks/Reallos - TODO FUNCTIONALITY.pdf',
-                    members: ['Joseph John']
-                },
-                {
-                    name: 'Document 3',
-                    creator: 'John Doe',
-                    doc_id: 'GSLDS-53694',
-                    path: '/TRANSACTION_ID/paperworks/Reallos - TODO FUNCTIONALITY.pdf',
-                    members: ['Joseph John']
-                },
-                {
-                    name: 'Document 4',
-                    creator: 'John Doe',
-                    doc_id: 'QIOPW-0034',
-                    path: '/TRANSACTION_ID/paperworks/Reallos - TODO FUNCTIONALITY.pdf',
-                    members: ['Joseph John']
-                },
-                {
-                    name: 'Document 5',
-                    creator: 'John Doe',
-                    doc_id: 'SRXPO-7583',
-                    path: '/TRANSACTION_ID/paperworks/Reallos - TODO FUNCTIONALITY.pdf',
-                    members: ['Joseph John']
-                },
-            ]
-        }
+            documents: null,
+            menuAnchorElement: null,
+            isDeleteModalVisible: false,
+            menuTagetDocumentData: {
+                name: '',
+                creator: '',
+                doc_id: '',
+                path: '',
+                members: []
+            }
+        };
 
         this.RenderPaperworkCards = this.RenderPaperworkCards.bind(this);
         this.showUploadModalVisibility = this.showUploadModalVisibility.bind(this);
         this.dismissUploadModal = this.dismissUploadModal.bind(this);
         this.showSnackbar = this.showSnackbar.bind(this);
         this.dismissSnackbar = this.dismissSnackbar.bind(this);
+        this.setDocumentList = this.setDocumentList.bind(this);
+
+        this.setDocumentList();
     }
 
     /**
@@ -121,7 +94,7 @@ class PaperWork extends React.Component {
 
     /**
      * Display a snackbar.
-     * 
+     *
      * @param {string} message
      * Message to be displayed inside the snackbar.
      */
@@ -143,10 +116,104 @@ class PaperWork extends React.Component {
     }
 
     /**
+     * Sets the anchor element for paperwork menu.
+     *
+     * @param {HTMLButtonElement} menuAnchorElement
+     * The element to be used as menu anchor.
+     * Pass `event.targetElement` as the argument.
+     *
+     * @param {object} menuTagetDocumentData
+     * The `docData` of the target document.
+     */
+    openMenu(menuAnchorElement, menuTagetDocumentData) {
+        this.setState({
+            menuAnchorElement,
+            menuTagetDocumentData
+        })
+    }
+    /**
+     * Sets the anchor element to null in order to
+     * dismiss the menu.
+     */
+    dismissMenu() {
+        this.setState({
+            menuAnchorElement: null
+        })
+    }
+
+    /**
+     * Set visibility for delete modal to `true`
+     */
+    showDeleteModal() {
+        this.setState({
+            isDeleteModalVisible: true
+        })
+    }
+
+    /**
+     * Returns document name with the extension stripped off.
+     *
+     * @param {string} docName
+     * Document name
+     */
+    getEffectiveDocumentName(docName) {
+        return docName.replace(/\.pdf$/, '');
+    }
+
+    /**
      * Returns URL of thumbnail for a PDF.
+     *
+     * @TODO: Should return thumbnail as data URL
      */
     getThumbnail() {
         return 'https://images.sampletemplates.com/wp-content/uploads/2016/04/15115200/Sample-Press-Release-Template-PDF.jpg';
+    }
+
+    /**
+     * Sets `document` state to documents in cloud.
+     */
+    async setDocumentList() {
+        let storageRef = myStorage.ref().child('TRANSACTION_ID/paperworks');
+        let documentList = await storageRef.listAll();
+        let paperworks = [];
+
+        documentList.items.map(documentItem => {
+            paperworks.push({
+                name: documentItem.name,
+                creator: 'John Doe',
+                doc_id: documentItem.name,
+                path: documentItem.fullPath,
+                members: ['Joseph John']
+            })
+        })
+
+        this.setState({
+            documents: paperworks
+        })
+    }
+
+    /**
+     * Deletes the specified document from the cloud.
+     *
+     * @param {{ name: string, creator: string, doc_id: string, path: string, members: any[] }} docData
+     * The document data of the particular document.
+     */
+    async deletePaperwork(docData) {
+        let docPath = docData.path
+        let docRef = myStorage.ref().child(docPath);
+
+        try {
+            await docRef.delete();
+
+            this.setState({
+                isSnackbarVisible: true,
+                snackbarMessage: 'The document was deleted successfully.',
+                documents: this.state.documents.filter(doc => doc.name != docData.name)
+            });
+        }
+        catch (err) {
+            this.showSnackbar("Failed to delete the document")
+        }
     }
 
     /**
@@ -154,10 +221,33 @@ class PaperWork extends React.Component {
      */
     RenderPaperworkCards() {
         const { classes } = this.props;
-        
-        if (this.state.documents.length === 0) {
+
+        if (this.state.documents === null) {
+            // If paperworks are not fetched
+
+            return (
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    marginTop: 30
+                }}>
+                    <ReallosLoader />
+
+                    <h1>
+                        Just a moment...
+                    </h1>
+                    <p style={{fontSize: 20, marginTop: 0}}>
+                        We are fetching your paperworks.
+                    </p>
+                </div>
+            )
+        }
+
+        else if (this.state.documents.length === 0) {
             // If paperwork documents are present.
-            
+
             return (
                 <Grid container direction="column" alignItems="center" justify="center" spacing={2}>
                     <Grid item>
@@ -181,12 +271,22 @@ class PaperWork extends React.Component {
 
         else {
             // If no paperwork documents are present.
-            
+
             return (
                 <div className="doc-card-group">
-                    {this.state.documents.map(docData => (
-                        <div className="doc-card-root" key={docData.doc_id}>
-                            <IconButton className="doc-card-top-action-btn">
+                    {this.state.documents.map((docData, itemIndex) => (
+                        <div
+                            className="doc-card-root"
+                            key={docData.doc_id}
+                            style={{
+                                opacity: 0,
+                                animation: `slide-up-anim 150ms ease-out ${itemIndex * 25}ms forwards`
+                            }}
+                        >
+                            <IconButton
+                                className="doc-card-top-action-btn"
+                                onClick={(event) => this.openMenu(event.currentTarget, docData)}
+                            >
                                 <KebabHorizontalIcon />
                             </IconButton>
 
@@ -194,15 +294,19 @@ class PaperWork extends React.Component {
                                 pathname: `/paperwork/${docData.doc_id}`,
                                 state: docData
                             }}>
-                                <Card className="doc-card">
+                                <Card className="doc-card" title={docData.name}>
                                     <CardMedia
                                         image={this.getThumbnail()}
                                         style={{height: 200}}
                                     />
 
                                     <CardContent>
-                                        <h2>
-                                            {docData.name}
+                                        <h2 style={{
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis'
+                                        }}>
+                                            {this.getEffectiveDocumentName(docData.name)}
                                         </h2>
 
                                         <div style={{
@@ -224,6 +328,87 @@ class PaperWork extends React.Component {
                             </NavLink>
                         </div>
                     ))}
+
+                    <Menu
+                        open={!!this.state.menuAnchorElement}
+                        anchorEl={this.state.menuAnchorElement}
+                        onClose={() => this.dismissMenu()}
+                        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                        transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                    >
+                        <MenuItem>
+                            <div style={{margin: 'auto 20px auto 0'}}>
+                                <ShieldIcon size={20} />
+                            </div>
+
+                            Configure access rights
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                            this.dismissMenu();
+                            this.showDeleteModal();
+                        }}>
+                            <div style={{margin: 'auto 20px auto 0'}}>
+                                <XIcon size={20} />
+                            </div>
+
+                            Delete
+                        </MenuItem>
+                    </Menu>
+
+                    <Modal
+                        title="Delete Paperwork"
+                        visible={this.state.isDeleteModalVisible}
+                        dismissCallback={() => this.setState({isDeleteModalVisible: false})}
+                        modalWidth={700}
+                    >
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 30
+                        }}>
+                            <img
+                                src={PdfLogo}
+                                alt=""
+                                style={{marginRight: 30, width: 80}}
+                            />
+
+                            <div style={{fontSize: 18}}>
+                                Are you sure you want to delete the following paperwork:
+                                <br />
+
+                                <strong>
+                                    {this.getEffectiveDocumentName(
+                                        this.state.menuTagetDocumentData.name
+                                    )}
+                                </strong>
+
+                                <p>
+                                    This action is undoable. Think again...
+                                </p>
+                            </div>
+                        </div>
+
+                        <ModalActionFooter>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => this.setState({isDeleteModalVisible: false})}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                    this.setState({isDeleteModalVisible: false});
+                                    this.deletePaperwork(this.state.menuTagetDocumentData)
+                                }}
+                            >
+                                Delete
+                            </Button>
+                        </ModalActionFooter>
+                    </Modal>
                 </div>
             )
         }
@@ -262,6 +447,7 @@ class PaperWork extends React.Component {
                     dismissCallback={this.dismissUploadModal}
                     visible={this.state.isUploadModalVisible}
                     showSnackbarCallback={this.showSnackbar}
+                    onSuccessCallback={() => this.setDocumentList()}
                 />
                 <Snackbar
                     open={this.state.isSnackbarVisible}
