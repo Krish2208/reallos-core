@@ -384,7 +384,7 @@ class PaperWork extends React.Component {
                                 </strong>
 
                                 <p>
-                                    This action is undoable. Think again...
+                                    This action is not undoable. Think again...
                                 </p>
                             </div>
                         </div>
