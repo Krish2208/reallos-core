@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { withRouter } from 'react-router-dom';
 import { FormGroup, FormControlLabel, TextField, Checkbox, Button, Fab } from '@material-ui/core';
+import ReallosLoader from '../shared/preloader/ReallosLoader';
 import {connect} from 'react-redux';
 import { login } from '../../actions/userActions';
 import {bindActionCreators} from 'redux';
@@ -8,6 +8,11 @@ import GoogleLogo from '../../assets/google-logo.svg';
 import FacebookLogo from '../../assets/fb-logo.svg';
 import Modal from '../shared/modal/Modal';
 import './SignInModal.css';
+
+
+const mapStateToProps = (state)=> ({
+    utils: state.utils
+});
 
 const mapDispatchToProps = (dispatch)=>{
     return bindActionCreators({
@@ -41,11 +46,13 @@ class SignIn extends Component{
         setTimeout(() => {
           }, 1000); // To add a delay to mimic the Server behavio
           
-        this.props.login(user,this.props.history);
+        this.props.login(user);
     }
 
     render(){
-        return(<Modal title="Sign In" visible={this.props.visible} dismissCallback={this.props.dismissCallback}>
+        return(
+        <Modal title="Sign In" visible={this.props.visible} dismissCallback={this.props.dismissCallback}>
+        <ReallosLoader visible={this.props.utils.Loading} shouldUseFullLogo={false}/>
         <FormGroup>
             <div id="signin-modal-content">
                 <TextField
@@ -120,4 +127,4 @@ class SignIn extends Component{
 }
 
 
-export default connect(null,mapDispatchToProps)(withRouter(SignIn));
+export default connect(mapStateToProps,mapDispatchToProps)(SignIn);

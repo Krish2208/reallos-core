@@ -65,10 +65,11 @@ class NewTransactionButton extends Component {
       Description: "",
       Invite: {
         // Holding the temprorary state of the invites
-        Name: "",
-        Email: "",
-        Role: "",
-        Accepted: false,
+        name: "",
+        email: "",
+        role: "",
+        uid: "",
+        accepted: false
       },
       errors: {
         Name: null,
@@ -169,9 +170,11 @@ class NewTransactionButton extends Component {
     this.setState({
       isInsideModalOpen: !this.state.isInsideModalOpen,
       Invite: {
-        Name: "",
-        Email: "",
-        Role: "",
+        name: "",
+        email: "",
+        role: "",
+        uid: "",
+        accepted: false
       },
     });
   }
@@ -237,22 +240,22 @@ class NewTransactionButton extends Component {
     }
 
     let Invite = this.state.Invite; // Intitalizing Invite with the state Invite
-    Invite.Accepted = false; // Always setting the accepted value to false
+    Invite.accepted = false; // Always setting the accepted value to false
     if (name === "name") {
-      Invite.Name = value;
+      Invite.name = value;
     }
     if (name === "email") {
-      Invite.Email = value;
+      Invite.email = value;
     }
     if (name === "role") {
-      Invite.Role = value;
+      Invite.role = value;
     }
     this.setState({ Invite, errors }); // Setting the state of the invite
 
     if (
-      this.state.Invite.Name != "" &&
-      this.state.Invite.Email != "" &&
-      this.state.Invite.Role != ""
+      this.state.Invite.name != "" &&
+      this.state.Invite.email != "" &&
+      this.state.Invite.role != ""
     ) {
       this.setState({ validatedInvite: true });
     } else {
@@ -280,15 +283,15 @@ class NewTransactionButton extends Component {
     // function to edit the invites
     this.toggleInsideModal();
     let Invite = this.state.Invite;
-    Invite.Name = invite.Name;
-    Invite.Email = invite.Email;
-    Invite.Role = invite.Role;
+    Invite.name = invite.name;
+    Invite.email = invite.email;
+    Invite.role = invite.role;
     this.setState({ Invite });
   }
 
   deleteInvite(email) {
     let Invites = this.state.Invites;
-    Invites = Invites.filter((Invite) => Invite.Email != email);
+    Invites = Invites.filter((Invite) => Invite.email != email);
     this.setState({ Invites });
   }
 
@@ -298,10 +301,8 @@ class NewTransactionButton extends Component {
       name: this.state.Name,
       address: this.state.Address,
       desc: this.state.Description,
-      people: this.state.Invites,
-      admin: null
     };
-    this.props.createTransaction(newTransaction); // dispatching an action with the appropriate payload
+    this.props.createTransaction(newTransaction,this.state.Invites); // dispatching an action with the appropriate payload
   }
 
   /**
@@ -537,13 +538,13 @@ class NewTransactionButton extends Component {
                             paddingBottom: 0,
                           }}
                         >
-                          {Invite.Name}
+                          {Invite.name}
                         </Grid>
                         <Grid item xs={2}>
-                          {Invite.Role}
+                          {Invite.role}
                         </Grid>
                         <Grid item xs={6} alignContent="right">
-                          {Invite.Email}
+                          {Invite.email}
                         </Grid>
                         <Grid item xs={1}>
                           <Button onClick={() => this.editInvite(Invite)}>
@@ -552,7 +553,7 @@ class NewTransactionButton extends Component {
                         </Grid>
                         <Grid item xs={1}>
                           <Button
-                            onClick={() => this.deleteInvite(Invite.Email)}
+                            onClick={() => this.deleteInvite(Invite.email)}
                           >
                             <XIcon size={16} />
                           </Button>
@@ -654,7 +655,7 @@ class NewTransactionButton extends Component {
                       className="third-step-person-chip"
                       color="primary"
                       variant="outlined"
-                      label={Invite.Name}
+                      label={Invite.name}
                     />
                   ))}
                 </Grid>
@@ -745,7 +746,7 @@ class NewTransactionButton extends Component {
               label="Name"
               className="input-new-transaction-form"
               name="name"
-              value={this.state.Invite.Name}
+              value={this.state.Invite.name}
               onChange={this.handleInviteChange}
               onBlur={this.handleInviteChange}
               helperText={this.state.errors.Name}
@@ -759,7 +760,7 @@ class NewTransactionButton extends Component {
               label="E-mail"
               className="input-new-transaction-form"
               name="email"
-              value={this.state.Invite.Email}
+              value={this.state.Invite.email}
               onChange={this.handleInviteChange}
               onBlur={this.handleInviteChange}
               helperText={this.state.errors.Email}
@@ -777,7 +778,7 @@ class NewTransactionButton extends Component {
                 id="select"
                 className="input-new-transaction-form"
                 name="role"
-                value={this.state.Invite.Role}
+                value={this.state.Invite.role}
                 onChange={this.handleInviteChange}
                 onBlur={this.handleInviteChange}
                 helperText={this.state.errors.Role}

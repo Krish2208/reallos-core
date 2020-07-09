@@ -33,14 +33,14 @@ function Main(props) {
     <div>
       <Switch>
         <Route path="/dummy" component={DummyPage} />
-        <PrivateRoute path="/transaction" component={TransactionDashbaord} />
-        <PrivateRoute path="/assist" component={TransactionAssist} />
-        <PrivateRoute path="/paperwork/*" component={PaperworkViewer} />
-        <PrivateRoute path="/paperwork" component={PaperWork} />
-        <PrivateRoute path="/people" component={PeopleInvolved} />
-        <PrivateRoute path="/todo" component={Todo} />
-        <PrivateRoute path="/discussions" component={DiscussionsMain} />
-        <Redirect to="/dummy" />
+        <PrivateRoute exact path="/transaction" component={TransactionDashbaord} />
+        <PrivateRoute path="/transaction/:tid/assist" component={TransactionAssist} />
+        <PrivateRoute path="/transaction/:tid/paperwork/*" component={PaperworkViewer} />
+        <PrivateRoute path="/transaction/:tid/paperwork" component={PaperWork} />
+        <PrivateRoute path="/transaction/:tid/people" component={PeopleInvolved} />
+        <PrivateRoute path="/transaction/:tid/todo" component={Todo} />
+        <PrivateRoute path="/transaction/:tid/discussions" component={DiscussionsMain} />
+        <Redirect to="dummy"/>
       </Switch>
     </div>
   );

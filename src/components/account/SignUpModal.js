@@ -3,16 +3,17 @@ import Modal from "../shared/modal/Modal";
 import SignupFormStep1 from "./SignUpFormStep1";
 import SignupFormStep2 from "./SignupFormStep2";
 import SignupFormStep3 from "./SignupFormStep3";
+import ReallosLoader from '../shared/preloader/ReallosLoader';
 import "./SignUpModal.css";
 import { Stepper, Step, StepLabel } from "@material-ui/core";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { signupUser } from "../../actions/userActions";
 import { validateFormField } from "../../global_func_lib";
-import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  utils: state.utils
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -90,7 +91,7 @@ class SignUpModal extends Component {
     }
     setTimeout(() => {
     }, 2000); // To add a delay to mimic the Server behavior */
-    this.props.signupUser(newUser,this.props.history);
+    this.props.signupUser(newUser);
   }
 
   handleChange = (event) => {
@@ -257,6 +258,7 @@ class SignUpModal extends Component {
           visible={this.props.visible}
           dismissCallback={this.closeSignUpModal}
         >
+          < ReallosLoader visible={false /*Change this to this.props.utils.visible*/}/>
           <Stepper activeStep={this.state.activeStep}>
             <Step>
               <StepLabel />
@@ -275,4 +277,4 @@ class SignUpModal extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUpModal));
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpModal);

@@ -18,7 +18,7 @@ function todoReducer(state=initialState,action){
                 }
             ]
         case actions.DELETE_TODO:
-            return state.filter(todo => todo.id!=action.id )
+            return state.filter(todo => todo.id !== action.id )
         case actions.EDIT_TODO:
             return state.map((todo)=>{
                 if(todo.id === action.id){

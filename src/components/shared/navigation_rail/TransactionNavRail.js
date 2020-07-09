@@ -85,37 +85,37 @@ export default function NavRail() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const routerLocation = useLocation();
-
+  const transId = routerLocation.pathname.split('/')[2]; // getting the id from the pathname
   let listItems = [
     {
       icon: (<HomeIcon size={24} />),
       label: 'Transaction Dashboard',
-      isActiveRoute: routerLocation.pathname.startsWith('/transaction'),
+      isActiveRoute: null,
       linkTo: '/transaction'
     },
     {
       icon: (<PackageIcon size={24} />),
       label: 'Transaction Assist',
-      isActiveRoute: routerLocation.pathname.startsWith('/assist'),
-      linkTo: '/assist'
+      isActiveRoute: routerLocation.pathname.includes('assist'),
+      linkTo: '/transaction/'+transId+'/assist'
     },
     {
       icon: (<FileIcon size={24} />),
       label: 'Paperwork',
-      isActiveRoute: routerLocation.pathname.startsWith('/paperwork'),
-      linkTo: '/paperwork'
+      isActiveRoute: routerLocation.pathname.includes('/paperwork'),
+      linkTo: '/transaction/'+transId+'/paperwork'
     },
     {
       icon: (<PersonIcon size={24} />),
       label: 'People',
-      isActiveRoute: routerLocation.pathname.startsWith('/people'),
-      linkTo: '/people'
+      isActiveRoute: routerLocation.pathname.includes('/people'),
+      linkTo: '/transaction/'+transId+'/people'
     },
     {
       icon: (<ChecklistIcon size={24} />),
       label: 'Todo',
-      isActiveRoute: routerLocation.pathname.startsWith('/todo'),
-      linkTo: '/todo'
+      isActiveRoute: routerLocation.pathname.includes('/todo'),
+      linkTo: '/transaction/'+transId+'/todo'
     },
     {
       icon: (<CommentDiscussionIcon size={24} />),
