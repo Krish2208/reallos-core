@@ -1,13 +1,39 @@
+import axios from 'axios';
+import {setLoadingTrue, setLoadingFalse, setErrors} from './utilsActions';
+
 export const ADD_TODO = 'ADD_TODO';
 export const DELETE_TODO = 'DELETE_TODO';
 export const EDIT_TODO = 'EDIT_TODO';
-let id = 0; // This will dynamically be fetched from the database but is being kept 0 for now
+
+
+export function getTask(id){ // getting the tasks from the server
+    console.log(id);
+    return (dispatch) =>{
+        axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/get-all-tasks/${id}`,{
+            headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
+        })
+        .then((res)=>{
+            console.log(res.data)
+            res.data.todoList.map(todo =>{
+                dispatch(addTodo(
+                    id,
+                    todo.title,
+                    todo.description,
+                    todo.date,
+                    todo.assignedTo,
+                    todo.assignedBy
+                ))
+            })
+        })
+        .catch(err =>{
+            console.error(err);
+        })
+    }
+}
 
 export function addTodo(transId, Title, Description, Date, To, From){ // action creator for ADD_TODO
-    id++;
     return({
         type: ADD_TODO,
-        id,
         transId,
         Title,
         Description,

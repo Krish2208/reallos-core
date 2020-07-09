@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addTodo, deleteTodo, editTodo } from "../../actions/todoActions";
+import { addTodo, deleteTodo, editTodo, getTask } from "../../actions/todoActions";
 import {
   Container,
   Grid,
@@ -47,6 +47,7 @@ const mapStateToProps = (state) => {
     todo: state.todo,
     transaction: state.transaction,
     user: state.user,
+    people: state.people
   };
 };
 
@@ -57,6 +58,7 @@ const mapDispatchToProps = (dispatch) => {
       addTodo,
       deleteTodo,
       editTodo,
+      getTask
     },
     dispatch
   );
@@ -103,6 +105,10 @@ class Todo extends Component {
     this.expandTask = this.expandTask.bind(this);
     this.getIcon = this.getIcon.bind(this);
     this.getDeadlineText = this.getDeadlineText.bind(this);
+  }
+
+  componentDidMount(){ // when the component is mounted
+    this.props.getTask(this.props.match.params.tid);
   }
 
   getIcon(deadline_date){
@@ -156,13 +162,8 @@ class Todo extends Component {
   };
 
   RenderToDo() {
-    let transId = this.props.transaction.filter(
-      (transaction) => transaction.active === true
-    )[0].id; // getting the id of the active transaction
-    let todos = this.props.todo.filter(
-      (todo) => todo.Transaction_id === transId
-    ); // Gettting only those todos that are part of that transaction
-    if (todos.length === 0) {
+    let todos;
+    if (true) {
       // If no todo exists in the server || have to replace this with an image
       return (
         <Box style={{ width: "100%" }}>
@@ -583,6 +584,7 @@ class Todo extends Component {
   }
 
   render() {
+    console.log(this.props.todo);
     return (
       <Container>
         <NavBar />
@@ -649,9 +651,7 @@ class Todo extends Component {
             <PersonIcon size={30} className="tag-icon" />
             {
               // Checking to see if the people dropdown should be disabled or not
-              this.props.transaction.filter(
-                (transaction) => transaction.active === true
-              )[0].People.length ? (
+              (false) ? (
                 <Select
                   id="person_select"
                   label="Select a person"
