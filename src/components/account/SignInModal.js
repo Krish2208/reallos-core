@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { FormGroup, FormControlLabel, TextField, Checkbox, Button, Fab } from '@material-ui/core';
-import ReallosLoader from '../shared/preloader/ReallosLoader';
+import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
 import {connect} from 'react-redux';
 import { login } from '../../actions/userActions';
 import {bindActionCreators} from 'redux';
@@ -52,7 +52,7 @@ class SignIn extends Component{
     render(){
         return(
         <Modal title="Sign In" visible={this.props.visible} dismissCallback={this.props.dismissCallback}>
-        <ReallosLoader visible={this.props.utils.Loading} shouldUseFullLogo={false}/>
+        <ReallosLoaderWithOverlay visible={this.props.utils.Loading} shouldUseFullLogo={false}/>
         <FormGroup>
             <div id="signin-modal-content">
                 <TextField
