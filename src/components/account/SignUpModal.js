@@ -3,7 +3,7 @@ import Modal from "../shared/modal/Modal";
 import SignupFormStep1 from "./SignUpFormStep1";
 import SignupFormStep2 from "./SignupFormStep2";
 import SignupFormStep3 from "./SignupFormStep3";
-import ReallosLoader from '../shared/preloader/ReallosLoader';
+import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
 import "./SignUpModal.css";
 import { Stepper, Step, StepLabel } from "@material-ui/core";
 import { connect } from "react-redux";
@@ -258,7 +258,7 @@ class SignUpModal extends Component {
           visible={this.props.visible}
           dismissCallback={this.closeSignUpModal}
         >
-          < ReallosLoader visible={false /*Change this to this.props.utils.visible*/}/>
+          <ReallosLoaderWithOverlay visible={false /*Change this to this.props.utils.visible*/}/>
           <Stepper activeStep={this.state.activeStep}>
             <Step>
               <StepLabel />
