@@ -2,12 +2,12 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import NavBar from '../shared/navbar/navbar';
 import NavRail from '../shared/navigation_rail/TransactionNavRail';
+import Modal, { ModalActionFooter } from '../shared/modal/Modal';
 import { ArchiveIcon } from '@primer/octicons-react';
 import StampIcon from '../../assets/stamp_icon.svg';
-import Modal from '../shared/modal/Modal';
 import DocUploadStatus from './uploader/DocUploadStatus';
 import { myStorage } from '../../Config/MyFirebase.js';
-import ReallosLoader from '../shared/preloader/ReallosLoader';
+import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
 
 import {
     PdfViewerComponent,
@@ -51,14 +51,18 @@ class PaperworkViewer extends React.Component {
             hasChanges: false,
             isLoadingDocument: true,
             isUploadModalVisible: false,
+            isResetModalVisible: false,
             isSnackbarVisible: false,
             snackbarMessage: null,
             uploadTaskStatus: {
+                filename: '',
                 progress: 0,
                 isPaused: false,
                 uploadTask: null
             }
         };
+
+        this.docBlob = null;
     }
 
     /**
@@ -84,12 +88,39 @@ class PaperworkViewer extends React.Component {
         let downloadLink = await myStorage.ref(docPath).getDownloadURL();
         let response = await fetch(downloadLink, {method: 'GET'});
         let docBlob = await response.blob();
+        this.docBlob = docBlob;
 
         let fileReader = new FileReader();
         fileReader.readAsDataURL(docBlob);
 
         fileReader.onloadend = () => {
-            this.viewer.documentPath = fileReader.result;
+            if (this.viewer) {
+                this.viewer.documentPath = fileReader.result;
+            }
+        }
+    }
+
+    /**
+     * Resets the document in the viewer.
+     * 
+     * Call to this function will not do anything
+     * if `setDocument` was not called initially.
+     */
+    resetDocument() {
+        if (this.docBlob) {
+            let fileReader = new FileReader();
+            this.viewer.documentPath = '';
+            fileReader.readAsDataURL(this.docBlob);
+
+            fileReader.onloadend = () => {
+                if (this.viewer) {
+                    this.viewer.documentPath = fileReader.result;
+
+                    this.setState({
+                        hasChanges: false
+                    })
+                }
+            }
         }
     }
 
@@ -113,6 +144,7 @@ class PaperworkViewer extends React.Component {
             let isPaused = snapshot.state == 'paused';
 
             let newUploadTaskDetails = {
+                filename: this.getState.name,
                 progress,
                 isPaused,
                 uploadTask
@@ -202,14 +234,29 @@ class PaperworkViewer extends React.Component {
                                 {docData.name}
                             </div>
 
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                disabled={!this.state.hasChanges}
-                                onClick={() => this.saveChangesToCloud(docData.path)}
-                            >
-                                Save Changes
-                            </Button>
+                            <div>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    disabled={!this.state.hasChanges}
+                                    onClick={() => {
+                                        this.setState({
+                                            isResetModalVisible: true
+                                        })
+                                    }}
+                                >
+                                    Revert Changes
+                                </Button>
+                                <span style={{marginRight: 10}} />
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={!this.state.hasChanges}
+                                    onClick={() => this.saveChangesToCloud(docData.path)}
+                                >
+                                    Save Changes
+                                </Button>
+                            </div>
                         </div>
                     </Box>
                     <PdfViewerComponent
@@ -221,6 +268,13 @@ class PaperworkViewer extends React.Component {
                         }}
                         documentPath={null}
                         documentLoad={() => this.setDocumentLoaded()}
+                        documentLoadFailed={() => {
+                            this.setDocumentLoaded();
+                            this.setState({
+                                isSnackbarVisible: true,
+                                snackbarMessage: 'Document failed to load'
+                            })
+                        }}
                         pageMouseover={() => this.setDocumentChanges()}
                         serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/pdfviewer"
                         style={{ 'height': '640px' }}
@@ -245,13 +299,46 @@ class PaperworkViewer extends React.Component {
                             isSavingDocument={true}
                         />
                     </Modal>
+                    <Modal
+                        title="Revert Changes"
+                        visible={this.state.isResetModalVisible}
+                        dismissCallback={() => this.setState({isResetModalVisible: false})}
+                        modalWidth={700}
+                    >
+                        This will reset all the changes you have made to this document so far.
+                        <br />
+                        This action cannot be undone. Are you sure to continue?
+
+                        <ModalActionFooter>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => this.setState({isResetModalVisible: false})}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                    this.setState({isResetModalVisible: false});
+                                    this.resetDocument();
+                                }}
+                            >
+                                Revert Changes
+                            </Button>
+                        </ModalActionFooter>
+                    </Modal>
                     <Snackbar
                         open={this.state.isSnackbarVisible}
                         onClose={() => this.setState({isSnackbarVisible: false})}
                         anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
                         message={this.state.snackbarMessage}
                     />
-                    <ReallosLoader visible={this.state.isLoadingDocument} />
+                    <ReallosLoaderWithOverlay
+                        visible={this.state.isLoadingDocument}
+                        strokeWidth={4}
+                    />
                     <Fab
                         variant="extended"
                         className="reallos-fab"
