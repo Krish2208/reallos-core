@@ -57,7 +57,7 @@ export function login(user){ // still have to dispatch actions that update the s
                     dispatch(setLoadingFalse()); // dispatching an action to set loading to false
             })
             .catch(err =>{
-                console.log(err)
+                console.error(err)
                 dispatch(setErrors()); // dispatching an actio to set the errors
             })
         })

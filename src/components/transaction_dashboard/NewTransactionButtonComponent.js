@@ -69,7 +69,7 @@ class NewTransactionButton extends Component {
         email: "",
         role: "",
         uid: "",
-        status: "",
+        accepted: false
       },
       errors: {
         Name: null,
@@ -174,7 +174,7 @@ class NewTransactionButton extends Component {
         email: "",
         role: "",
         uid: "",
-        status: "",
+        accepted: false
       },
     });
   }
@@ -240,7 +240,7 @@ class NewTransactionButton extends Component {
     }
 
     let Invite = this.state.Invite; // Intitalizing Invite with the state Invite
-    Invite.Accepted = false; // Always setting the accepted value to false
+    Invite.accepted = false; // Always setting the accepted value to false
     if (name === "name") {
       Invite.name = value;
     }

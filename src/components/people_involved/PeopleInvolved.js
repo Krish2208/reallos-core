@@ -3,10 +3,8 @@ import NavBar from "../shared/navbar/navbar";
 import NavRail from "../shared/navigation_rail/TransactionNavRail";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-  addToTransaction,
-  removeFromTransaction,
-} from "../../actions/transactionActions";
+import ReallosLoader from '../shared/preloader/ReallosLoader';
+import { getAllPeople,addPerson,deletePeople } from "../../actions/peopleActions";
 import {
   Container,
   Grid,
@@ -38,15 +36,16 @@ import { validateFormField } from "../../global_func_lib";
 import "./PeopleInvolved.css";
 
 const mapStateToProps = (state) => ({
-  transaction: state.transaction,
-  user: state.user,
+  people: state.people,
+  utils: state.utils
 });
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      addToTransaction,
-      removeFromTransaction,
+      getAllPeople,
+      addPerson,
+      deletePeople
     },
     dispatch
   );
@@ -62,9 +61,9 @@ class People extends Component {
       Email: "",
       Role: "",
       errors: {
-        name: null,
-        email: null,
-        role: null,
+        Name: null,
+        Email: null,
+        Role: null,
       },
       validated: false,
     };
@@ -73,6 +72,10 @@ class People extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.addPeople = this.addPeople.bind(this);
     this.deletePeople = this.deletePeople.bind(this);
+  }
+
+  componentDidMount(){ // when the component is mounted
+    this.props.getAllPeople(this.props.match.params.tid,this.props.people.length);
   }
 
   toggleModal() {
@@ -137,48 +140,27 @@ class People extends Component {
     };
 
     if (this.state.validated === true && this.validForm(errors)) {
-      let peopleArray = this.props.transaction.filter(
-        (transaction) => transaction.active === true
-      )[0].People;
+  
       let newPerson = {
-        Name: this.state.Name,
-        Email: this.state.Email,
-        Role: this.state.Role,
-        Accepted: false,
+        name: this.state.name,
+        email: this.state.email,
+        role: this.state.role,
+        accepted: false
       }; // creating a new person
-      peopleArray.push(newPerson);
-      this.props.addToTransaction(
-        peopleArray,
-        this.props.transaction.filter(
-          (transaction) => transaction.active === true
-        )[0].id
-      );
+
+      this.props.addPerson(this.props.match.params.tid,newPerson);
       this.toggleModal();
     }
   }
 
   deletePeople(email) {
-    let peopleArray = this.props.transaction
-      .filter((transaction) => transaction.active === true)[0]
-      .People.filter((person) => person.Email != email);
-    this.props.removeFromTransaction(
-      peopleArray,
-      this.props.transaction.filter(
-        (transaction) => transaction.active === true
-      )[0].id
-    );
+    this.props.deletePeople(this.props.match.params.tid, email); 
   }
 
   RenderPeopleInvolved() {
-    if (
-      this.props.transaction.filter(
-        (transaction) => transaction.active === true
-      )[0].People.length
-    ) {
-      // If there are people involved in the transaction
-      const card = this.props.transaction
-        .filter((transaction) => transaction.active === true)[0]
-        .People.map((data) => {
+    if (this.props.people && this.props.people.length){// If there are people involved in the transaction
+      const card = this.props.people
+        .map((data) => {
           return (
             <Grid
               key={data.id}
@@ -207,7 +189,7 @@ class People extends Component {
                             ></Avatar>
                           ) : (
                             <Avatar style={{ backgroundColor: "#150578" }}>
-                              {data.Name[0]}
+                              {data.name[0]}
                             </Avatar>
                           )}
                         </Box>
@@ -226,7 +208,7 @@ class People extends Component {
                                 fontSize: 15,
                               }}
                             >
-                              {data.Role}
+                              {data.role}
                             </span>
                           </Typography>
                         </Box>
@@ -234,7 +216,7 @@ class People extends Component {
                       <Grid item xs={2}>
                         <Box marginY={1}>
                           {() =>
-                            data.Accepted
+                            data.accepted
                               ? "Invitation accepted"
                               : "Invitation pending"
                           }
@@ -243,18 +225,18 @@ class People extends Component {
                       <Grid item xs={4}>
                         <Box marginY={1} paddingRight={2}>
                           <Typography align="right" style={{ fontSize: 15 }}>
-                            {data.Email}
+                            {data.email}
                           </Typography>
                         </Box>
                       </Grid>
                       <Grid item xs={1}>
                         <Box marginY={1}>
                           {() =>
-                            data.Accepted ? ( // The ternary operator is used to only render the cross for people that have not accepted the invitation
+                            data.accepted ? ( // The ternary operator is used to only render the cross for people that have not accepted the invitation
                               <></>
                             ) : (
                               <IconButton
-                                onClick={() => this.deletePeople(data.Email)}
+                                onClick={() => this.deletePeople(data.email)}
                                 style={{ color: "#565656" }}
                               >
                                 <XIcon />
@@ -323,6 +305,7 @@ class People extends Component {
     return (
       <div>
         <Container>
+          <ReallosLoader visible={this.props.utils.Loading} />
           <NavBar />
           <NavRail />
           <Modal

@@ -72,7 +72,7 @@ class TransactionDasboard extends Component {
 
   componentDidMount() {
     // Component did mount is used to fetch the transactions of the user form the redux store
-    this.props.getTransaction(); // Fetching all the transactions of that particular user
+    this.props.getTransaction(this.props.user.id); // Fetching all the transactions of that particular user
   }
 
   handleChange(event) {

@@ -86,8 +86,6 @@ export default function NavRail() {
   const [open, setOpen] = React.useState(false);
   const routerLocation = useLocation();
   const transId = routerLocation.pathname.split('/')[2]; // getting the id from the pathname
-  console.log(transId);
-
   let listItems = [
     {
       icon: (<HomeIcon size={24} />),
