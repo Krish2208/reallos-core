@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
-import { myFirestore } from "../../../Config/ChatFirebase";
+import { myFirestore } from "../../../Config/MyFirebase";
 import WelcomeBoard from "../WelcomeBoard/WelcomeBoard";
 import "./DiscussionsMain.css";
 import DiscussionsBoard from "../DiscussionsBoard/DiscussionsBoard";
@@ -90,7 +90,11 @@ class Chat extends Component {
                   alt="icon avatar"
                 ></img>
               </ListItemAvatar>
-              <ListItemText primary={`${item.data().name}`} />
+              <ListItemText
+                primary={
+                  `${item.data().firstName}` + " " + `${item.data().lastName}`
+                }
+              />
             </ListItem>
           );
         }
