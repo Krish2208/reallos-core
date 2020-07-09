@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { Button } from '@material-ui/core';
 import AddFiles from '../../../assets/add_files.svg';
 import PdfIcon from '../../../assets/pdf_icon_duotone.svg';
+import { ModalActionFooter } from '../../shared/modal/Modal';
 import { bytesToSize } from '../../../global_func_lib';
 import './DocUploadDropzone.css';
 
@@ -110,7 +111,7 @@ function DocUploadDropzone({
                     }
                 </div>
             </div>
-            <div id="upload-doc-action-footer">
+            <ModalActionFooter marginTop={20}>
                 <Button variant="outlined" onClick={dismissCallback} color="primary">
                     Cancel
                 </Button>
@@ -122,7 +123,7 @@ function DocUploadDropzone({
                 >
                     Upload
                 </Button>
-            </div>
+            </ModalActionFooter>
         </>
     )
 }

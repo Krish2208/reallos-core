@@ -3,7 +3,7 @@ import NavBar from "../shared/navbar/navbar";
 import NavRail from "../shared/navigation_rail/TransactionNavRail";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import ReallosLoader from '../shared/preloader/ReallosLoader';
+import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
 import { getAllPeople,addPerson,deletePeople } from "../../actions/peopleActions";
 import {
   Container,
@@ -305,7 +305,7 @@ class People extends Component {
     return (
       <div>
         <Container>
-          <ReallosLoader visible={this.props.utils.Loading} />
+          <ReallosLoaderWithOverlay visible={this.props.utils.Loading} />
           <NavBar />
           <NavRail />
           <Modal

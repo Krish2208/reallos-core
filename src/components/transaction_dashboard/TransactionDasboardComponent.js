@@ -7,7 +7,7 @@ import NewTransactionButton from "./NewTransactionButtonComponent";
 import NavBar from "../shared/navbar/navbar";
 import SearchBar from "../shared/searchbar/SearchBarComponent";
 import TransactionCardGroup from "./TransactionCardGroup";
-import ReallosLoader from '../shared/preloader/ReallosLoader';
+import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
 import { connect } from "react-redux";
 import { editUser } from "../../actions/userActions";
 import { getTransaction } from '../../actions/transactionActions';
@@ -370,7 +370,7 @@ class TransactionDasboard extends Component {
       // If any of these fields are empty then open the fill in details modal
     return (
       <Box component="div">
-          <ReallosLoader visible={this.props.utils.Loading} />
+          <ReallosLoaderWithOverlay visible={this.props.utils.Loading} />
         <Container>
           <NavBar />
           <this.SocialDetailModal />

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './ProfileEditDrawer.css';
 import SideDrawer from '../shared/drawer/SideDrawer';
-import Modal from '../shared/modal/Modal';
+import Modal, { ModalActionFooter } from '../shared/modal/Modal';
 import UserAvatar from '../../assets/user.png';
 import { PencilIcon } from '@primer/octicons-react';
 
@@ -220,7 +220,7 @@ class ProfileEditDrawer extends React.Component {
                             />
                         </FormGroup>
 
-                        <div className="profile-edit-update-modal-action-group">
+                        <ModalActionFooter>
                             <Button
                                 variant="outlined"
                                 color="primary"
@@ -235,7 +235,7 @@ class ProfileEditDrawer extends React.Component {
                             >
                                 Done
                             </Button>
-                        </div>
+                        </ModalActionFooter>
                     </div>
                 );
 
@@ -310,7 +310,7 @@ class ProfileEditDrawer extends React.Component {
                             </FormHelperText>
                         </FormControl>
 
-                        <div className="profile-edit-update-modal-action-group">
+                        <ModalActionFooter>
                             <Button
                                 variant="outlined"
                                 color="primary"
@@ -325,7 +325,7 @@ class ProfileEditDrawer extends React.Component {
                             >
                                 Done
                             </Button>
-                        </div>
+                        </ModalActionFooter>
                     </div>
                 );
 
@@ -388,7 +388,7 @@ class ProfileEditDrawer extends React.Component {
                             }}
                         />
 
-                        <div className="profile-edit-update-modal-action-group">
+                        <ModalActionFooter>
                             <Button
                                 variant="outlined"
                                 color="primary"
@@ -403,7 +403,7 @@ class ProfileEditDrawer extends React.Component {
                             >
                                 Done
                             </Button>
-                        </div>
+                        </ModalActionFooter>
                     </div>
                 );
 
@@ -466,7 +466,7 @@ class ProfileEditDrawer extends React.Component {
                             }}
                         />
 
-                        <div className="profile-edit-update-modal-action-group">
+                        <ModalActionFooter>
                             <Button
                                 variant="outlined"
                                 color="primary"
@@ -481,7 +481,7 @@ class ProfileEditDrawer extends React.Component {
                             >
                                 Done
                             </Button>
-                        </div>
+                        </ModalActionFooter>
                     </div>
                 );
 

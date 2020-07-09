@@ -16,7 +16,7 @@
     visibility: visible;
 }
 
-.r-logo-container {
+.reallos-preloader-root .r-logo-container {
     z-index: 1300;
     position: fixed;
     top: 0;
@@ -24,6 +24,7 @@
     height: 100vh;
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -81,7 +82,7 @@
     40% {
         stroke-dashoffset: 0;
     }
-    60% {
+    80% {
         stroke-dashoffset: 0;
     }
     100% {

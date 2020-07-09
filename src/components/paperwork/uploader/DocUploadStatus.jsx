@@ -13,7 +13,7 @@ import './DocUploadStatus.css';
  * @param {object} props
  * Props passed to this component
  * 
- * @param {{progress: number, isPaused: boolean, uploadTask: firebase.storage.UploadTask}} props.uploadStatus
+ * @param {{filename: string, progress: number, isPaused: boolean, uploadTask: firebase.storage.UploadTask}} props.uploadStatus
  * Firebase upload task status.
  * 
  * @param {Function} props.resetUploadStateCallback
@@ -35,6 +35,9 @@ import './DocUploadStatus.css';
  * Specify if the existing file is being saved.
  * (_Default: false_)
  * 
+ * @param {Function} props.onSuccessCallback
+ * Callback called after an upload is successful.
+ * 
  * @param {Function} props.dismissCallback
  * Callback to dismiss upload modal.
  * 
@@ -46,6 +49,7 @@ function DocUploadStatus({
     resetUploadStateCallback=()=>{},
     showSnackbarCallback=()=>{},
     dismissCallback,
+    onSuccessCallback=()=>{},
     isSavingDocument=false
 }) {
     /**
@@ -101,6 +105,7 @@ function DocUploadStatus({
                     ? "Document saved successfully"
                     : "Document Uploaded Successfully"
             );
+            onSuccessCallback();
         }, 1000);
     }
 
@@ -112,7 +117,7 @@ function DocUploadStatus({
 
                     <div className="upload-info">
                         <h1 className="document-name">
-                            Document 1
+                            {uploadStatus.filename}
                         </h1>
                         <div className="upload-progress-info">
                             {
