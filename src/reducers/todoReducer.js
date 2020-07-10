@@ -6,11 +6,9 @@ const initialState = [
 function todoReducer(state=initialState,action){
     switch(action.type){
         case actions.ADD_TODO:
-            console.log(action);
             return [
                 ...state,{
                     id: action.id,
-                    Transaction_id: action.transId,
                     Title: action.Title,
                     Description: action.Description,
                     Date: action.Date,

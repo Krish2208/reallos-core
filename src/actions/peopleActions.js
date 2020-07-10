@@ -12,7 +12,6 @@ export function getAllPeople(id,peopleLength){
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         }) 
         .then( res => {
-            console.log(res);
             if(res.data.peopleList.length !== peopleLength){ // If there has been any changes to people added
             res.data.peopleList.map( person =>{
                 dispatch(addPeople(

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addTodo, deleteTodo, editTodo, getTask } from "../../actions/todoActions";
+import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
 import {
   Container,
   Grid,
@@ -47,7 +48,8 @@ const mapStateToProps = (state) => {
     todo: state.todo,
     transaction: state.transaction,
     user: state.user,
-    people: state.people
+    people: state.people,
+    utils: state.utils
   };
 };
 
@@ -162,8 +164,17 @@ class Todo extends Component {
   };
 
   RenderToDo() {
-    let todos;
-    if (true) {
+    console.log(this.props.todo);
+
+    return(
+      this.props.todo.map((todo)=>(
+        <p>{todo.Date}</p>
+    ))
+    )
+
+
+
+    if (this.props.todo.length !== 0) {
       // If no todo exists in the server || have to replace this with an image
       return (
         <Box style={{ width: "100%" }}>
@@ -186,7 +197,7 @@ class Todo extends Component {
           <Box paddingLeft={5}>
             <h1>Tasks</h1>
             <SearchBar />
-            {todos.map((todo) => (
+            {this.props.todo.map((todo) => (
               <Box component="div" marginTop={2}>
                 <Card elevation={3}>
                   <Grid
@@ -584,9 +595,9 @@ class Todo extends Component {
   }
 
   render() {
-    console.log(this.props.todo);
     return (
       <Container>
+        <ReallosLoaderWithOverlay visible={this.props.utils.Loading} />
         <NavBar />
         <NavRail />
         <this.RenderToDoModal />
