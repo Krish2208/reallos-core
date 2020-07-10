@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addTask, deleteTodo, editTodo, getTask } from "../../actions/todoActions";
+import { addTask, deleteTask, editTask, getTask } from "../../actions/todoActions";
 import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
 import {
   Container,
@@ -58,8 +58,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       addTask,
-      deleteTodo,
-      editTodo,
+      deleteTask,
+      editTask,
       getTask
     },
     dispatch
@@ -72,11 +72,11 @@ class Todo extends Component {
     this.state = {
       isNewTaskFormOpen: false,
       isModalOpen: false, // To make sure the task modal is open or not
+      editId:null,
       title: "",
       description: "",
       date: "",
       to: "",
-      to_Person: "", // js object that contains the person object
       todo: null,
       errors: {
         title: null,
@@ -110,7 +110,7 @@ class Todo extends Component {
   }
 
   componentDidMount(){ // when the component is mounted
-    this.props.getTask(this.props.match.params.tid,this.props.people.length); // sending the Transaction id and the lenght of people stored in redux
+    this.props.getTask(this.props.match.params.tid,this.props.people.length,this.props.user.id); // sending the Transaction id and the lenght of people stored in redux
   }
 
   getIcon(deadline_date){
@@ -293,7 +293,7 @@ class Todo extends Component {
                             <PencilIcon />
                           </IconButton>
                           <IconButton
-                            onClick={() => this.props.deleteTodo(todo.id)}
+                            onClick={() => this.props.deleteTask(this.props.match.params.tid, todo.id)}
                           >
                             <XIcon />
                           </IconButton>
@@ -301,7 +301,7 @@ class Todo extends Component {
                       ) : (
                         <>
                           <IconButton
-                            onClick={() => this.props.deleteTodo(todo.id)}
+                            onClick={() => this.props.deleteTask(this.props.match.params.tid, todo.id)}
                           >
                             <XIcon />
                           </IconButton>
@@ -517,15 +517,20 @@ class Todo extends Component {
 
   addNewTask() {
     // Adding new task to the redux store
-    if (this.state.todo != null) {
+    if (this.state.todo !== null) {  // When the task is being edited
       let todo = this.state.todo;
-      this.props.editTodo(
-        todo.id,
-        this.state.title,
-        this.state.description,
-        this.state.date,
-        this.state.to
-      );
+
+      let Task = {
+        id: this.state.editId,
+        title: this.state.title,
+        description: this.state.description,
+        date: this.state.date,
+        to: this.state.to,
+        from: this.props.user
+      }
+      
+      this.props.editTask(this.props.match.params.tid, Task);
+
       this.setState({
         title: "",
         description: "",
@@ -535,6 +540,8 @@ class Todo extends Component {
         isNewTaskFormOpen: false,
         validated: false,
       });
+
+
     } else {
 
       let newTask = {
@@ -561,6 +568,7 @@ class Todo extends Component {
   editTask(todo) {
     // Editing task that already exist
     this.setState({
+      editId: todo.id,
       title: todo.Title,
       description: todo.Description,
       date: todo.Date,
