@@ -35,6 +35,8 @@ function todoReducer(state=initialState,action){
                     }
                 }
             })
+        case actions.CLEAR_TODO:
+            return initialState;
         default:
             return state;
     }

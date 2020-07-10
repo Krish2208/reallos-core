@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addTodo, deleteTodo, editTodo, getTask } from "../../actions/todoActions";
+import { addTask, deleteTodo, editTodo, getTask } from "../../actions/todoActions";
 import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
 import {
   Container,
@@ -57,7 +57,7 @@ const mapDispatchToProps = (dispatch) => {
   // This is to map the actions to the props of the component
   return bindActionCreators(
     {
-      addTodo,
+      addTask,
       deleteTodo,
       editTodo,
       getTask
@@ -110,7 +110,7 @@ class Todo extends Component {
   }
 
   componentDidMount(){ // when the component is mounted
-    this.props.getTask(this.props.match.params.tid);
+    this.props.getTask(this.props.match.params.tid,this.props.people.length); // sending the Transaction id and the lenght of people stored in redux
   }
 
   getIcon(deadline_date){
@@ -164,17 +164,8 @@ class Todo extends Component {
   };
 
   RenderToDo() {
-    console.log(this.props.todo);
 
-    return(
-      this.props.todo.map((todo)=>(
-        <p>{todo.Date}</p>
-    ))
-    )
-
-
-
-    if (this.props.todo.length !== 0) {
+    if (this.props.todo.length === 0) {
       // If no todo exists in the server || have to replace this with an image
       return (
         <Box style={{ width: "100%" }}>
@@ -230,13 +221,13 @@ class Todo extends Component {
                         </Grid>
                         <Grid item>
                           <Box marginY={2}>
-                            {todo.From.img ? (
+                            {false ? ( // fetch the image of the person here
                               <Avatar
                                 src={process.env.PUBLIC_URL + todo.From.img}
                               ></Avatar>
                             ) : (
                               <Avatar style={{ backgroundColor: "#150578" }}>
-                                {todo.From.Name[0]}
+                                {todo.From.name[0]}
                               </Avatar>
                             )}
                           </Box>
@@ -246,13 +237,13 @@ class Todo extends Component {
                         </Grid>
                         <Grid item>
                           <Box marginY={2}>
-                            {todo.To.img ? (
+                            {false ? ( // fetch the image of the person here
                               <Avatar
                                 src={process.env.PUBLIC_URL + todo.to.img}
                               ></Avatar>
                             ) : (
                               <Avatar style={{ backgroundColor: "#150578" }}>
-                                {todo.To.Name[0]}
+                                {todo.To.name[0]}
                               </Avatar>
                             )}
                           </Box>
@@ -296,7 +287,7 @@ class Todo extends Component {
                       </Grid>
                     </div>
                     <Grid item xs={1}>
-                      {todo.From.id === this.props.user.id ? ( // ternary operator used to make sure only the person assiging the task has the right to edit it
+                      {todo.From.email === this.props.user.email ? ( // ternary operator used to make sure only the person assiging the task has the right to edit it
                         <>
                           <IconButton onClick={() => this.editTask(todo)}>
                             <PencilIcon />
@@ -379,7 +370,7 @@ class Todo extends Component {
               <table>
                 <tr>
                   <td>
-                    {this.state.expandedTask.to.img ? (
+                    {false ? ( // set this image to false
                       <Avatar
                         src={
                           process.env.PUBLIC_URL +
@@ -388,8 +379,8 @@ class Todo extends Component {
                       ></Avatar>
                     ) : (
                       <Avatar style={{ backgroundColor: "#150578" }}>
-                        {this.state.expandedTask.to.Name ? (
-                          this.state.expandedTask.to.Name[0]
+                        {this.state.expandedTask.to.name ? (
+                          this.state.expandedTask.to.name[0]
                         ) : (
                           <></>
                         )}
@@ -398,12 +389,12 @@ class Todo extends Component {
                   </td>
                   <td style={{ paddingLeft: "15px" }}>
                     Assigned to{" "}
-                    <strong>{this.state.expandedTask.to.Name}</strong>
+                    <strong>{this.state.expandedTask.to.name}</strong>
                   </td>
                 </tr>
                 <tr>
                   <td style={{ paddingTop: "10px" }}>
-                    {this.state.expandedTask.from.img ? (
+                    {false ? ( // get the image of the user
                       <Avatar
                         src={
                           process.env.PUBLIC_URL +
@@ -412,8 +403,8 @@ class Todo extends Component {
                       ></Avatar>
                     ) : (
                       <Avatar style={{ backgroundColor: "#150578" }}>
-                        {this.state.expandedTask.from.Name ? (
-                          this.state.expandedTask.from.Name[0]
+                        {this.state.expandedTask.from.name ? (
+                          this.state.expandedTask.from.name[0]
                         ) : (
                           <></>
                         )}
@@ -422,7 +413,7 @@ class Todo extends Component {
                   </td>
                   <td style={{ paddingLeft: "15px", paddingTop: "10px" }}>
                     Assigned by{" "}
-                    <strong>{this.state.expandedTask.from.Name}</strong>
+                    <strong>{this.state.expandedTask.from.name}</strong>
                   </td>{" "}
                   {/* This field should be edited with the user's name */}
                 </tr>
@@ -545,17 +536,17 @@ class Todo extends Component {
         validated: false,
       });
     } else {
-      let transId = this.props.transaction.filter(
-        (transaction) => transaction.active === true
-      )[0].id; // Getting the id of the active transaction
-      this.props.addTodo(
-        transId,
-        this.state.title,
-        this.state.description,
-        this.state.date,
-        this.state.to,
-        this.props.user
-      );
+
+      let newTask = {
+        Title: this.state.title,
+        Description: this.state.description,
+        Date: this.state.date,
+        To: this.state.to,
+        From: this.props.user
+      }
+
+      this.props.addTask(this.props.match.params.tid,newTask);
+
       this.setState({
         title: "",
         description: "",
@@ -662,7 +653,7 @@ class Todo extends Component {
             <PersonIcon size={30} className="tag-icon" />
             {
               // Checking to see if the people dropdown should be disabled or not
-              (false) ? (
+              (this.props.people.length !== 0) ? (
                 <Select
                   id="person_select"
                   label="Select a person"
@@ -672,10 +663,8 @@ class Todo extends Component {
                   value={this.state.to}
                   name="to"
                 >
-                  {this.props.transaction
-                    .filter((transaction) => transaction.active === true)[0]
-                    .People.map((person) => (
-                      <MenuItem value={person}>{person.Name}</MenuItem>
+                  {this.props.people.map((person) => (
+                      <MenuItem value={person}>{person.name}</MenuItem>
                     ))}
                 </Select>
               ) : (

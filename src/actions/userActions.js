@@ -50,7 +50,6 @@ export function login(user){ // still have to dispatch actions that update the s
                 headers: {Authorization: 'Bearer '+response.data.token}
             })
             .then( res => {
-
                     localStorage.setItem('userID',res.data.id); // storing the id of the user to local storage
 
                     window.location.href='/transaction';
