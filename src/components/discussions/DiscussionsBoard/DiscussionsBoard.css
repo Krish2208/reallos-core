@@ -179,7 +179,7 @@ input::placeholder {
 .viewItemLeft {
   width: 300px;
   height: auto;
-  background-color: #203152;
+  background-color: #0c0349;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   border-bottom-left-radius: 0px;
@@ -194,7 +194,7 @@ input::placeholder {
 .viewItemLeft2 {
   width: 300px;
   height: auto;
-  background-color: #203152;
+  background-color: #0c0349;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   border-bottom-left-radius: 0px;
@@ -210,20 +210,6 @@ input::placeholder {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 8px;
   color: white;
-}
-
-.peerAvatarLeft {
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  object-fit: cover;
-  align-self: flex-end;
-}
-
-.viewPaddingLeft {
-  width: 40px;
 }
 
 /* Item text */
@@ -260,8 +246,7 @@ input::placeholder {
 }
 
 .textTimeLeft {
-  color: #808888;
+  color: #000000;
   font-size: 12px;
   font-style: italic;
-  margin-left: 50px;
 }

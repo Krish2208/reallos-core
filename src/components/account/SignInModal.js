@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { FormGroup, FormControlLabel, TextField, Checkbox, Button, Fab } from '@material-ui/core';
+import { FormGroup, FormControlLabel, TextField, Checkbox, Button, Fab, CircularProgress } from '@material-ui/core';
 import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
 import {connect} from 'react-redux';
 import { login } from '../../actions/userActions';
@@ -52,7 +52,7 @@ class SignIn extends Component{
     render(){
         return(
         <Modal title="Sign In" visible={this.props.visible} dismissCallback={this.props.dismissCallback}>
-        <ReallosLoaderWithOverlay visible={this.props.utils.Loading} shouldUseFullLogo={false}/>
+        <ReallosLoaderWithOverlay visible={false} shouldUseFullLogo={false}/>
         <FormGroup>
             <div id="signin-modal-content">
                 <TextField
@@ -94,8 +94,9 @@ class SignIn extends Component{
                     color="primary"
                     variant="contained"
                     style={{'textTransform': 'none', 'fontSize': '18px'}}
-                    onClick= {this.loginUser} >
-                    Sign In
+                    onClick= {this.loginUser} 
+                    disabled={this.props.utils.Loading}>
+                    {(this.props.utils.Loading) ? <CircularProgress size={31} style={{color: '#150578'}} /> : 'Sign In'}
                 </Button>
             </div>
         </FormGroup>
