@@ -40,10 +40,9 @@ class Chat extends Component {
     this.state = {
       currentPeerUser: null,
     };
-
-    //To be set using redux store
     this.currentUserId = AppString.ID;
     this.currentUserName = AppString.NAME;
+    this.transId = this.props.match.params.tid;
     this.listUser = [];
   }
 
@@ -52,7 +51,11 @@ class Chat extends Component {
   }
 
   getListUser = async () => {
-    const result = await myFirestore.collection(AppString.NODE_USERS).get();
+    const result = await myFirestore
+      .collection("transactions")
+      .doc(this.transId)
+      .collection("people")
+      .get();
     if (result.docs.length > 0) {
       this.listUser = [...result.docs];
       this.setState({ isLoading: false });
@@ -66,14 +69,14 @@ class Chat extends Component {
       let viewListUser = [];
 
       this.listUser.forEach((item, index) => {
-        if (item.data().id !== this.currentUserId) {
+        if (item.data().uid !== this.currentUserId && item.data().uid !== "") {
           viewListUser.push(
             <ListItem
               button
               key={index}
               className={
                 this.state.currentPeerUser &&
-                this.state.currentPeerUser.id === item.data().id
+                this.state.currentPeerUser.id === item.data().uid
                   ? "viewWrapItemFocused"
                   : "viewWrapItem"
               }
@@ -90,11 +93,7 @@ class Chat extends Component {
                   alt="icon avatar"
                 ></img>
               </ListItemAvatar>
-              <ListItemText
-                primary={
-                  `${item.data().firstName}` + " " + `${item.data().lastName}`
-                }
-              />
+              <ListItemText primary={`${item.data().name}`} />
             </ListItem>
           );
         }
@@ -198,6 +197,7 @@ class Chat extends Component {
                   {this.state.currentPeerUser ? (
                     <DiscussionsBoard
                       currentPeerUser={this.state.currentPeerUser}
+                      transId={this.transId}
                     />
                   ) : (
                     <WelcomeBoard
