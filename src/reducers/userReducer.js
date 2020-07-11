@@ -38,6 +38,7 @@ function userReducer(state = initialState, action){
         case actions.EDIT_USER:
             return{
                 ...state,
+                Name: action.firstName+" "+action.lastName,
                 firstName: action.firstName,
                 lastName: action.lastName,
                 email: action.email,

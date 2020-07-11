@@ -67,6 +67,32 @@ export function login(user){ // still have to dispatch actions that update the s
     }
 }
 
+
+export function editingUser(newUser){ // to edit the current user
+    return (dispatch) =>{
+        axios.put(`https://us-central1-reallos-test.cloudfunctions.net/api/update-profile`,newUser, {
+            headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
+        })
+        .then(() => {
+            dispatch(editUser(
+                newUser.firstName,
+                newUser.lastName,
+                newUser.email,
+                newUser.role,
+                newUser.phone,
+                newUser.state
+            ));
+        })
+        .catch(err => {
+            console.error(err);
+            dispatch(setErrors(err)); // dispatching an action to set the error
+        })
+    }
+}
+
+
+
+// pure reducer functions here
 export function addUser(id,firstName,lastName,email,phone,role,state,transactions){ // User is added to the redux store
     return({
         type: ADD_USER,
