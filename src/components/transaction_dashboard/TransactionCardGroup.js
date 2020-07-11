@@ -99,7 +99,7 @@ function RenderCard(props) {
                                 className={classes.top}
                                 size={100}
                                 thickness={7}
-                                value={60}
+                                value={100} // Make this dynamic wrt the transaction
                               />
                             </div>
                             <Box
@@ -113,7 +113,7 @@ function RenderCard(props) {
                               justifyContent="center"
                               paddingLeft={2}
                             >
-                              <Typography variant="h6" component="div">60</Typography>
+                              <Typography variant="h6" component="div">{/* Add the dynamic % of completion here */}</Typography> 
                             </Box>
                           </Box>
                           <Box marginTop={2}><Typography justify="center" variant="h5">
@@ -137,11 +137,11 @@ function RenderCard(props) {
                             <table>
                               <tr>
                                 <td style={{ paddingBottom: '4.5px', paddingRight: '18px' }}><CheckCircleIcon className="transaction-card-subicongreen" size={18} /></td>
-                                <td>6 Tasks</td>
+                                <td>{transaction.completedTask} Tasks</td>
                               </tr>
                               <tr>
                                 <td style={{ paddingBottom: '4.5px', paddingRight: '18px' }}><XCircleIcon className="transaction-card-subiconred" size={18} /></td>
-                                <td>4 Tasks</td>
+                                <td>{transaction.allTask - transaction.completedTask} Tasks</td>
                               </tr>
                             </table>
                           </Typography>

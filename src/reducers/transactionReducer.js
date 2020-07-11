@@ -13,6 +13,8 @@ function transactionReducer(state=initialState, action){
                     Address: action.Address,
                     Description: action.Description,
                     People: action.People,
+                    allTask: action.allTask,
+                    completedTask: action.completedTask,
                     active:false
                 }
             ]
