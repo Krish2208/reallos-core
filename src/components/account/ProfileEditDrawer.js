@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {editingUser} from '../../actions/userActions';
 import './ProfileEditDrawer.css';
 import SideDrawer from '../shared/drawer/SideDrawer';
 import Modal, { ModalActionFooter } from '../shared/modal/Modal';
@@ -30,11 +32,23 @@ import {
     FormGroup,
     FormHelperText
 } from '@material-ui/core';
+import { bindActionCreators } from 'redux';
 
 /**
  * Display a "Profile Edit" Side Drawer
  * @augments {React.Component<Props>}
  */
+
+const mapStateToProps = (state) =>({
+    user: state.user
+});
+
+const mapDispatchToProps = (dispatch) =>{
+    return bindActionCreators({
+        editingUser
+    },dispatch)
+}
+
 class ProfileEditDrawer extends React.Component {
     constructor() {
         super();
@@ -49,11 +63,13 @@ class ProfileEditDrawer extends React.Component {
 
         this.state = {
             profilePic: '',
-            firstName: 'Joy',
-            lastName: 'Joseph',
-            role: 'seller',
-            email: 'joy_joseph@example.com',
-            phone: '9999999999',
+            firstName: '',
+            lastName: '',
+            role: '',
+            email: '',
+            phone: '',
+            state: '',
+            Loaded: false,
             isUpdateModalVisible: false,
             updateModalType: '',
             updateModalFieldErrors: {
@@ -77,6 +93,45 @@ class ProfileEditDrawer extends React.Component {
          * when clicked outside the drawer
          */
         dismissCallback: PropTypes.func
+    }
+
+    submitEdits(){ // function to submit the edits to the database
+        let newUser = {
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            role: this.state.role,
+            email: this.state.email,
+            phone: this.state.phone,
+            state: this.state.state
+        }
+        this.props.editingUser(newUser);
+        this.props.dismissCallback();
+    }
+
+    cancelEdits(){ // fucntion to cancel the edits
+        this.setState({
+            firstName: this.props.user.firstName,
+            lastName: this.props.user.lastName,
+            email: this.props.user.email,
+            phone: this.props.user.phone,
+            role: this.props.user.role,
+            state: this.props.user.state,
+            Loaded: true
+        });
+        this.props.dismissCallback();
+    }
+
+    updateStateOnLoading(){
+        if(!this.state.Loaded) // To check if the state has been changed or not
+        this.setState({
+            firstName: this.props.user.firstName,
+            lastName: this.props.user.lastName,
+            email: this.props.user.email,
+            phone: this.props.user.phone,
+            role: this.props.user.role,
+            state: this.props.user.state,
+            Loaded: true
+        });
     }
 
     updateUserData(mode) {
@@ -188,7 +243,7 @@ class ProfileEditDrawer extends React.Component {
                     <div>
                         <p style={{marginBottom: 30}}>
                             Your current name is "<strong>
-                                {`${this.state.firstName} ${this.state.lastName}`}
+                                {`${this.props.user.firstName} ${this.props.user.lastName}`}
                             </strong>".
 
                             Enter a new name to change your current name.
@@ -428,6 +483,7 @@ class ProfileEditDrawer extends React.Component {
                             phone: fieldValidation
                         }
                     });
+
                 };
 
                 _handleChange = (e) => {
@@ -512,6 +568,10 @@ class ProfileEditDrawer extends React.Component {
             dismissCallback
         } = this.props;
 
+        if(this.props.user.id !== null){
+            this.updateStateOnLoading();
+        }
+
         return (
             <div className="profile-edit-drawer">
                 <SideDrawer
@@ -575,16 +635,12 @@ class ProfileEditDrawer extends React.Component {
                             secondary={this.state.email}
                         />
 
-                        <ListItemSecondaryAction>
-                            <IconButton onClick={() => this.updateUserData('USER_EMAIL')}>
-                                <PencilIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
+                        <ListItemSecondaryAction />
                     </ListItem>
                     <ListItem>
                         <ListItemText
                             primary="Phone Number"
-                            secondary={`+91 ${this.state.phone}`}
+                            secondary={`+1 ${this.state.phone}`}
                         />
 
                         <ListItemSecondaryAction>
@@ -594,10 +650,10 @@ class ProfileEditDrawer extends React.Component {
                         </ListItemSecondaryAction>
                     </ListItem>
                     <div className="profile-edit-footer-action-group">
-                        <Button variant="outlined" color="primary">
+                        <Button variant="outlined" color="primary" onClick={() => this.cancelEdits()}>
                             Cancel
                         </Button>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={() => this.submitEdits()}>
                             Save
                         </Button>
                     </div>
@@ -613,4 +669,4 @@ class ProfileEditDrawer extends React.Component {
     }
 }
 
-export default ProfileEditDrawer;
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileEditDrawer);

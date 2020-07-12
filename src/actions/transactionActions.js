@@ -41,7 +41,9 @@ export function getTransaction(userId){
                                     res.data.name,
                                     res.data.address,
                                     res.data.desc,
-                                    res.data.people
+                                    res.data.people,
+                                    res.data.all,
+                                    res.data.completed
                                 ))
                             })
                             .catch(err => {
@@ -109,14 +111,16 @@ export function createTransaction(newTransaction,people){
 
 
 // Pure Reducer functions
-export function addTransaction(id, Name, Address, Description, People){
+export function addTransaction(id, Name, Address, Description, People, allTask, completedTask){
     return({
         type: ADD_TRANSACTION,
         id: id,
         Name: Name,
         Address: Address,
         Description: Description,
-        People: People
+        People: People,
+        allTask,
+        completedTask
     })
 }
 

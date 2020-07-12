@@ -121,7 +121,7 @@ export default function NavRail() {
       icon: (<CommentDiscussionIcon size={24} />),
       label: 'Discussions',
       isActiveRoute: routerLocation.pathname.startsWith('/discussions'),
-      linkTo: '/discussions'
+      linkTo: '/transaction/'+transId+'/discussions'
     },
   ];
 

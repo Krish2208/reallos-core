@@ -37,7 +37,8 @@ import "./PeopleInvolved.css";
 
 const mapStateToProps = (state) => ({
   people: state.people,
-  utils: state.utils
+  utils: state.utils,
+  user: state.user
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -75,7 +76,7 @@ class People extends Component {
   }
 
   componentDidMount(){ // when the component is mounted
-    this.props.getAllPeople(this.props.match.params.tid,this.props.people.length);
+    this.props.getAllPeople(this.props.match.params.tid,this.props.people.length,this.props.user.id);
   }
 
   toggleModal() {
@@ -197,7 +198,7 @@ class People extends Component {
                       <Grid item xs={4}>
                         <Box marginY={2}>
                           <Typography style={{ fontWeight: 800 }}>
-                            {data.Name}
+                            {data.name}
                             <span style={{ paddingLeft: 12, fontWeight: 200 }}>
                               <DotFillIcon size={12} />
                             </span>

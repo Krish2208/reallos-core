@@ -1,5 +1,5 @@
 export const AppString = {
-  ID: "3hriIK1gf2DPs1t1nn15",
+  ID: localStorage.getItem("userID"),
   PHOTO_URL: "photoUrl",
   NAME: "name",
   NODE_MESSAGES: "messages",
@@ -8,8 +8,3 @@ export const AppString = {
   DOC_ADDED: "added",
   PREFIX_IMAGE: "image/",
 };
-
-// Akash Id = 3hriIK1gf2DPs1t1nn15
-// Akshat Id = lI5DbQfLB4jdKGWt4EXK
-// Krish Id = GuY3XcsgmeqHpNHqzSci
-// Melvin Id = 1Guqh7bVZar6QdVK9MiY

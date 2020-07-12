@@ -1,11 +1,11 @@
 import moment from "moment";
 import React, { Component } from "react";
 import ReactLoading from "react-loading";
-import { myFirestore, myStorage } from "../../../Config/ChatFirebase";
+import { myFirestore, myStorage } from "../../../Config/MyFirebase";
 import images from "../Themes/Images";
 import "./DiscussionsBoard.css";
 import { AppString } from "../Const";
-import { Typography, Box } from "@material-ui/core";
+import { Typography, Box, Avatar } from "@material-ui/core";
 
 export default class ChatBoard extends Component {
   constructor(props) {
@@ -17,8 +17,9 @@ export default class ChatBoard extends Component {
     };
     this.currentUserId = AppString.ID;
     this.currentUserName = AppString.NAME;
+    this.transId = this.props.transId;
     this.listMessage = [];
-    this.currentPeerUser = this.props.currentPeerUser;
+    this.currentPeerUser = this.props.currentPeerUser.uid;
     this.groupChatId = null;
     this.removeListener = null;
     this.currentPhotoFile = null;
@@ -41,7 +42,7 @@ export default class ChatBoard extends Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.currentPeerUser) {
-      this.currentPeerUser = newProps.currentPeerUser;
+      this.currentPeerUser = newProps.currentPeerUser.uid;
       this.getListHistory();
     }
   }
@@ -52,17 +53,21 @@ export default class ChatBoard extends Component {
     }
     this.listMessage.length = 0;
     this.setState({ isLoading: true });
+    console.log(this.currentUserId);
+    console.log(this.props.currentPeerUser);
     if (
       this.hashString(this.currentUserId) <=
-      this.hashString(this.currentPeerUser.id)
+      this.hashString(this.currentPeerUser)
     ) {
-      this.groupChatId = `${this.currentUserId}-${this.currentPeerUser.id}`;
+      this.groupChatId = `${this.currentUserId}-${this.currentPeerUser}`;
     } else {
-      this.groupChatId = `${this.currentPeerUser.id}-${this.currentUserId}`;
+      this.groupChatId = `${this.currentPeerUser}-${this.currentUserId}`;
     }
 
     // Get history and listen new data added
     this.removeListener = myFirestore
+      .collection("transactions")
+      .doc(this.transId)
       .collection(AppString.NODE_MESSAGES)
       .doc(this.groupChatId)
       .collection(this.groupChatId)
@@ -98,13 +103,15 @@ export default class ChatBoard extends Component {
 
     const itemMessage = {
       idFrom: this.currentUserId,
-      idTo: this.currentPeerUser.id,
+      idTo: this.currentPeerUser,
       timestamp: timestamp,
       content: content.trim(),
       type: type,
     };
 
     myFirestore
+      .collection("transactions")
+      .doc(this.transId)
       .collection(AppString.NODE_MESSAGES)
       .doc(this.groupChatId)
       .collection(this.groupChatId)
@@ -181,16 +188,16 @@ export default class ChatBoard extends Component {
       <Box className="viewChatBoard">
         {/* Header */}
         <Box className="headerChatBoard">
-          <img
+          <Avatar
             className="avatar"
             src={
               require("../../../assets/user.png")
-              //this.currentPeerUser.photoUrl
+              //this.props.currentPeerUser.photoUrl
             }
             alt="icon avatar"
-          />
+          ></Avatar>
           <Typography className="textHeaderChatBoard">
-            {this.currentPeerUser.name}
+            {this.props.currentPeerUser.name}
           </Typography>
         </Box>
 
@@ -270,21 +277,21 @@ export default class ChatBoard extends Component {
           } else if (item.type === 1) {
             viewListMessage.push(
               <div className="viewItemRight2" key={item.timestamp}>
-                <img
+                <Avatar
                   className="imgItemRight"
                   src={item.content}
                   alt="content message"
-                />
+                ></Avatar>
               </div>
             );
           } else {
             viewListMessage.push(
               <div className="viewItemRight3" key={item.timestamp}>
-                <img
+                <Avatar
                   className="imgItemRight"
                   src={this.getGifImage(item.content)}
                   alt="content message"
-                />
+                ></Avatar>
               </div>
             );
           }
@@ -294,22 +301,13 @@ export default class ChatBoard extends Component {
             viewListMessage.push(
               <div className="viewWrapItemLeft" key={item.timestamp}>
                 <div className="viewWrapItemLeft3">
-                  {this.isLastMessageLeft(index) ? (
-                    <img
-                      src={this.currentPeerUser.photoUrl}
-                      alt="avatar"
-                      className="peerAvatarLeft"
-                    />
-                  ) : (
-                    <div className="viewPaddingLeft" />
-                  )}
                   <div className="viewItemLeft">
                     <span className="textContentItem">{item.content}</span>
                   </div>
                 </div>
                 {this.isLastMessageLeft(index) ? (
                   <span className="textTimeLeft">
-                    {moment(Number(item.timestamp)).format("ll")}
+                    {moment(Number(item.timestamp)).format("LT")}
                   </span>
                 ) : null}
               </div>
@@ -318,21 +316,12 @@ export default class ChatBoard extends Component {
             viewListMessage.push(
               <div className="viewWrapItemLeft2" key={item.timestamp}>
                 <div className="viewWrapItemLeft3">
-                  {this.isLastMessageLeft(index) ? (
-                    <img
-                      src={this.currentPeerUser.photoUrl}
-                      alt="avatar"
-                      className="peerAvatarLeft"
-                    />
-                  ) : (
-                    <div className="viewPaddingLeft" />
-                  )}
                   <div className="viewItemLeft2">
-                    <img
+                    <Avatar
                       className="imgItemLeft"
                       src={item.content}
                       alt="content message"
-                    />
+                    ></Avatar>
                   </div>
                 </div>
                 {this.isLastMessageLeft(index) ? (
@@ -346,21 +335,12 @@ export default class ChatBoard extends Component {
             viewListMessage.push(
               <div className="viewWrapItemLeft2" key={item.timestamp}>
                 <div className="viewWrapItemLeft3">
-                  {this.isLastMessageLeft(index) ? (
-                    <img
-                      src={this.currentPeerUser.photoUrl}
-                      alt="avatar"
-                      className="peerAvatarLeft"
-                    />
-                  ) : (
-                    <div className="viewPaddingLeft" />
-                  )}
                   <div className="viewItemLeft3" key={item.timestamp}>
-                    <img
+                    <Avatar
                       className="imgItemLeft"
                       src={this.getGifImage(item.content)}
                       alt="content message"
-                    />
+                    ></Avatar>
                   </div>
                 </div>
                 {this.isLastMessageLeft(index) ? (

@@ -1,18 +1,40 @@
 import axios from 'axios'; 
 import {setLoadingTrue, setLoadingFalse, setErrors} from './utilsActions';
+import {addUser} from './userActions';
 
 export const ADD_PEOPLE = 'ADD_PEOPLE';
 export const DELETE_PEOPLE = 'DELETE_PEOPLE';
 
 
-export function getAllPeople(id,peopleLength){
+export function getAllPeople(id,peopleLength,user){
     return (dispatch) => {
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
+
+        if(user === null){ // if the user isn't available
+            axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/user-details`,{
+                headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
+            })
+            .then(res =>{
+                dispatch(addUser( // dispatching an action to add the user to the redux store
+                    res.data.id,
+                    res.data.lastName,
+                    res.data.email,
+                    res.data.phone,
+                    res.data.role,
+                    res.data.state,
+                    res.data.transaction
+                ))
+            })
+            .catch(err =>{
+                console.error(err);
+                dispatch(setErrors(err));
+            })
+        }
+
         axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/get-all-people/${id}`,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         }) 
         .then( res => {
-            console.log(res);
             if(res.data.peopleList.length !== peopleLength){ // If there has been any changes to people added
             res.data.peopleList.map( person =>{
                 dispatch(addPeople(

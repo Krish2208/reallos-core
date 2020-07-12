@@ -9,7 +9,6 @@ function todoReducer(state=initialState,action){
             return [
                 ...state,{
                     id: action.id,
-                    Transaction_id: action.transId,
                     Title: action.Title,
                     Description: action.Description,
                     Date: action.Date,
@@ -36,6 +35,8 @@ function todoReducer(state=initialState,action){
                     }
                 }
             })
+        case actions.CLEAR_TODO:
+            return initialState;
         default:
             return state;
     }
