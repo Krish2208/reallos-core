@@ -3,7 +3,7 @@ import Modal from "../shared/modal/Modal";
 import SignupFormStep1 from "./SignUpFormStep1";
 import SignupFormStep2 from "./SignupFormStep2";
 import SignupFormStep3 from "./SignupFormStep3";
-import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
+import { ReallosLoaderWithOverlay } from "../shared/preloader/ReallosLoader";
 import "./SignUpModal.css";
 import { Stepper, Step, StepLabel } from "@material-ui/core";
 import { connect } from "react-redux";
@@ -13,13 +13,13 @@ import { validateFormField } from "../../global_func_lib";
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  utils: state.utils
+  utils: state.utils,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      signupUser
+      signupUser,
     },
     dispatch
   );
@@ -87,10 +87,9 @@ class SignUpModal extends Component {
       phone: this.state.phone,
       role: this.state.role,
       state: this.state.state,
-      password: this.state.password
-    }
-    setTimeout(() => {
-    }, 2000); // To add a delay to mimic the Server behavior */
+      password: this.state.password,
+    };
+    setTimeout(() => {}, 2000); // To add a delay to mimic the Server behavior */
     this.props.signupUser(newUser);
   }
 
@@ -251,29 +250,29 @@ class SignUpModal extends Component {
   }
 
   render() {
-  {
-      return (
-        <Modal
-          title="Sign Up"
-          visible={this.props.visible}
-          dismissCallback={this.closeSignUpModal}
-        >
-          <ReallosLoaderWithOverlay visible={false /*Change this to this.props.utils.visible*/}/>
-          <Stepper activeStep={this.state.activeStep}>
-            <Step>
-              <StepLabel />
-            </Step>
-            <Step>
-              <StepLabel />
-            </Step>
-            <Step>
-              <StepLabel />
-            </Step>
-          </Stepper>
-          <this.RenderStepsForm />
-        </Modal>
-      );
-    }
+    return (
+      <Modal
+        title="Sign Up"
+        visible={this.props.visible}
+        dismissCallback={this.closeSignUpModal}
+      >
+        <ReallosLoaderWithOverlay
+          visible={false /*Change this to this.props.utils.visible*/}
+        />
+        <Stepper activeStep={this.state.activeStep}>
+          <Step>
+            <StepLabel />
+          </Step>
+          <Step>
+            <StepLabel />
+          </Step>
+          <Step>
+            <StepLabel />
+          </Step>
+        </Stepper>
+        <this.RenderStepsForm />
+      </Modal>
+    );
   }
 }
 

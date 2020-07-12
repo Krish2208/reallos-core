@@ -7,10 +7,10 @@ import NewTransactionButton from "./NewTransactionButtonComponent";
 import NavBar from "../shared/navbar/navbar";
 import SearchBar from "../shared/searchbar/SearchBarComponent";
 import TransactionCardGroup from "./TransactionCardGroup";
-import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
+import { ReallosLoaderWithOverlay } from "../shared/preloader/ReallosLoader";
 import { connect } from "react-redux";
 import { editUser } from "../../actions/userActions";
-import { getTransaction } from '../../actions/transactionActions';
+import { getTransaction } from "../../actions/transactionActions";
 import { validateFormField } from "../../global_func_lib";
 import { bindActionCreators } from "redux";
 import {
@@ -27,14 +27,14 @@ import { CheckIcon } from "@primer/octicons-react";
 const mapStateToProps = (state) => ({
   user: state.user,
   transaction: state.transaction,
-  utils: state.utils
+  utils: state.utils,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       editUser,
-      getTransaction
+      getTransaction,
     },
     dispatch
   );
@@ -169,7 +169,7 @@ class TransactionDasboard extends Component {
   }
 
   changeStep() {
-    if (this.state.activeStep == 0) {
+    if (this.state.activeStep === 0) {
       this.setState({
         activeStep: 1,
       });
@@ -185,6 +185,7 @@ class TransactionDasboard extends Component {
               <Grid container justify="center">
                 <img
                   src={require("../../assets/social-details-form.png")}
+                  alt={"SD"}
                   style={{ width: "250px" }}
                 />
               </Grid>
@@ -367,10 +368,10 @@ class TransactionDasboard extends Component {
   }
 
   render() {
-      // If any of these fields are empty then open the fill in details modal
+    // If any of these fields are empty then open the fill in details modal
     return (
       <Box component="div">
-          <ReallosLoaderWithOverlay visible={this.props.utils.Loading} />
+        <ReallosLoaderWithOverlay visible={this.props.utils.Loading} />
         <Container>
           <NavBar />
           <this.SocialDetailModal />
@@ -398,7 +399,6 @@ class TransactionDasboard extends Component {
       </Box>
     );
   }
-
 }
 
 export default connect(
