@@ -26,13 +26,23 @@ export function signupUser(newUser) { // Still have to dispatch actions that upd
             })
             .catch(err => {
                 console.log(err);
-                dispatch(setErrors(err)); // dispatching an action to set the error
-            })
 
+                if(err.response) {
+                    dispatch(setErrors(err.response.data)); // dispatching an action to set the error
+                }
+                else{
+                    dispatch(setErrors({error: 'Please check your internet connection'}));
+                }
+            })
         })
-        .catch(err => {
+        .catch(err =>{
             console.error(err);
-            dispatch(setErrors(err)); // dispatching an action to set the error
+            if(err.response){
+                dispatch(setErrors(err.response.data)); // dispatching an action to set the error
+            }
+            else{
+                dispatch(setErrors({error: 'Please check your internet connection'}));
+            }
         });
     }
 } 
@@ -57,12 +67,22 @@ export function login(user) { // still have to dispatch actions that update the 
             })
             .catch(err => {
                 console.error(err);
-                dispatch(setErrors()); // dispatching an actio to set the errors
+                if (err.response) {
+                    dispatch(setErrors(err.response.data)); // dispatching an action to set the error
+                }
+                else{
+                    dispatch(setErrors({error: 'Please check your internet connection'}));
+                }
             })
         })
         .catch(err => {
             console.error(err);
-            dispatch(setErrors()); // dispatching an actio to set the errors
+            if(err.response) {
+                dispatch(setErrors(err.response.data)); // dispatching an action to set the error
+            }
+            else{
+                dispatch(setErrors({error: 'Please check your internet connection'}));
+            }
         })
     }
 }
@@ -84,7 +104,12 @@ export function editingUser(newUser) { // to edit the current user
         })
         .catch(err => {
             console.error(err);
-            dispatch(setErrors(err)); // dispatching an action to set the error
+            if(err.response){
+                    dispatch(setErrors(err.response.data)); // dispatching an action to set the error
+                }
+                else{
+                    dispatch(setErrors({error: 'Please check your internet connection'}));
+                }
         })
     }
 }

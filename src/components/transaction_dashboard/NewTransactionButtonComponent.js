@@ -69,7 +69,7 @@ class NewTransactionButton extends Component {
         email: "",
         role: "",
         uid: "",
-        accepted: false
+        accepted: false,
       },
       errors: {
         Name: null,
@@ -174,7 +174,7 @@ class NewTransactionButton extends Component {
         email: "",
         role: "",
         uid: "",
-        accepted: false
+        accepted: false,
       },
     });
   }
@@ -207,9 +207,9 @@ class NewTransactionButton extends Component {
     this.setState({ errors });
 
     if (
-      this.state.Name != "" &&
-      this.state.Address != "" &&
-      this.state.Description != ""
+      this.state.Name !== "" &&
+      this.state.Address !== "" &&
+      this.state.Description !== ""
     ) {
       this.setState({ validatedForm: true });
     } else {
@@ -253,9 +253,9 @@ class NewTransactionButton extends Component {
     this.setState({ Invite, errors }); // Setting the state of the invite
 
     if (
-      this.state.Invite.name != "" &&
-      this.state.Invite.email != "" &&
-      this.state.Invite.role != ""
+      this.state.Invite.name !== "" &&
+      this.state.Invite.email !== "" &&
+      this.state.Invite.role !== ""
     ) {
       this.setState({ validatedInvite: true });
     } else {
@@ -291,7 +291,7 @@ class NewTransactionButton extends Component {
 
   deleteInvite(email) {
     let Invites = this.state.Invites;
-    Invites = Invites.filter((Invite) => Invite.email != email);
+    Invites = Invites.filter((Invite) => Invite.email !== email);
     this.setState({ Invites });
   }
 
@@ -302,7 +302,7 @@ class NewTransactionButton extends Component {
       address: this.state.Address,
       desc: this.state.Description,
     };
-    this.props.createTransaction(newTransaction,this.state.Invites); // dispatching an action with the appropriate payload
+    this.props.createTransaction(newTransaction, this.state.Invites); // dispatching an action with the appropriate payload
   }
 
   /**

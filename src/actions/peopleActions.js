@@ -17,6 +17,7 @@ export function getAllPeople(id,peopleLength,user){
             .then(res =>{
                 dispatch(addUser( // dispatching an action to add the user to the redux store
                     res.data.id,
+                    res.data.firstName,
                     res.data.lastName,
                     res.data.email,
                     res.data.phone,

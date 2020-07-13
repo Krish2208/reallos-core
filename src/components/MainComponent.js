@@ -8,6 +8,7 @@ import PeopleInvolved from "./people_involved/PeopleInvolved";
 import Todo from "./todo/TodoComponent";
 import DiscussionsMain from "./discussions/DiscussionsMain/DiscussionsMain";
 import Error404Component from './404/Error404Component';
+import EmailHandler from "./email-handlers/EmailHandlerComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import Auth from "./account/Authenticate";
 
@@ -34,6 +35,7 @@ function Main(props) {
       <Switch>
         <Route path="/dummy" component={DummyPage} />
         <PrivateRoute exact path="/transaction" component={TransactionDashbaord} />
+        <Route path="/action" component={EmailHandler}/>
         <PrivateRoute path="/transaction/:tid/assist" component={TransactionAssist} />
         <PrivateRoute path="/transaction/:tid/paperwork/*" component={PaperworkViewer} />
         <PrivateRoute path="/transaction/:tid/paperwork" component={PaperWork} />

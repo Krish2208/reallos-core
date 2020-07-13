@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addTask, deleteTask, editTask, getTask } from "../../actions/todoActions";
-import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
+import {
+  addTask,
+  deleteTask,
+  editTask,
+  getTask,
+} from "../../actions/todoActions";
+import { ReallosLoaderWithOverlay } from "../shared/preloader/ReallosLoader";
 import {
   Container,
   Grid,
@@ -24,15 +29,13 @@ import {
   TagIcon,
   PencilIcon,
   CalendarIcon,
-  PeopleIcon,
   PersonIcon,
   CheckIcon,
   XIcon,
   AlertIcon,
   ArrowRightIcon,
   IssueOpenedIcon,
-  CheckCircleIcon,
-  CheckCircleFillIcon
+  CheckCircleFillIcon,
 } from "@primer/octicons-react";
 import SideDrawer from "../shared/drawer/SideDrawer";
 import NavBar from "../shared/navbar/navbar";
@@ -49,7 +52,7 @@ const mapStateToProps = (state) => {
     transaction: state.transaction,
     user: state.user,
     people: state.people,
-    utils: state.utils
+    utils: state.utils,
   };
 };
 
@@ -60,7 +63,7 @@ const mapDispatchToProps = (dispatch) => {
       addTask,
       deleteTask,
       editTask,
-      getTask
+      getTask,
     },
     dispatch
   );
@@ -72,7 +75,7 @@ class Todo extends Component {
     this.state = {
       isNewTaskFormOpen: false,
       isModalOpen: false, // To make sure the task modal is open or not
-      editId:null,
+      editId: null,
       title: "",
       description: "",
       date: "",
@@ -109,62 +112,56 @@ class Todo extends Component {
     this.getDeadlineText = this.getDeadlineText.bind(this);
   }
 
-  componentDidMount(){ // when the component is mounted
-    this.props.getTask(this.props.match.params.tid,this.props.people.length,this.props.user.id); // sending the Transaction id and the lenght of people stored in redux
+  componentDidMount() {
+    // when the component is mounted
+    this.props.getTask(
+      this.props.match.params.tid,
+      this.props.people.length,
+      this.props.user.id
+    ); // sending the Transaction id and the lenght of people stored in redux
   }
 
-  getIcon(deadline_date){
+  getIcon(deadline_date) {
     var d = new Date();
     var currentDate = d.getTime();
     var deadlineDate = Date.parse(deadline_date);
-    var diff = (deadlineDate-currentDate)/(1000*60*60*24)
-    if (diff<=3 && diff>=1){
-      return(
-        <AlertIcon className="alert-color" size={20} />
-      );
+    var diff = (deadlineDate - currentDate) / (1000 * 60 * 60 * 24);
+    if (diff <= 3 && diff >= 1) {
+      return <AlertIcon className="alert-color" size={20} />;
+    } else if (diff < 1) {
+      return <IssueOpenedIcon className="danger-color" size={20} />;
+    } else if (diff > 3) {
+      return <CheckIcon className="success-color" size={20} />;
     }
-    else if (diff<1){
-      return(
-        <IssueOpenedIcon className="danger-color" size={20} />
-      );
-    }
-    else if(diff>3){
-      return(
-        <CheckIcon className="success-color" size={20} />
-      );
-    }
-  };
+  }
 
-  getDeadlineText(deadline_date){
+  getDeadlineText(deadline_date) {
     var d = new Date();
     var currentDate = d.getTime();
     var deadlineDate = Date.parse(deadline_date);
-    var diff = (deadlineDate-currentDate)/(1000*60*60*24)
-    if (diff<=3 && diff>=1){
-      return(
+    var diff = (deadlineDate - currentDate) / (1000 * 60 * 60 * 24);
+    if (diff <= 3 && diff >= 1) {
+      return (
         <Typography className="alert-color">
           This Task is going to hit the deadline soon!
         </Typography>
       );
-    }
-    else if (diff<1){
-      return(
-        <Typography className="danger-color" >
+    } else if (diff < 1) {
+      return (
+        <Typography className="danger-color">
+          This Task is going to hit the deadline soon!
+        </Typography>
+      );
+    } else if (diff > 3) {
+      return (
+        <Typography className="success-color">
           This Task is going to hit the deadline soon!
         </Typography>
       );
     }
-    else if(diff>3){
-      return(
-        <Typography className="success-color" >
-          This Task is going to hit the deadline soon!
-        </Typography>
-      );
-    }
-  };
+  }
 
   RenderToDo() {
-
     if (this.props.todo.length === 0) {
       // If no todo exists in the server || have to replace this with an image
       return (
@@ -176,6 +173,7 @@ class Todo extends Component {
             <Box marginTop={5}>
               <img
                 src={require("../../assets/no-todo.png")}
+                alt={"No Todo"}
                 style={{ width: "500px" }}
               />
             </Box>
@@ -215,9 +213,7 @@ class Todo extends Component {
                         spacing={1}
                       >
                         <Grid item>
-                          <Box paddingLeft={2}>
-                            {this.getIcon(todo.Date)}
-                          </Box>
+                          <Box paddingLeft={2}>{this.getIcon(todo.Date)}</Box>
                         </Grid>
                         <Grid item>
                           <Box marginY={2}>
@@ -293,7 +289,12 @@ class Todo extends Component {
                             <PencilIcon />
                           </IconButton>
                           <IconButton
-                            onClick={() => this.props.deleteTask(this.props.match.params.tid, todo.id)}
+                            onClick={() =>
+                              this.props.deleteTask(
+                                this.props.match.params.tid,
+                                todo.id
+                              )
+                            }
                           >
                             <XIcon />
                           </IconButton>
@@ -301,7 +302,12 @@ class Todo extends Component {
                       ) : (
                         <>
                           <IconButton
-                            onClick={() => this.props.deleteTask(this.props.match.params.tid, todo.id)}
+                            onClick={() =>
+                              this.props.deleteTask(
+                                this.props.match.params.tid,
+                                todo.id
+                              )
+                            }
                           >
                             <XIcon />
                           </IconButton>
@@ -332,11 +338,9 @@ class Todo extends Component {
             <Box>
               <table>
                 <tr>
-                  <td>
-                    {this.getIcon(this.state.expandedTask.date)}
-                  </td>
+                  <td>{this.getIcon(this.state.expandedTask.date)}</td>
                   <td style={{ paddingLeft: "10px", paddingTop: "4px" }}>
-                  {this.getDeadlineText(this.state.expandedTask.date)}
+                    {this.getDeadlineText(this.state.expandedTask.date)}
                   </td>
                 </tr>
               </table>
@@ -420,7 +424,10 @@ class Todo extends Component {
               </table>
             </Box>
             <Typography align="right">
-              <Button startIcon={<CheckCircleFillIcon/>} style={{backgroundColor:'#150578', color: '#fff'}}>
+              <Button
+                startIcon={<CheckCircleFillIcon />}
+                style={{ backgroundColor: "#150578", color: "#fff" }}
+              >
                 Completed
               </Button>
             </Typography>
@@ -476,10 +483,10 @@ class Todo extends Component {
 
     this.setState({ errors, [name]: value });
     if (
-      this.state.title != "" &&
-      this.state.description != "" &&
-      this.state.date != "" &&
-      this.state.to != ""
+      this.state.title !== "" &&
+      this.state.description !== "" &&
+      this.state.date !== "" &&
+      this.state.to !== ""
     ) {
       this.setState({ validated: true });
     }
@@ -517,18 +524,17 @@ class Todo extends Component {
 
   addNewTask() {
     // Adding new task to the redux store
-    if (this.state.todo !== null) {  // When the task is being edited
-      let todo = this.state.todo;
-
+    if (this.state.todo !== null) {
+      // When the task is being edited
       let Task = {
         id: this.state.editId,
         title: this.state.title,
         description: this.state.description,
         date: this.state.date,
         to: this.state.to,
-        from: this.props.user
-      }
-      
+        from: this.props.user,
+      };
+
       this.props.editTask(this.props.match.params.tid, Task);
 
       this.setState({
@@ -540,19 +546,16 @@ class Todo extends Component {
         isNewTaskFormOpen: false,
         validated: false,
       });
-
-
     } else {
-
       let newTask = {
         Title: this.state.title,
         Description: this.state.description,
         Date: this.state.date,
         To: this.state.to,
-        From: this.props.user
-      }
+        From: this.props.user,
+      };
 
-      this.props.addTask(this.props.match.params.tid,newTask);
+      this.props.addTask(this.props.match.params.tid, newTask);
 
       this.setState({
         title: "",
@@ -635,7 +638,6 @@ class Todo extends Component {
               rows={8}
               onChange={this.handleChange}
               onBlur={this.handleChange}
-              name="description"
               helperText={this.state.errors.description}
               error={this.state.errors.description !== null}
             />
@@ -661,7 +663,7 @@ class Todo extends Component {
             <PersonIcon size={30} className="tag-icon" />
             {
               // Checking to see if the people dropdown should be disabled or not
-              (this.props.people.length !== 0) ? (
+              this.props.people.length !== 0 ? (
                 <Select
                   id="person_select"
                   label="Select a person"
@@ -672,8 +674,8 @@ class Todo extends Component {
                   name="to"
                 >
                   {this.props.people.map((person) => (
-                      <MenuItem value={person}>{person.name}</MenuItem>
-                    ))}
+                    <MenuItem value={person}>{person.name}</MenuItem>
+                  ))}
                 </Select>
               ) : (
                 <Select className="form-fields" disabled="true" />
