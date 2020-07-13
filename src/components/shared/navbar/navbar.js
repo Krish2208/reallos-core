@@ -204,21 +204,22 @@ class RenderNav extends Component {
 
   calculateCompleted() { // calculating the percentage of the profile || Can be edited in the future
     let score = 2;// assuming 20% of the application is already completed
-    if(this.props.user.phone!=null){
+    if(this.props.user.phone!=null) {
       score+=2;
     }
-    if(this.props.user.role!=null){
+    if(this.props.user.role!=null) {
       score+=1;
     }
-    if(this.props.user.state!=null){
+    if(this.props.user.state!=null) {
       score+=1;
     }
-    if(this.props.user.eSignature!=null){
+    if(this.props.user.eSignature!=null) {
       score+=2;
     }
-    if(this.props.user.initials!=null){
+    if(this.props.user.initials!=null) {
       score+=2;
     }
+
     let percentage = (score/10)*100;
     return percentage;
   }
@@ -231,7 +232,7 @@ class RenderNav extends Component {
     return dummyData.filter((data) => !data.isRead).length;
   }
 
-    signOut(){
+    signOut() {
         Auth.signout(); // Signing out of the application
         this.setState({
             authenticated: Auth.getAuth()
@@ -241,14 +242,14 @@ class RenderNav extends Component {
 
     render() {
         let { classes } = this.props;
-        if(this.state.authenticated === false){
+        if (this.state.authenticated === false) {
             return(
                 <Redirect to="/" />
             );
         }
-        else{
+        else {
             return (
-              <div className="navbar-main">
+              <div className="navbar-main" style={{marginTop: 20}}>
                 <Grid
                   container
                   direction="row"
