@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { editingUser } from "../../actions/userActions";
-import "./ProfileEditDrawer.css";
-import SideDrawer from "../shared/drawer/SideDrawer";
-import Modal, { ModalActionFooter } from "../shared/modal/Modal";
-import UserAvatar from "../../assets/user.png";
-import { PencilIcon } from "@primer/octicons-react";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { editingUser } from '../../actions/userActions';
+import './ProfileEditDrawer.css';
+import SideDrawer from '../shared/drawer/SideDrawer';
+import Modal, { ModalActionFooter } from '../shared/modal/Modal';
+import UserAvatar from '../../assets/user.png';
+import { PencilIcon } from '@primer/octicons-react';
 
 import {
   USER_ROLES,

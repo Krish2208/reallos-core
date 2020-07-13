@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
   bottom: {
     opacity: '0.6',
-    color: '#92DCE5',
+    color: '#21DAF1',
   },
   top: {
     position: 'absolute',

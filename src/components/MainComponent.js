@@ -7,10 +7,10 @@ import DummyPage from "./dummy/DummyPage";
 import PeopleInvolved from "./people_involved/PeopleInvolved";
 import Todo from "./todo/TodoComponent";
 import DiscussionsMain from "./discussions/DiscussionsMain/DiscussionsMain";
+import Error404Component from './404/Error404Component';
 import EmailHandler from "./email-handlers/EmailHandlerComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import Auth from "./account/Authenticate";
-
 
 const PrivateRoute = (
   { component: Component, ...rest } // Component that protects all the routing if the user is not autenticated
@@ -35,14 +35,16 @@ function Main(props) {
       <Switch>
         <Route path="/dummy" component={DummyPage} />
         <PrivateRoute exact path="/transaction" component={TransactionDashbaord} />
+        <Route path="/action" component={EmailHandler}/>
         <PrivateRoute path="/transaction/:tid/assist" component={TransactionAssist} />
         <PrivateRoute path="/transaction/:tid/paperwork/*" component={PaperworkViewer} />
         <PrivateRoute path="/transaction/:tid/paperwork" component={PaperWork} />
         <PrivateRoute path="/transaction/:tid/people" component={PeopleInvolved} />
         <PrivateRoute path="/transaction/:tid/todo" component={Todo} />
         <PrivateRoute path="/transaction/:tid/discussions" component={DiscussionsMain} />
-        <Route path="/action" component={EmailHandler}/>
-        <Redirect to="dummy"/>
+        {/* <Redirect path="/transaction/:tid" to="assist" /> */}
+        <Redirect exact from="/" to="dummy" />
+        <Route path="*" component={Error404Component} />
       </Switch>
     </div>
   );

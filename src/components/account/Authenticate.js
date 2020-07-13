@@ -4,7 +4,7 @@ const Auth = {
     token: localStorage.FBIdToken,
     isAuthenticated: false,
 
-    authenticate(){
+    authenticate() {
         if(Auth.token){
             const decode = jwtDecode(Auth.token);
             if(decode.exp * 1000 < Date.now()){ // If the token has expired
@@ -16,16 +16,15 @@ const Auth = {
         }
     },
 
-    signout(){
+    signout() {
         this.isAuthenticated = false;
         localStorage.clear();
     },
 
-    getAuth(){
+    getAuth() {
         this.authenticate();
         return this.isAuthenticated;
     }
-
 };
 
 export default Auth;

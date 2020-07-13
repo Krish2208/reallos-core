@@ -1,0 +1,8 @@
+.access-rights-subheading {
+    margin-bottom: 20px;
+}
+
+.access-rights-list {
+    overflow: auto;
+    height: 350px;
+}

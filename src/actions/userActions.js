@@ -1,39 +1,39 @@
 import axios from 'axios'; // Importing axios to make endpoint request
-import { setLoadingTrue,setLoadingFalse, setErrors } from './utilsActions'; // Importing acttions for util purposes
+import { setLoadingTrue, setLoadingFalse, setErrors } from './utilsActions'; // Importing acttions for util purposes
 
 export const ADD_USER = 'ADD_USER'; // Action to add the user to the database
 export const ADD_TRANSACTION_USER = 'ADD_TRANSACTION_USER'; // Action to add the transaction to the user
 export const EDIT_USER = 'EDIT_USER';
 
-export function signupUser(newUser){ // Still have to dispatch actions that update the state of the reducer
-    return (dispatch)=> {
+export function signupUser(newUser) { // Still have to dispatch actions that update the state of the reducer
+    return (dispatch) => {
         dispatch(setLoadingTrue()); // dispatching an action set loading to true
         axios.post('https://us-central1-reallos-test.cloudfunctions.net/api/signup',{
             ...newUser
         })
-        .then( response =>{
+        .then(response => {
             localStorage.setItem('FBIdToken', response.data.token); // storing the token in the local storage
 
             axios.get('https://us-central1-reallos-test.cloudfunctions.net/api/user-details',{  // Getting the user from the database
-                headers: {Authorization: 'Bearer '+response.data.token}
+                headers: {Authorization: 'Bearer ' + response.data.token}
             })
-            .then( res => {
+            .then(res => {
                     localStorage.setItem('userID',res.data.id); // Storing the userID in the local storage 
 
-                    window.location.href = '/transaction'
+                    window.location.href = '/transaction';
                     dispatch(setLoadingFalse()); // dispatching an action to set loading to false
 
             })
-            .catch(err =>{
+            .catch(err => {
                 console.log(err);
-                if(err.response){
+
+                if(err.response) {
                     dispatch(setErrors(err.response.data)); // dispatching an action to set the error
                 }
                 else{
                     dispatch(setErrors({error: 'Please check your internet connection'}));
                 }
             })
-
         })
         .catch(err =>{
             console.error(err);
@@ -47,27 +47,27 @@ export function signupUser(newUser){ // Still have to dispatch actions that upda
     }
 } 
 
-export function login(user){ // still have to dispatch actions that update the state of the reducer
-    return (dispatch) =>{
+export function login(user) { // still have to dispatch actions that update the state of the reducer
+    return (dispatch) => {
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
-        axios.post('https://us-central1-reallos-test.cloudfunctions.net/api/login',{
+        axios.post('https://us-central1-reallos-test.cloudfunctions.net/api/login', {
             ...user
         })
-        .then( response=>{
+        .then( response => {
             localStorage.setItem('FBIdToken', response.data.token); //storing the token in the local storage
 
             axios.get('https://us-central1-reallos-test.cloudfunctions.net/api/user-details',{  // Getting the user from the database
-                headers: {Authorization: 'Bearer '+response.data.token}
+                headers: {Authorization: 'Bearer ' + response.data.token}
             })
-            .then( res => {
+            .then(res => {
                     localStorage.setItem('userID',res.data.id); // storing the id of the user to local storage
 
                     window.location.href='/transaction';
                     dispatch(setLoadingFalse()); // dispatching an action to set loading to false
             })
-            .catch(err =>{
+            .catch(err => {
                 console.error(err);
-                if(err.response){
+                if (err.response) {
                     dispatch(setErrors(err.response.data)); // dispatching an action to set the error
                 }
                 else{
@@ -75,9 +75,9 @@ export function login(user){ // still have to dispatch actions that update the s
                 }
             })
         })
-        .catch(err =>{
+        .catch(err => {
             console.error(err);
-            if(err.response){
+            if(err.response) {
                 dispatch(setErrors(err.response.data)); // dispatching an action to set the error
             }
             else{
@@ -87,11 +87,10 @@ export function login(user){ // still have to dispatch actions that update the s
     }
 }
 
-
-export function editingUser(newUser){ // to edit the current user
-    return (dispatch) =>{
+export function editingUser(newUser) { // to edit the current user
+    return (dispatch) => {
         axios.put(`https://us-central1-reallos-test.cloudfunctions.net/api/update-profile`,newUser, {
-            headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
+            headers: {Authorization: 'Bearer ' + localStorage.getItem('FBIdToken')}
         })
         .then(() => {
             dispatch(editUser(
@@ -115,10 +114,8 @@ export function editingUser(newUser){ // to edit the current user
     }
 }
 
-
-
 // pure reducer functions here
-export function addUser(id,firstName,lastName,email,phone,role,state,transactions){ // User is added to the redux store
+export function addUser(id,firstName,lastName,email,phone,role,state,transactions) { // User is added to the redux store
     return({
         type: ADD_USER,
         id: id,
@@ -132,14 +129,14 @@ export function addUser(id,firstName,lastName,email,phone,role,state,transaction
     });
 }
 
-export function addTransactionUser(payload){
+export function addTransactionUser(payload) {
     return({
         type: ADD_TRANSACTION_USER,
         payload
     });
 }
 
-export function editUser(firstName, lastName, email, role, phone, state){ // Editing the user 
+export function editUser(firstName, lastName, email, role, phone, state) { // Editing the user 
     return({
         type: EDIT_USER,
         Name: firstName+" "+lastName,
