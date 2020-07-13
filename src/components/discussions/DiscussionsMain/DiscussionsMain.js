@@ -174,6 +174,7 @@ class Chat extends Component {
                           <Box ml={2} component="a" href="#">
                             <img
                               src={require("../../../assets/reallos-logo.svg")}
+                              alt={"Reallos"}
                               className="discussions-reallos-logo"
                             />
                           </Box>

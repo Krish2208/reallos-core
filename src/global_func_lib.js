@@ -204,21 +204,20 @@ export const validateFormField = (textValue, fieldType) => {
 /**
  * Converts bytes to other measurments of size.
  * _('KB', 'MB', 'GB', 'TB')_
- * 
+ *
  * @param {number} bytes
  * Size in bytes
- * 
+ *
  * @returns {string}
  * Converted size measurment
  */
 export const bytesToSize = (bytes) => {
   // @SRC: https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
 
-  let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  let sizes = ["Bytes", "KB", "MB", "GB", "TB"];
 
-  if (bytes == 0)
-    return '0 Byte';
+  if (bytes === 0) return "0 Byte";
 
   let i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
   return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`;
-}
+};

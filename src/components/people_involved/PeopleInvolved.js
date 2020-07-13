@@ -3,8 +3,12 @@ import NavBar from "../shared/navbar/navbar";
 import NavRail from "../shared/navigation_rail/TransactionNavRail";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { ReallosLoaderWithOverlay } from '../shared/preloader/ReallosLoader';
-import { getAllPeople,addPerson,deletePeople } from "../../actions/peopleActions";
+import { ReallosLoaderWithOverlay } from "../shared/preloader/ReallosLoader";
+import {
+  getAllPeople,
+  addPerson,
+  deletePeople,
+} from "../../actions/peopleActions";
 import {
   Container,
   Grid,
@@ -38,7 +42,7 @@ import "./PeopleInvolved.css";
 const mapStateToProps = (state) => ({
   people: state.people,
   utils: state.utils,
-  user: state.user
+  user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -46,7 +50,7 @@ const mapDispatchToProps = (dispatch) => {
     {
       getAllPeople,
       addPerson,
-      deletePeople
+      deletePeople,
     },
     dispatch
   );
@@ -75,8 +79,13 @@ class People extends Component {
     this.deletePeople = this.deletePeople.bind(this);
   }
 
-  componentDidMount(){ // when the component is mounted
-    this.props.getAllPeople(this.props.match.params.tid,this.props.people.length,this.props.user.id);
+  componentDidMount() {
+    // when the component is mounted
+    this.props.getAllPeople(
+      this.props.match.params.tid,
+      this.props.people.length,
+      this.props.user.id
+    );
   }
 
   toggleModal() {
@@ -141,118 +150,117 @@ class People extends Component {
     };
 
     if (this.state.validated === true && this.validForm(errors)) {
-  
       let newPerson = {
         name: this.state.name,
         email: this.state.email,
         role: this.state.role,
-        accepted: false
+        accepted: false,
       }; // creating a new person
 
-      this.props.addPerson(this.props.match.params.tid,newPerson);
+      this.props.addPerson(this.props.match.params.tid, newPerson);
       this.toggleModal();
     }
   }
 
   deletePeople(email) {
-    this.props.deletePeople(this.props.match.params.tid, email); 
+    this.props.deletePeople(this.props.match.params.tid, email);
   }
 
   RenderPeopleInvolved() {
-    if (this.props.people && this.props.people.length){// If there are people involved in the transaction
-      const card = this.props.people
-        .map((data) => {
-          return (
-            <Grid
-              key={data.id}
-              container
-              paddingLeft={6}
-              direction="column"
-              alignItems="center"
-              justify="center"
-              spacing={1}
-            >
-              <Grid item paddingLeft={6} style={{ width: "100%" }}>
-                <Box paddingLeft={6}>
-                  <Card elevation={3} style={{ marginBottom: "10px" }}>
-                    <Grid
-                      container
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      style={{ color: "#150158" }}
-                    >
-                      <Grid item xs={1}>
-                        <Box marginY={2} paddingLeft={2}>
-                          {data.img ? (
-                            <Avatar
-                              src={process.env.PUBLIC_URL + data.img}
-                            ></Avatar>
-                          ) : (
-                            <Avatar style={{ backgroundColor: "#150578" }}>
-                              {data.name[0]}
-                            </Avatar>
-                          )}
-                        </Box>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <Box marginY={2}>
-                          <Typography style={{ fontWeight: 800 }}>
-                            {data.name}
-                            <span style={{ paddingLeft: 12, fontWeight: 200 }}>
-                              <DotFillIcon size={12} />
-                            </span>
-                            <span
-                              style={{
-                                paddingLeft: 12,
-                                fontWeight: 450,
-                                fontSize: 15,
-                              }}
-                            >
-                              {data.role}
-                            </span>
-                          </Typography>
-                        </Box>
-                      </Grid>
-                      <Grid item xs={2}>
-                        <Box marginY={1}>
-                          {() =>
-                            data.accepted
-                              ? "Invitation accepted"
-                              : "Invitation pending"
-                          }
-                        </Box>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <Box marginY={1} paddingRight={2}>
-                          <Typography align="right" style={{ fontSize: 15 }}>
-                            {data.email}
-                          </Typography>
-                        </Box>
-                      </Grid>
-                      <Grid item xs={1}>
-                        <Box marginY={1}>
-                          {() =>
-                            data.accepted ? ( // The ternary operator is used to only render the cross for people that have not accepted the invitation
-                              <></>
-                            ) : (
-                              <IconButton
-                                onClick={() => this.deletePeople(data.email)}
-                                style={{ color: "#565656" }}
-                              >
-                                <XIcon />
-                              </IconButton>
-                            )
-                          }
-                        </Box>
-                      </Grid>
+    if (this.props.people && this.props.people.length) {
+      // If there are people involved in the transaction
+      const card = this.props.people.map((data) => {
+        return (
+          <Grid
+            key={data.id}
+            container
+            paddingLeft={6}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            spacing={1}
+          >
+            <Grid item paddingLeft={6} style={{ width: "100%" }}>
+              <Box paddingLeft={6}>
+                <Card elevation={3} style={{ marginBottom: "10px" }}>
+                  <Grid
+                    container
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    style={{ color: "#150158" }}
+                  >
+                    <Grid item xs={1}>
+                      <Box marginY={2} paddingLeft={2}>
+                        {data.img ? (
+                          <Avatar
+                            src={process.env.PUBLIC_URL + data.img}
+                          ></Avatar>
+                        ) : (
+                          <Avatar style={{ backgroundColor: "#150578" }}>
+                            {data.name[0]}
+                          </Avatar>
+                        )}
+                      </Box>
                     </Grid>
-                  </Card>
-                </Box>
-              </Grid>
+                    <Grid item xs={4}>
+                      <Box marginY={2}>
+                        <Typography style={{ fontWeight: 800 }}>
+                          {data.name}
+                          <span style={{ paddingLeft: 12, fontWeight: 200 }}>
+                            <DotFillIcon size={12} />
+                          </span>
+                          <span
+                            style={{
+                              paddingLeft: 12,
+                              fontWeight: 450,
+                              fontSize: 15,
+                            }}
+                          >
+                            {data.role}
+                          </span>
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Box marginY={1}>
+                        {() =>
+                          data.accepted
+                            ? "Invitation accepted"
+                            : "Invitation pending"
+                        }
+                      </Box>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Box marginY={1} paddingRight={2}>
+                        <Typography align="right" style={{ fontSize: 15 }}>
+                          {data.email}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={1}>
+                      <Box marginY={1}>
+                        {() =>
+                          data.accepted ? ( // The ternary operator is used to only render the cross for people that have not accepted the invitation
+                            <></>
+                          ) : (
+                            <IconButton
+                              onClick={() => this.deletePeople(data.email)}
+                              style={{ color: "#565656" }}
+                            >
+                              <XIcon />
+                            </IconButton>
+                          )
+                        }
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Card>
+              </Box>
             </Grid>
-          );
-        });
+          </Grid>
+        );
+      });
       return (
         <Grid container direction="column" spacing={1} paddingTop={-1}>
           <Box paddingLeft={6}>
@@ -276,6 +284,7 @@ class People extends Component {
             <Box marginTop={-4}>
               <img
                 src={require("../../assets/no-people-img.png")}
+                alt={"No People"}
                 className="no-people-image"
               />
             </Box>
