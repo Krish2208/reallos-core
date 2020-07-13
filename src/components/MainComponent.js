@@ -7,6 +7,7 @@ import DummyPage from "./dummy/DummyPage";
 import PeopleInvolved from "./people_involved/PeopleInvolved";
 import Todo from "./todo/TodoComponent";
 import DiscussionsMain from "./discussions/DiscussionsMain/DiscussionsMain";
+import EmailHandler from "./email-handlers/EmailHandlerComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import Auth from "./account/Authenticate";
 
@@ -40,6 +41,7 @@ function Main(props) {
         <PrivateRoute path="/transaction/:tid/people" component={PeopleInvolved} />
         <PrivateRoute path="/transaction/:tid/todo" component={Todo} />
         <PrivateRoute path="/transaction/:tid/discussions" component={DiscussionsMain} />
+        <Route path="/action" component={EmailHandler}/>
         <Redirect to="dummy"/>
       </Switch>
     </div>
