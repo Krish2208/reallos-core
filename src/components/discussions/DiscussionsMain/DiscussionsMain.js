@@ -44,6 +44,7 @@ class Chat extends Component {
     this.currentUserName = AppString.NAME;
     this.transId = this.props.match.params.tid;
     this.listUser = [];
+    this.peopleRoute = "/transaction/" + this.transId + "/people";
   }
 
   componentDidMount() {
@@ -64,10 +65,9 @@ class Chat extends Component {
 
   renderListUser = () => {
     const { classes } = this.props;
+    let viewListUser = [];
 
     if (this.listUser.length > 0) {
-      let viewListUser = [];
-
       this.listUser.forEach((item, index) => {
         if (item.data().uid !== this.currentUserId && item.data().uid !== "") {
           viewListUser.push(
@@ -98,7 +98,8 @@ class Chat extends Component {
           );
         }
       });
-
+    }
+    if (viewListUser.length > 0) {
       return viewListUser;
     } else {
       return (
@@ -138,7 +139,7 @@ class Chat extends Component {
                 <Box paddingTop={5}>
                   <Button
                     className="anchor-btn"
-                    href="/people"
+                    href={this.peopleRoute}
                     variant="contained"
                     color="primary"
                   >
