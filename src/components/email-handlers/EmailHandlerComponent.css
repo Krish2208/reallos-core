@@ -1,0 +1,71 @@
+.maingrid{
+    overflow-y: "hidden";
+}
+.logo{
+    background-color: aqua;
+    position: absolute;
+    bottom: 0 ;
+    right: 0;
+    margin-bottom: 15px;
+    margin-right: 10px;
+}
+.form{
+    margin-bottom: 12px !important;
+}
+@media only screen and (min-width: 2000px){
+    .right-image{
+        height: 800px;
+    }
+}
+@media only screen and (min-width: 1260px){
+    .right-card{
+        width: 50%;
+    }
+    .form{
+        width: 150%
+    }
+}
+@media only screen and (min-width: 960px){
+    .right-image{
+        height: 350px;
+    }
+    .logo{
+        height: 30px
+    }
+}
+@media only screen and (min-width: 600px){
+    .right-image{
+        height: 550px;
+    }
+    .right-card{
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+    .logo{
+        height: 30px
+    }
+}
+@media only screen and (min-width: 300px){
+    .right-image{
+        height: 225px;
+    }
+    .right-card{
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+    .logo{
+        height: 30px
+    }
+}
+@media only screen and (max-width: 300px){
+    .right-image{
+        height: 150px;
+    }
+    .right-card{
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+    .logo{
+        height: 30px
+    }
+}
