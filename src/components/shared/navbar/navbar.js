@@ -241,17 +241,23 @@ class RenderNav extends Component {
 
   render() {
     let { classes } = this.props;
+
     if (this.state.authenticated === false) {
-      return <Redirect to="/" />;
-    } else {
+      return (
+        <Redirect to="/" />
+      );
+    }
+
+    else {
       return (
         <div className="navbar-main" style={{marginTop: 20}}>
           <Grid container direction="row" justify="center" alignitems="center">
-            <AppBar className="nav" position="static">
+            <AppBar className="navbar-root" position="static">
               <Toolbar>
-                <Typography className="logo" variant="h6">
+                <Typography className="navbar-logo" variant="h6">
                   Reallos
                 </Typography>
+
                 <div className="navbar-btn-group">
                   <Tooltip
                     title={
