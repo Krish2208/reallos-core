@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { myFirebase } from './Config/MyFirebase';
+
 /**
  * List of maps containing user roles in the form:
  *
@@ -53,7 +56,7 @@ export const phoneNumberValidationRegex = /^[0-9]{10}$/;
  * @param {string} textValue
  * The value to validate.
  *
- * @param {"firstname" | "lastname" | "email" | "phone" | "role" | "stateopt" | "password"} fieldType
+ * @param {"firstname" | "lastname" | "email" | "phone" | "role" | "state" | "address" | "password"} fieldType
  * Type of form field that needs to be validated.
  *
  * @returns {{hasError: boolean, errorText: string}}
@@ -221,4 +224,47 @@ export const bytesToSize = (bytes) => {
 
   let i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
   return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`;
+}
+
+/**
+ * Returns `TransactionID` from **location** prop.
+ * Will return `null` if the location does not have a TransactionID.
+ * 
+ * @param {object} locationObject
+ * Object containing location data. You must pass either
+ * `this.props.location` or a `useLocation` object.
+ * 
+ * @returns {string}
+ * TransactionID as a string.
+ */
+export const getTransactionID = (locationObject) => {
+  let transactionID =
+    (locationObject.pathname.indexOf('transaction') != -1)
+      ? locationObject.pathname.split('/')[2]
+      : null;
+
+  return transactionID;
+}
+
+/**
+ * Returns the list of people involved in a transaction.
+ * 
+ * @param {string} transactionID
+ * Transaction ID for which the people list has
+ * to be fetched.
+ * 
+ * @returns {Promise<object[]>}
+ */
+export const getPeopleInvolved = async (transactionID) => {
+  // @TODO: Add error handling
+  
+  const endpoint = `https://us-central1-reallos-test.cloudfunctions.net/api/get-all-people/${transactionID}`;
+  
+  let response = await axios.get(endpoint, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('FBIdToken')}`
+    }
+  });
+
+  return response.data.peopleList;
 }
