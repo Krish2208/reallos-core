@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+}
+
+.root-404 {
+    display: flex;
+    height: 100vh;
+}
+
+.error-code-404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #21DAF1;
+    color: #150578;
+    font-size: 150px;
+    font-family: 'Gilroy';
+    font-weight: bold;
+    flex: 5;
+}
+
+.error-message-404 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #150578;
+    color: #21DAF1;
+    padding: 50px;
+    flex: 6;
+}
+
+.error-message-404-sorry {
+    font-family: 'Gilroy';
+    font-weight: bold;
+    font-size: 60px;
+}
+
+.error-message-404-submsg {
+    font-family: 'Gilroy';
+    font-weight: bold;
+    font-size: 30px;
+    margin-top: 10px;
+}
+
+.error-message-404-verbose {
+    margin-top: 50px;
+    font-size: 20px;
+}
+
+.error-message-404-verbose a {
+    text-decoration: underline;
+    color: #21DAF1;
+}
+
+.error-message-404-prev-page-btn {
+    margin-top: 50px;
+}
+
+.error-message-404-prev-page-btn > button {
+    color: #150578;
+    font-family: 'Gilroy';
+    font-weight: bold;
+    font-size: 19px;
+    text-transform: none;
+}
+
+.reallos-logo-404 {
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+    width: 180px;
+}
