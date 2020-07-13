@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {editingUser} from '../../actions/userActions';
+import { editingUser } from '../../actions/userActions';
 import './ProfileEditDrawer.css';
 import SideDrawer from '../shared/drawer/SideDrawer';
 import Modal, { ModalActionFooter } from '../shared/modal/Modal';
@@ -39,14 +39,14 @@ import { bindActionCreators } from 'redux';
  * @augments {React.Component<Props>}
  */
 
-const mapStateToProps = (state) =>({
+const mapStateToProps = (state) => ({
     user: state.user
 });
 
-const mapDispatchToProps = (dispatch) =>{
+const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         editingUser
-    },dispatch)
+    }, dispatch)
 }
 
 class ProfileEditDrawer extends React.Component {
@@ -95,7 +95,7 @@ class ProfileEditDrawer extends React.Component {
         dismissCallback: PropTypes.func
     }
 
-    submitEdits(){ // function to submit the edits to the database
+    submitEdits() { // function to submit the edits to the database
         let newUser = {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
@@ -108,7 +108,7 @@ class ProfileEditDrawer extends React.Component {
         this.props.dismissCallback();
     }
 
-    cancelEdits(){ // fucntion to cancel the edits
+    cancelEdits() { // fucntion to cancel the edits
         this.setState({
             firstName: this.props.user.firstName,
             lastName: this.props.user.lastName,
@@ -121,17 +121,17 @@ class ProfileEditDrawer extends React.Component {
         this.props.dismissCallback();
     }
 
-    updateStateOnLoading(){
+    updateStateOnLoading() {
         if(!this.state.Loaded) // To check if the state has been changed or not
-        this.setState({
-            firstName: this.props.user.firstName,
-            lastName: this.props.user.lastName,
-            email: this.props.user.email,
-            phone: this.props.user.phone,
-            role: this.props.user.role,
-            state: this.props.user.state,
-            Loaded: true
-        });
+            this.setState({
+                firstName: this.props.user.firstName,
+                lastName: this.props.user.lastName,
+                email: this.props.user.email,
+                phone: this.props.user.phone,
+                role: this.props.user.role,
+                state: this.props.user.state,
+                Loaded: true
+            });
     }
 
     updateUserData(mode) {
