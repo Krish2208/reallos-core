@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Auth from '../../account/Authenticate';
 import { withStyles } from '@material-ui/core/styles';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import {
   AppBar,
