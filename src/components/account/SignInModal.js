@@ -43,8 +43,6 @@ class SignIn extends Component{
             email: this.state.email,
             password: this.state.password
         }
-        setTimeout(() => {
-          }, 1000); // To add a delay to mimic the Server behavio
           
         this.props.login(user);
     }

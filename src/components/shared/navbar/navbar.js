@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import Auth from "../../account/Authenticate";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
+import { myFirebase } from '../../../Config/MyFirebase';
 
 import {
   AppBar,
@@ -236,7 +237,13 @@ class RenderNav extends Component {
     this.setState({
       authenticated: Auth.getAuth(),
     });
-    window.location.href = "/"; // redirecting to the home page with public access
+    myFirebase.auth().signOut()
+    .then(()=>{
+      window.location.href = "/"; // redirecting to the home page with public access
+    })
+    .catch(err =>{
+      console.error(err);
+    })
   }
 
   render() {

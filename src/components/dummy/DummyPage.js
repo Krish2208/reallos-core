@@ -36,14 +36,13 @@ function DummyPage(props) {
       const handleClose = () => {
           props.clearErrors(); // dispatching an action to clear the errors
       };
-
     return (
         <>
         {props.utils.Errors === null ? <></> 
         : 
         <Snackbar open={true} autoHideDuration={60000} onClose={handleClose} >
             <Alert severity="warning" onClose={handleClose}> 
-                {props.utils.Errors.error}
+                {props.utils.Errors}
             </Alert>
         </Snackbar>
         }

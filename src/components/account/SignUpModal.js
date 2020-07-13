@@ -89,7 +89,6 @@ class SignUpModal extends Component {
       state: this.state.state,
       password: this.state.password,
     };
-    setTimeout(() => {}, 2000); // To add a delay to mimic the Server behavior */
     this.props.signupUser(newUser);
   }
 
