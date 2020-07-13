@@ -1,23 +1,54 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { clearErrors } from '../../actions/utilsActions';
+import { Button, Checkbox, FormControlLabel, Snackbar } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import SignIn from '../account/SignInModal';
 import SignUpModal from '../account/SignUpModal';
 import SideDrawer from '../shared/drawer/SideDrawer';
 import ReallosLogo from '../../assets/reallos-logo.svg';
 import './DummyPage.css';
 
-function DummyPage() {
+
+const mapStateToProps = (state) =>({
+    utils: state.utils
+});
+
+const mapDispatchToProps = (dispatch) =>{
+    return bindActionCreators({
+        clearErrors
+    },dispatch);
+}
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+function DummyPage(props) {
+
     let [signInModalVisible, setSignInModalVisibility] = useState(false);
     let [signUpModalVisible, setSignUpModalVisibility] = useState(false);
     let [sideDrawerVisible, setSideDrawerVisibility] = useState(false);
     let [isSideDrawerLeftSide, setSideDrawerLeftSide] = useState(false);
 
+      const handleClose = () => {
+          props.clearErrors(); // dispatching an action to clear the errors
+      };
+
     return (
         <>
+        {props.utils.Errors === null ? <></> 
+        : 
+        <Snackbar open={true} autoHideDuration={60000} onClose={handleClose} >
+            <Alert severity="warning" onClose={handleClose}> 
+                {props.utils.Errors.error}
+            </Alert>
+        </Snackbar>
+        }
             <div id="dummy-page-container">
                 <img src={ReallosLogo} alt="Reallos" />
-
                 {/* Link to transactio dashboard */}
                 <Link to="/transaction">Transaction Dashboard link</Link>
 
@@ -75,4 +106,4 @@ function DummyPage() {
     );
 }
 
-export default DummyPage;
+export default connect(mapStateToProps,mapDispatchToProps)(DummyPage);

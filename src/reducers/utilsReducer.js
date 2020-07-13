@@ -23,7 +23,11 @@ function utilsReducer(state = intialState, action){
                 Loading: false,
                 Errors: action.error
             }
-
+        case actions.CLEAR_ERRORS:
+            return {
+                Loading: false,
+                Errors: null
+            }
         default:
             return state;
     }
