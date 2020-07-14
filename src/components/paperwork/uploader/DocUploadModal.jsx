@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useLocation } from 'react-router';
 import Modal from "../../shared/modal/Modal";
 import { myStorage } from "../../../Config/MyFirebase.js";
 import DocUploadDropzone from "./DocUploadDropzone";
 import DocUploadStatus from "./DocUploadStatus";
+import { getTransactionID } from '../../../global_func_lib';
 import "./DocUploadModal.css";
 
 /**
@@ -39,6 +41,9 @@ function DocUploadModal({
     uploadTask: null,
   });
 
+  const location = useLocation();
+  const transactionID = getTransactionID(location);
+
   /**
    * Uploads document selected in uploader
    *
@@ -55,7 +60,7 @@ function DocUploadModal({
 
       let fileRef = myStorage
         .ref()
-        .child(`TRANSACTION_ID/paperworks/${acceptedFiles[0].name}`);
+        .child(`${transactionID}/paperworks/${acceptedFiles[0].name}`);
       let uploadTask = fileRef.put(acceptedFiles[0]);
 
       uploadTask.on("state_changed", (snapshot) => {

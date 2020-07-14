@@ -75,7 +75,7 @@ function DocUploadDropzone({ uploadDocumentCallback, dismissCallback }) {
             isDragActive ? "dropzone-active" : ""
           }`}
         >
-          {acceptedFiles === 0 ? (
+          {acceptedFiles.length === 0 ? (
             <img src={AddFiles} alt="Upload Document" />
           ) : (
             <img src={PdfIcon} alt="Document Selected" />
