@@ -2,7 +2,6 @@ import axios from 'axios'; // Importing axios to make endpoint request
 import { myFirebase } from '../Config/MyFirebase';
 import { setLoadingTrue, setLoadingFalse, setErrors } from './utilsActions'; // Importing acttions for util purposes
 
-
 export const ADD_USER = 'ADD_USER'; // Action to add the user to the database
 export const ADD_TRANSACTION_USER = 'ADD_TRANSACTION_USER'; // Action to add the transaction to the user
 export const EDIT_USER = 'EDIT_USER';
@@ -93,6 +92,67 @@ export function login(user) { // still have to dispatch actions that update the 
         })
     }
 }
+
+export function googleAuth(){
+    return (dispatch) =>{
+        myFirebase.auth().signInWithPopup(new myFirebase.auth.GoogleAuthProvider())
+        .then(res =>{
+            localStorage.setItem('userID', res.user.uid); // storing the userID in the localstorage
+            res.user.getIdToken()
+            .then( token =>{
+                localStorage.setItem('FBIdToken',token); // storing the jwt in the localstorage
+            })
+            .catch(err =>{
+                dispatch(setErrors(err));
+            })
+
+            window.location.href = '/transaction';
+        })
+        .catch(err =>{
+            dispatch(setErrors(err)); // dispatching an action to set the error
+        })
+    }
+}
+
+export function additionalInformation(userInfo){
+    return (dispatch) =>{
+        dispatch(setLoadingTrue()); // dispatching an action to set loading to true
+
+        let info = {
+            email: myFirebase.auth().currentUser.email,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+            phone: userInfo.phone,
+            role: userInfo.role,
+            state: userInfo.state
+        };
+
+        axios.post(`https://us-central1-reallos-test.cloudfunctions.net/api/add-user-details/${localStorage.getItem('userID')}`,info,{
+            headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
+        })
+        .then(() =>{
+
+            dispatch(addUser( // dispatching an action to add the user to the redux store
+                localStorage.getItem('userID'),
+                info.firstName,
+                info.lastName,
+                info.email,
+                info.phone,
+                info.role,
+                info.state,
+                null
+            ));
+            dispatch(setLoadingFalse()); // Dispatching an action to set loading to false
+        })
+        .catch(err =>{
+            dispatch(setErrors(err)); // dispatching an action to set the errors
+        })
+    }
+}
+
+
+
+
 
 export function editingUser(newUser) { // to edit the current user
     return (dispatch) => {

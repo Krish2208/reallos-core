@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { ReallosLoaderWithOverlay } from "../shared/preloader/ReallosLoader";
 import { connect } from "react-redux";
-import { login } from "../../actions/userActions";
+import { login, googleAuth } from "../../actions/userActions";
 import { bindActionCreators } from "redux";
 import GoogleLogo from "../../assets/google-logo.svg";
 import FacebookLogo from "../../assets/fb-logo.svg";
@@ -26,6 +26,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       login,
+      googleAuth
     },
     dispatch
   );
@@ -140,7 +141,7 @@ class SignIn extends Component {
 
           <div id="social-login-container">
             <div className="social-login-btn">
-              <Fab>
+              <Fab onClick = {this.props.googleAuth}>
                 <img src={GoogleLogo} alt="Sign In with Google" />
               </Fab>
             </div>

@@ -9,7 +9,7 @@ import SearchBar from "../shared/searchbar/SearchBarComponent";
 import TransactionCardGroup from "./TransactionCardGroup";
 import { ReallosLoaderWithOverlay } from "../shared/preloader/ReallosLoader";
 import { connect } from "react-redux";
-import { editUser } from "../../actions/userActions";
+import { additionalInformation } from "../../actions/userActions";
 import { getTransaction } from "../../actions/transactionActions";
 import { validateFormField } from "../../global_func_lib";
 import { bindActionCreators } from "redux";
@@ -33,8 +33,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      editUser,
       getTransaction,
+      additionalInformation
     },
     dispatch
   );
@@ -337,14 +337,16 @@ class TransactionDasboard extends Component {
   };
 
   SocialDetailClose() {
-    this.props.editUser(
-      this.state.firstName,
-      this.state.lastName,
-      this.props.user.email,
-      this.state.role,
-      this.state.phone,
-      this.state.state
-    ); // Call editUser here
+    let userInfo = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      phone: this.state.phone,
+      role: this.state.role,
+      state: this.state.state
+    };
+
+    this.props.additionalInformation(userInfo);
+
     this.setState({
       socialModal: false,
       firstName: "",
@@ -356,15 +358,27 @@ class TransactionDasboard extends Component {
   }
 
   SocialDetailModal() {
-    return (
-      <Modal
-        title="Fill in Details"
-        visible={this.state.socialModal}
-        modalWidth={500}
-      >
-        <this.RenderStep />
-      </Modal>
-    );
+    if(!this.props.utils.Loading){ // if the component is not loading
+      if(this.props.user.firstName){ // if the user is defined in the redux store
+        return (
+          <></>
+        );
+      }
+      else{ 
+        return (
+          <Modal
+            title="Fill in Details"
+            visible={true}
+            modalWidth={500}
+          >
+            <this.RenderStep />
+          </Modal>
+        );
+      }
+    }
+    else{
+      return (<></>);
+    }
   }
 
   render() {
@@ -374,7 +388,7 @@ class TransactionDasboard extends Component {
         <ReallosLoaderWithOverlay visible={this.props.utils.Loading} />
         <Container>
           <NavBar />
-          <this.SocialDetailModal />
+          <this.SocialDetailModal  />
           <Grid
             container
             direction="row"
