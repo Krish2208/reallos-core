@@ -114,6 +114,27 @@ export function googleAuth(){
     }
 }
 
+export function facebookAuth(){
+    return (dispatch) =>{
+        myFirebase.auth().signInWithPopup(new myFirebase.auth.FacebookAuthProvider())
+        .then(res =>{
+            localStorage.setItem('userID', res.user.uid); // storing the userID in the localstorage
+            res.user.getIdToken()
+            .then( token =>{
+                localStorage.setItem('FBIdToken',token); // storing the jwt in the localstorage
+            })
+            .catch(err =>{
+                dispatch(setErrors(err));
+            })
+
+            window.location.href = '/transaction';
+        })
+        .catch(err =>{
+            dispatch(setErrors(err)); // dispatching an action to set the error
+        })
+    }
+}
+
 export function additionalInformation(userInfo){
     return (dispatch) =>{
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
