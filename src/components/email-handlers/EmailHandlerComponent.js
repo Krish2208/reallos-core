@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   Box,
   Grid,
@@ -6,86 +6,100 @@ import {
   FormControl,
   TextField,
   Card,
-  Button
+  Button,
 } from "@material-ui/core";
 import "./EmailHandlerComponent.css";
 import { useLocation } from "react-router-dom";
+import { myFirebase } from '../../Config/MyFirebase.js';
+import VerifyEmail from './VerifyEmail.js';
+import ResetPassword from './ResetPassword.js';
 
-function RenderEmailHandler() {
-  return (
-    <div className="maingrid">
-      <img src={require('../../assets/reallos-logo.svg')} className="logo"/>
-      <Grid style={{ height: "97vh" }}>
-        <Grid container direction="row" style={{ height: "100%" }}>
-          <Grid container alignItems="center" md={6} style={{ height: "100%" }} justify="center">
-            <Box ml={1} mt={-10}>
-              <img
-                src={require("../../assets/emailhandler.png")}
-                className="right-image"
-              />
-            </Box>
-          </Grid>
-          <Grid
-            container
-            md={6}
-            alignItems="center"
-            justify="center"
-            style={{ backgroundColor: "#150578" }}
-          >
-            <Card elevation={3} style={{ padding: "30px"}} className="right-card">
-              <RenderRightColumn />
-            </Card>
+class EmailHandler extends Component {
+
+  constructor(props){
+    super(props);
+    this.state={
+      email: null,
+      password: '',
+      error: '',
+      success: false,
+      validCode: null,
+      verifiedCode: false,
+      actionCode: '',
+      mode: '',
+    }
+    this.RenderRightColumn = this.RenderRightColumn.bind(this);
+  }
+
+  render() {
+    return (
+      <div className="maingrid">
+        <img
+          src={require("../../assets/reallos-logo-light.svg")}
+          className="emailhandler-logo"
+        />
+        <Grid style={{ height: "100vh" }}>
+          <Grid container direction="row" style={{ height: "100%" }}>
+            <Grid
+              container
+              alignItems="center"
+              md={6}
+              style={{ height: "100%" }}
+              justify="center"
+            >
+              <Box ml={1} mt={-10}>
+                <img
+                  src={require("../../assets/emailhandler.png")}
+                  className="right-image"
+                />
+              </Box>
+            </Grid>
+            <Grid
+              container
+              md={6}
+              alignItems="center"
+              justify="center"
+              style={{ backgroundColor: "#150578" }}
+            >
+              <Card
+                elevation={3}
+                style={{ padding: "30px" }}
+                className="right-card"
+              >
+                <this.RenderRightColumn />
+              </Card>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </div>
-  );
-}
-
-function RenderRightColumn(props) {
-  let query = new URLSearchParams(useLocation().search);
-  const mode = query.get("mode");
-
-  if (mode === "verifyEmail") {
-    return <Typography variant="h6" align="center" style={{color: "#150578"}}>Thank You, Your Email has been verified</Typography>;
-  }
-  if (mode === "resetPassword") {
-    return (
-      <div>
-        <Typography variant="h6" style={{ width: "150%", marginBottom: "8px" }}>
-          Reset Password
-        </Typography>
-        <FormControl>
-          <TextField
-            className="input-item"
-            label="New Password"
-            name="password"
-            variant="outlined"
-            type="password"
-            style={{ marginBottom: "8px" }}
-            className="form"
-          />
-          <TextField
-            className="input-item"
-            label="Confirm New Password"
-            name="password"
-            variant="outlined"
-            type="password"
-            style={{ marginBottom: "8px" }}
-            className="form"
-          />
-          <Button
-            className="input-item"
-            color="primary"
-            variant="contained"
-            style={{ textTransform: "none", fontSize: "16px"}}
-            className="form"
-          >
-            Confirm
-          </Button>
-        </FormControl>
       </div>
     );
   }
+
+  RenderRightColumn() {
+    let query = new URLSearchParams(useLocation().search);
+    const mode = query.get("mode");
+    const actionCode = query.get("oobCode");
+    console.log(actionCode);
+    if (mode === "verifyEmail") {
+      return(
+        <VerifyEmail actionCode={actionCode}/>
+      );
+    }
+    if (mode === "resetPassword") {
+      return (
+        <ResetPassword actionCode={actionCode}/>
+      );
+    }
+    else{
+      return(
+        <Typography
+            variant="h6"
+            style={{ width: "150%", marginBottom: "8px", color: "red" }}
+          >
+            Invalid Request 
+          </Typography>
+      );
+    }
+  }
 }
-export default RenderEmailHandler;
+export default EmailHandler;
