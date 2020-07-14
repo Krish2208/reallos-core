@@ -24,6 +24,7 @@ export function signupUser(newUser) { // Still have to dispatch actions that upd
 
             axios.post(`https://us-central1-reallos-test.cloudfunctions.net/api/add-user-details/${localStorage.getItem('userID')}`,user)
             .then(() =>{
+                myFirebase.auth().currentUser.sendEmailVerification(); // Sending the email verification to the new user
                 dispatch(setLoadingFalse()); // dispatching an action to set loading to false
             })
             .catch(err =>{
@@ -66,6 +67,12 @@ export function login(user) { // still have to dispatch actions that update the 
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
         myFirebase.auth().signInWithEmailAndPassword(user.email, user.password) // Logging in the user
         .then( res => {
+            if(!myFirebase.auth().currentUser.emailVerified){
+                let error = {
+                    code: 'verify email'
+                }
+                throw error;
+            }
             return res.user.getIdToken(); // returning the jwt token
         })
         .then( token =>{
@@ -83,6 +90,9 @@ export function login(user) { // still have to dispatch actions that update the 
                     break;
                 case 'auth/network-request-failed':
                     error = 'Please check your internet connection';
+                    break;
+                case 'verify email':
+                    error = 'Please verify your email';
                     break;
                 default :
                     error = 'Something went wrong, try again later!'
