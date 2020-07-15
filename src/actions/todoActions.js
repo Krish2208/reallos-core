@@ -6,6 +6,7 @@ import {addUser} from './userActions';
 export const ADD_TODO = 'ADD_TODO';
 export const DELETE_TODO = 'DELETE_TODO';
 export const EDIT_TODO = 'EDIT_TODO';
+export const COMPLETE_TODO = 'COMPLETE_TODO';
 export const CLEAR_TODO = 'CLEAR_TODO';
 
 
@@ -70,7 +71,8 @@ export function getTask(id,peopleLength,user){ // getting the tasks from the ser
                     todo.description,
                     todo.date,
                     todo.assignedTo,
-                    todo.assignedBy
+                    todo.assignedBy,
+                    todo.completed
                 ))
             })
             dispatch(setLoadingFalse()); // dispatching an action to set loading to false
@@ -170,8 +172,26 @@ export function editTask(id, Task){
     }
 }
 
+export function completeTask(id, taskId){ // function to mark the task completed 
+    return (dispatch) =>{
+        dispatch(setLoadingTrue()); // dispatching an action to set loading to true
+        
+        axios.put(`https://us-central1-reallos-test.cloudfunctions.net/api/task-done/${id}/${taskId}`,null,{
+            headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
+        })
+        .then(() =>{
+            dispatch(completeTodo(taskId)); // dispatching an action to complete the task
+            dispatch(setLoadingFalse());
+        })
+        .catch(err => {
+            console.error(err);
+            dispatch(setErrors(err));
+        })
+    }
+}
+
 // pure Reducer Functions
-export function addTodo(id, Title, Description, Date, To, From){ // action creator for ADD_TODO
+export function addTodo(id, Title, Description, Date, To, From, Completed){ // action creator for ADD_TODO
     return({
         type: ADD_TODO,
         id,
@@ -179,7 +199,8 @@ export function addTodo(id, Title, Description, Date, To, From){ // action creat
         Description,
         Date,
         To,
-        From
+        From,
+        Completed
     });
 }
 
@@ -198,6 +219,13 @@ export function editTodo(id,Title, Description, Date, To){
         Description,
         Date, 
         To
+    })
+}
+
+export function completeTodo(id){
+    return({
+        type: COMPLETE_TODO,
+        id
     })
 }
 
