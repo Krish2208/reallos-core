@@ -53,6 +53,8 @@ class PaperWork extends React.Component {
         this.state = {
             isUploadModalVisible: false,
             isSnackbarVisible: false,
+            isPaperworkExistsModalVisible: false,
+            uploadFileName: null,
             snackbarMessage: null,
             documents: null,
             menuAnchorElement: null,
@@ -437,6 +439,47 @@ class PaperWork extends React.Component {
                             </Button>
                         </ModalActionFooter>
                     </Modal>
+
+                    <Modal
+                        title="Can't Upload"
+                        visible={this.state.isPaperworkExistsModalVisible}
+                        dismissCallback={() => this.setState({isPaperworkExistsModalVisible: false})}
+                        modalWidth={700}
+                    >
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 30
+                        }}>
+                            <img
+                                src={PdfLogo}
+                                alt=""
+                                style={{marginRight: 30, width: 80}}
+                            />
+
+                            <div style={{fontSize: 18}}>
+                                You cannot upload "
+                                <strong>
+                                    {getEffectiveDocumentName(
+                                        this.state.uploadFileName
+                                    )}
+                                </strong>
+                                " as it already exists. If you want to upload this paperwork, delete the existing paperwork first.
+                            </div>
+                        </div>
+
+                        <ModalActionFooter>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => this.setState({isPaperworkExistsModalVisible: false})}
+                            >
+                                Close
+                            </Button>
+                        </ModalActionFooter>
+                    </Modal>
+
                     <AccessRightsModal
                         visible={this.state.isAccessRightsModalVisible}
                         dismissCallback={() => this.setState({isAccessRightsModalVisible: false})}
@@ -483,6 +526,12 @@ class PaperWork extends React.Component {
                     visible={this.state.isUploadModalVisible}
                     showSnackbarCallback={this.showSnackbar}
                     onSuccessCallback={() => this.setDocumentList()}
+                    onFileExistsCallback={filename => {
+                        this.setState({
+                            isPaperworkExistsModalVisible: true,
+                            uploadFileName: filename
+                        })
+                    }}
                 />
                 <Snackbar
                     open={this.state.isSnackbarVisible}
