@@ -257,7 +257,7 @@ export const getTransactionID = (locationObject) => {
 export const getPeopleInvolved = async (transactionID) => {
   // @TODO: Add error handling
   
-  const endpoint = `https://us-central1-reallos-test.cloudfunctions.net/api/get-all-people/${transactionID}`;
+  const endpoint = `https://us-central1-reallos-382c7.cloudfunctions.net/api/get-all-people/${transactionID}`;
   
   let response = await axios.get(endpoint, {
     headers: {
