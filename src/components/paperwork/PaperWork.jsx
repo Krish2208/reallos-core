@@ -10,7 +10,7 @@ import PdfLogo from '../../assets/pdf_icon_duotone.svg';
 import { NavLink } from 'react-router-dom';
 import { myStorage, myFirestore } from '../../Config/MyFirebase';
 import { withStyles } from '@material-ui/core/styles';
-import { getTransactionID, getEffectiveDocumentName, getCurrentUser } from '../../global_func_lib';
+import { getTransactionID, getEffectiveDocumentName, getCurrentUser, getPeopleInvolved } from '../../global_func_lib';
 
 import {
     Container,
@@ -63,9 +63,7 @@ class PaperWork extends React.Component {
             menuTagetDocumentData: {
                 name: '',
                 creator: '',
-                doc_id: '',
-                path: '',
-                members: []
+                path: ''
             }
         };
 
@@ -178,6 +176,7 @@ class PaperWork extends React.Component {
                 .get()
 
         let paperworks = [];
+        let peopleList = await getPeopleInvolved(this.transactionID);
 
         paperworkDataSnapshot.docs.map(doc => {
             let paperworkMeta = doc.data();
@@ -189,6 +188,11 @@ class PaperWork extends React.Component {
                     `${this.transactionID}/paperworks/${paperworkMeta.path}`
                 );
 
+                let creator =
+                    (paperworkMeta.creator === getCurrentUser().email)
+                        ? "You"
+                        : peopleList.filter(person => person.email == paperworkMeta.creator)[0]
+
                 let currentUserAcessRight =
                     (paperworkMeta.creator === getCurrentUser().email)
                         ? 2
@@ -196,10 +200,8 @@ class PaperWork extends React.Component {
 
                 paperworks.push({
                     name: documentRef.name,
-                    creator: 'John Doe',
-                    doc_id: documentRef.name,
+                    creator: creator,
                     path: paperworkMeta.path,
-                    members: ['Joseph John'],
                     accessRight: currentUserAcessRight
                 });
             }
@@ -213,7 +215,7 @@ class PaperWork extends React.Component {
     /**
      * Deletes the specified document from the cloud.
      *
-     * @param {{ name: string, creator: string, doc_id: string, path: string, members: any[] }} docData
+     * @param {{ name: string, creator: string, path: string }} docData
      * The document data of the particular document.
      */
     async deletePaperwork(docData) {
@@ -302,7 +304,7 @@ class PaperWork extends React.Component {
                     {this.state.documents.map((docData, itemIndex) => (
                         <div
                             className="doc-card-root"
-                            key={docData.doc_id}
+                            key={docData.name}
                             style={{
                                 opacity: 0,
                                 animation: `slide-up-anim 150ms ease-out ${itemIndex * 25}ms forwards`
@@ -316,7 +318,7 @@ class PaperWork extends React.Component {
                             </IconButton>
 
                             <NavLink to={{
-                                pathname: `/transaction/${this.transactionID}/paperwork/${docData.doc_id}`,
+                                pathname: `/transaction/${this.transactionID}/paperwork/${docData.name}`,
                                 state: docData
                             }}>
                                 <Card className="doc-card" title={docData.name}>
