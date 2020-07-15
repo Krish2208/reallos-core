@@ -12,7 +12,7 @@ export function getTransaction(userId){
             let userID = localStorage.getItem('userID'); // Getting the stored user id from local storage
             dispatch(setLoadingTrue()); // dispatching an action to set loading to true
 
-            axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/user-details`,{
+            axios.get(`/user-details`,{
                 headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
             })
             .then(res =>{
@@ -29,12 +29,12 @@ export function getTransaction(userId){
                 ))
 
                 if(userID !== null) { // To ensure that the userID is not null
-                    axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/get-all-transactions/${userID}`,{
+                    axios.get(`/get-all-transactions/${userID}`,{
                         headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
                     })
                     .then( res =>{ // Getting all the transactions the user is involved in
                         res.data.txnList.map((transId)=>{
-                            axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/get-transaction/${transId}`) // Getting all the transactions from the database
+                            axios.get(`/get-transaction/${transId}`) // Getting all the transactions from the database
                             .then( res => {
                                 dispatch(addTransaction(
                                     transId,
@@ -73,18 +73,18 @@ export function createTransaction(newTransaction,people){
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
         let token = localStorage.getItem('FBIdToken'); // getting the jwt
 
-        axios.post('https://us-central1-reallos-test.cloudfunctions.net/api/create-transaction',newTransaction,{
+        axios.post('/create-transaction',newTransaction,{
             headers: { Authorization: 'Bearer ' + token }
         })
         .then(res =>{
             let id = res.data.id; // storing the id of the recently created transaction
-            axios.post(`https://us-central1-reallos-test.cloudfunctions.net/api/add-multiple-people/${id}`,{
+            axios.post(`/add-multiple-people/${id}`,{
                 people: people
             },{
                 headers: { Authorization: 'Bearer ' + token }
             })
             .then( () => {
-                axios.put(`https://us-central1-reallos-test.cloudfunctions.net/api/add-transaction-to-user/${id}`,null,{
+                axios.put(`/add-transaction-to-user/${id}`,null,{
                     headers: {Authorization: 'Bearer ' + token}
                 })
                 .then( () =>{

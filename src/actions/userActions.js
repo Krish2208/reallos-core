@@ -22,7 +22,7 @@ export function signupUser(newUser) { // Still have to dispatch actions that upd
                 state: newUser.state
             };
 
-            axios.post(`https://us-central1-reallos-test.cloudfunctions.net/api/add-user-details/${localStorage.getItem('userID')}`,user)
+            axios.post(`/add-user-details/${localStorage.getItem('userID')}`,user)
             .then(() =>{
                 myFirebase.auth().currentUser.sendEmailVerification(); // Sending the email verification to the new user
                 dispatch(setLoadingFalse()); // dispatching an action to set loading to false
@@ -158,7 +158,7 @@ export function additionalInformation(userInfo){
             state: userInfo.state
         };
 
-        axios.post(`https://us-central1-reallos-test.cloudfunctions.net/api/add-user-details/${localStorage.getItem('userID')}`,info,{
+        axios.post(`/add-user-details/${localStorage.getItem('userID')}`,info,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         })
         .then(() =>{
@@ -187,7 +187,7 @@ export function additionalInformation(userInfo){
 
 export function editingUser(newUser) { // to edit the current user
     return (dispatch) => {
-        axios.put(`https://us-central1-reallos-test.cloudfunctions.net/api/update-profile`,newUser, {
+        axios.put(`/update-profile`,newUser, {
             headers: {Authorization: 'Bearer ' + localStorage.getItem('FBIdToken')}
         })
         .then(() => {

@@ -16,7 +16,7 @@ export function getTask(id,peopleLength,user){ // getting the tasks from the ser
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
 
         if(user === null){ // if the user isn't available
-            axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/user-details`,{
+            axios.get(`/user-details`,{
                 headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
             })
             .then(res =>{
@@ -38,7 +38,7 @@ export function getTask(id,peopleLength,user){ // getting the tasks from the ser
         }
 
         if(peopleLength === 0){ // if the redux store has no people stored 
-            axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/get-all-people/${id}`,{
+            axios.get(`/get-all-people/${id}`,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         }) 
         .then( res => {
@@ -60,7 +60,7 @@ export function getTask(id,peopleLength,user){ // getting the tasks from the ser
         })
         }
 
-        axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/get-all-tasks/${id}`,{
+        axios.get(`/get-all-tasks/${id}`,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         })
         .then((res)=>{
@@ -103,7 +103,7 @@ export function addTask(id,newTask){
             title: newTask.Title
         }
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
-        axios.post(`https://us-central1-reallos-test.cloudfunctions.net/api/add-task/${id}`,Task,{
+        axios.post(`/add-task/${id}`,Task,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         })
         .then(res =>{
@@ -128,7 +128,7 @@ export function addTask(id,newTask){
 export function deleteTask(id,taskid){
     return (dispatch) =>{
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
-        axios.delete(`https://us-central1-reallos-test.cloudfunctions.net/api/delete-task/${id}/${taskid}`,{
+        axios.delete(`/delete-task/${id}/${taskid}`,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         })
         .then(res =>{
@@ -152,7 +152,7 @@ export function editTask(id, Task){
             assignedTo: Task.to,
             date: Task.date
         }
-        axios.put(`https://us-central1-reallos-test.cloudfunctions.net/api/update-task/${id}/${Task.id}`,editingTask,{
+        axios.put(`/update-task/${id}/${Task.id}`,editingTask,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         })
         .then(res =>{
@@ -176,7 +176,7 @@ export function completeTask(id, taskId){ // function to mark the task completed
     return (dispatch) =>{
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
         
-        axios.put(`https://us-central1-reallos-test.cloudfunctions.net/api/task-done/${id}/${taskId}`,null,{
+        axios.put(`/task-done/${id}/${taskId}`,null,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         })
         .then(() =>{
