@@ -1,29 +1,79 @@
-.first-time-image{
-    height: 290px;
-    width:310px;
+.first-time-image {
+  height: 290px;
+  width: 310px;
 }
 
-.continue-button{
-    background-color: #150578!important;
-    color: white!important;
-    margin-top: 25px!important;
+.continue-button {
+  background-color: #150578 !important;
+  color: white !important;
+  margin-top: 25px !important;
 }
 
-.action-button{
-    background-color: #150578!important;
-    color: white!important;
-    margin-top: 25px!important;
+.action-button {
+  background-color: #150578 !important;
+  color: white !important;
+  margin-top: 25px !important;
 }
 
-.expansion-panel-heading{
-    font-size: 20px!important;
-    padding: 9px;
+.expansion-panel-heading {
+  font-size: 20px !important;
+  padding: 9px;
 }
 
-.expansion-panel-text{
-    font-size: 16px;
+.expansion-panel-text {
+  font-size: 16px;
 }
 
-.expansion-divider{
-    height: 50px!important;
+.expansion-divider {
+  height: 50px !important;
+}
+
+.img-div {
+  text-align: center;
+}
+
+.coming-soon-img {
+  height: 270px;
+  padding-bottom: 10px;
+}
+
+.div-heading {
+  font-size: 25px !important;
+  padding-bottom: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.div-text {
+  font-size: 20px !important;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.cards {
+  height: 130px !important;
+  border-radius: 10px;
+  background-color: #6c63ff;
+  transition: all 0.3s ease-in-out;
+}
+
+.cards:hover {
+  box-shadow: rgba(0, 0, 0, 0.22) 0px 19px 43px;
+  transform: translate3d(0px, -2px, 0px);
+  background-color: #7f79ff;
+}
+
+.card-content {
+  padding-top: 20px !important;
+  color: #ffffff !important;
+  margin: auto !important;
+  text-align: center !important;
+}
+.card-text {
+  padding-top: 15px;
+  color: #d3d0ff !important;
+  font-weight: 400 !important;
+  font-size: 24px !important;
+  font-family: "Gilroy" !important;
+  font-weight: bold !important;
 }
