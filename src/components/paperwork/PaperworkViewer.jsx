@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import NavBar from "../shared/navbar/navbar";
 import NavRail from "../shared/navigation_rail/TransactionNavRail";
 import Modal, { ModalActionFooter } from "../shared/modal/Modal";
-import { ArchiveIcon } from "@primer/octicons-react";
+import { ArchiveIcon, EyeIcon } from "@primer/octicons-react";
 import StampIcon from "../../assets/stamp_icon.svg";
 import DocUploadStatus from "./uploader/DocUploadStatus";
 import { myStorage } from "../../Config/MyFirebase.js";
@@ -23,6 +23,7 @@ import {
   TextSearch,
   FormFields,
   Inject,
+  PdfViewer,
 } from "@syncfusion/ej2-react-pdfviewer";
 
 import {
@@ -63,6 +64,25 @@ class PaperworkViewer extends React.Component {
     };
 
     this.docBlob = null;
+
+    this.pdfViewerServices = [
+      FormFields,
+      Toolbar,
+      Magnification,
+      Navigation,
+      TextSearch,
+      LinkAnnotation,
+      BookmarkView,
+      ThumbnailView,
+      Print,
+      TextSelection,
+    ]
+  }
+
+  componentWillMount() {
+    if (this.getState.accessRight === 2) {
+      this.pdfViewerServices.push(Annotation);
+    }
   }
 
   /**
@@ -72,7 +92,8 @@ class PaperworkViewer extends React.Component {
    * Void
    */
   showSignaturePanel() {
-    this.viewer.toolbar.annotationToolbarModule.showSignaturepanel();
+    if (this.viewer.toolbar.annotationToolbarModule)
+      this.viewer.toolbar.annotationToolbarModule.showSignaturepanel();
   }
 
   /**
@@ -135,26 +156,28 @@ class PaperworkViewer extends React.Component {
    * Void
    */
   async saveChangesToCloud(docPath) {
-    let docBlob = await this.viewer.saveAsBlob();
-    let fileRef = myStorage.ref().child(docPath);
-    let uploadTask = fileRef.put(docBlob);
+    if (this.getState.accessRight === 2) {
+      let docBlob = await this.viewer.saveAsBlob();
+      let fileRef = myStorage.ref().child(docPath);
+      let uploadTask = fileRef.put(docBlob);
 
-    uploadTask.on("state_changed", (snapshot) => {
-      let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      let isPaused = snapshot.state === "paused";
+      uploadTask.on("state_changed", (snapshot) => {
+        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        let isPaused = snapshot.state === "paused";
 
-      let newUploadTaskDetails = {
-        filename: this.getState.name,
-        progress,
-        isPaused,
-        uploadTask,
-      };
+        let newUploadTaskDetails = {
+          filename: this.getState.name,
+          progress,
+          isPaused,
+          uploadTask,
+        };
 
-      this.setState({
-        isUploadModalVisible: true,
-        uploadTaskStatus: newUploadTaskDetails,
+        this.setState({
+          isUploadModalVisible: true,
+          uploadTaskStatus: newUploadTaskDetails,
+        });
       });
-    });
+    }
   }
 
   /**
@@ -208,6 +231,7 @@ class PaperworkViewer extends React.Component {
     if (this.getState) {
       // Proceed if document metadata is available in props
       const docData = this.getState;
+      const canEdit = (docData.accessRight === 2);
 
       return (
         <Container>
@@ -236,13 +260,33 @@ class PaperworkViewer extends React.Component {
                 </NavLink>
                 <span style={{ margin: "0 10px" }}>/</span>
                 {docData.name}
+
+                {(!canEdit)
+                  ? <span style={{
+                    marginLeft: 15,
+                    background: '#ffca1c',
+                    color: '#000000',
+                    fontFamily: 'Gilroy',
+                    fontWeight: 'bold',
+                    padding: '2px 5px',
+                    borderRadius: 5
+                  }}>
+                    <span style={{marginRight: 5}}>
+                      <EyeIcon />
+                    </span>
+
+                    Read Only
+                  </span>
+
+                  : <></>
+                }
               </div>
 
-              <div>
+              <div style={{display: canEdit ? 'block' : 'none'}}>
                 <Button
                   variant="outlined"
                   color="primary"
-                  disabled={!this.state.hasChanges}
+                  disabled={!canEdit || !this.state.hasChanges}
                   onClick={() => {
                     this.setState({
                       isResetModalVisible: true,
@@ -255,7 +299,7 @@ class PaperworkViewer extends React.Component {
                 <Button
                   variant="contained"
                   color="primary"
-                  disabled={!this.state.hasChanges}
+                  disabled={!canEdit || !this.state.hasChanges}
                   onClick={() => this.saveChangesToCloud(docData.path)}
                 >
                   Save Changes
@@ -284,19 +328,7 @@ class PaperworkViewer extends React.Component {
             style={{ height: "640px" }}
           >
             <Inject
-              services={[
-                FormFields,
-                Toolbar,
-                Magnification,
-                Navigation,
-                Annotation,
-                TextSearch,
-                LinkAnnotation,
-                BookmarkView,
-                ThumbnailView,
-                Print,
-                TextSelection,
-              ]}
+              services={this.pdfViewerServices}
             />
           </PdfViewerComponent>
           <Modal
@@ -359,20 +391,23 @@ class PaperworkViewer extends React.Component {
             visible={this.state.isLoadingDocument}
             strokeWidth={4}
           />
-          <Fab
-            variant="extended"
-            className="reallos-fab"
-            size="large"
-            onClick={() => this.showSignaturePanel()}
-          >
-            <img
-              src={StampIcon}
-              alt=""
-              height={20}
-              style={{ marginRight: 12 }}
-            />
-            E-Sign Document
-          </Fab>
+          <div style={{display: canEdit ? 'block' : 'none'}}>
+            <Fab
+              variant="extended"
+              className="reallos-fab"
+              size="large"
+              onClick={() => this.showSignaturePanel()}
+              disabled={!canEdit}
+            >
+              <img
+                src={StampIcon}
+                alt=""
+                height={20}
+                style={{ marginRight: 12 }}
+              />
+              E-Sign Document
+            </Fab>
+          </div>
         </Container>
       );
     } else {

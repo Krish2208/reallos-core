@@ -8,9 +8,9 @@ import AccessRightsModal from './AccessRightsModal';
 import UserAvatar from '../../assets/user.png';
 import PdfLogo from '../../assets/pdf_icon_duotone.svg';
 import { NavLink } from 'react-router-dom';
-import { myStorage } from '../../Config/MyFirebase';
+import { myStorage, myFirestore } from '../../Config/MyFirebase';
 import { withStyles } from '@material-ui/core/styles';
-import { getTransactionID } from '../../global_func_lib';
+import { getTransactionID, getEffectiveDocumentName, getCurrentUser } from '../../global_func_lib';
 
 import {
     Container,
@@ -156,16 +156,6 @@ class PaperWork extends React.Component {
     }
 
     /**
-     * Returns document name with the extension stripped off.
-     *
-     * @param {string} docName
-     * Document name
-     */
-    getEffectiveDocumentName(docName) {
-        return docName.replace(/\.pdf$/, '');
-    }
-
-    /**
      * Returns URL of thumbnail for a PDF.
      *
      * @TODO: Should return thumbnail as data URL
@@ -178,19 +168,40 @@ class PaperWork extends React.Component {
      * Sets `document` state to documents in cloud.
      */
     async setDocumentList() {
-        let storageRef = myStorage.ref().child(`${this.transactionID}/paperworks`);
-        let documentList = await storageRef.listAll();
+        let paperworkDataSnapshot =
+            await myFirestore
+                .collection('transactions')
+                .doc(this.transactionID)
+                .collection('paperwork')
+                .get()
+
         let paperworks = [];
 
-        documentList.items.map(documentItem => {
-            paperworks.push({
-                name: documentItem.name,
-                creator: 'John Doe',
-                doc_id: documentItem.name,
-                path: documentItem.fullPath,
-                members: ['Joseph John']
-            })
-        })
+        paperworkDataSnapshot.docs.map(doc => {
+            let paperworkMeta = doc.data();
+
+            if (paperworkMeta.creator === getCurrentUser().email ||
+                paperworkMeta.accessData[getCurrentUser().email] > 0
+            ) {
+                let documentRef = myStorage.ref().child(
+                    `${this.transactionID}/paperworks/${paperworkMeta.path}`
+                );
+
+                let currentUserAcessRight =
+                    (paperworkMeta.creator === getCurrentUser().email)
+                        ? 2
+                        : paperworkMeta.accessData[getCurrentUser().email] ?? 0;
+
+                paperworks.push({
+                    name: documentRef.name,
+                    creator: 'John Doe',
+                    doc_id: documentRef.name,
+                    path: paperworkMeta.path,
+                    members: ['Joseph John'],
+                    accessRight: currentUserAcessRight
+                });
+            }
+        });
 
         this.setState({
             documents: paperworks
@@ -318,7 +329,7 @@ class PaperWork extends React.Component {
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis'
                                         }}>
-                                            {this.getEffectiveDocumentName(docData.name)}
+                                            {getEffectiveDocumentName(docData.name)}
                                         </h2>
 
                                         <div style={{
@@ -395,7 +406,7 @@ class PaperWork extends React.Component {
                                 <br />
 
                                 <strong>
-                                    {this.getEffectiveDocumentName(
+                                    {getEffectiveDocumentName(
                                         this.state.menuTagetDocumentData.name
                                     )}
                                 </strong>
@@ -429,7 +440,9 @@ class PaperWork extends React.Component {
                     <AccessRightsModal
                         visible={this.state.isAccessRightsModalVisible}
                         dismissCallback={() => this.setState({isAccessRightsModalVisible: false})}
+                        filename={this.state.menuTagetDocumentData.name}
                         transactionID={this.transactionID}
+                        showSnackbarCallback={this.showSnackbar}
                     />
                 </div>
             )
