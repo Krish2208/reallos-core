@@ -11,7 +11,7 @@ export function getAllPeople(id,peopleLength,user){
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
 
         if(user === null){ // if the user isn't available
-            axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/user-details`,{
+            axios.get(`/user-details`,{
                 headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
             })
             .then(res =>{
@@ -32,7 +32,7 @@ export function getAllPeople(id,peopleLength,user){
             })
         }
 
-        axios.get(`https://us-central1-reallos-test.cloudfunctions.net/api/get-all-people/${id}`,{
+        axios.get(`/get-all-people/${id}`,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         }) 
         .then( res => {
@@ -59,7 +59,7 @@ export function getAllPeople(id,peopleLength,user){
 export function addPerson(id,newPerson){ // adding a new person to the redux store
     return (dispatch)=>{
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
-        axios.post(`https://us-central1-reallos-test.cloudfunctions.net/api/add-people/${id}`,newPerson,{
+        axios.post(`/add-people/${id}`,newPerson,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         })
         .then( res =>{
@@ -81,7 +81,7 @@ export function addPerson(id,newPerson){ // adding a new person to the redux sto
 export function deletePeople(id,email){
     return (dispatch)=>{
         dispatch(setLoadingTrue()); // dispatching an action to set loading to true
-        axios.delete(`https://us-central1-reallos-test.cloudfunctions.net/api/delete-people/${id}/${email}`,{
+        axios.delete(`/delete-people/${id}/${email}`,{
             headers: {Authorization: 'Bearer '+localStorage.getItem('FBIdToken')}
         })
         .then(()=>{

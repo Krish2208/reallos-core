@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Modal, { ModalActionFooter } from '../shared/modal/Modal';
-import { getPeopleInvolved } from '../../global_func_lib';
+import { getPeopleInvolved, accessRights } from '../../global_func_lib';
 import { myFirestore } from '../../Config/MyFirebase';
 import { NoEntryIcon, PencilIcon, EyeIcon } from '@primer/octicons-react';
 import TransactionNoPeople from '../../assets/transaction-no-people.png';
@@ -38,6 +38,7 @@ class AccessRightsModal extends React.Component {
             peopleList: null,
             accessData: {}
         }
+        this.currentFileName = "";
     }
 
     static propTypes = {
@@ -53,14 +54,29 @@ class AccessRightsModal extends React.Component {
         dismissCallback: PropTypes.func,
 
         /**
+         * Filename of the paperwork which is used
+         * to refer the document in firebase.
+         */
+        filename: PropTypes.string.isRequired,
+
+        /**
          * Transaction ID to populate the list of people
          * for the given transaction.
          */
-        transactionID: PropTypes.string.isRequired
+        transactionID: PropTypes.string.isRequired,
+
+        /**
+         * Callback function to show snackbar.
+         */
+        showSnackbarCallback: PropTypes.func
     }
 
-    componentDidMount() {
-        this.setPeopleList();
+    componentDidUpdate() {
+        // This is to prevent continuous fetching of paperwork data
+        // when the components update but the filename doesn't.
+        if (this.currentFileName != this.props.filename) {
+            this.fetchPaperworkAccessData();
+        }
     }
 
     /**
@@ -69,15 +85,33 @@ class AccessRightsModal extends React.Component {
      * 
      * @returns {Promise<void>}
      */
-    async setPeopleList() {
+    async fetchPaperworkAccessData() {
+        if (!this.props.filename) return;
+        this.currentFileName = this.props.filename;
+
+        // Reset the modal contents
+        this.setState({
+            peopleList: null,
+            accessData: {}
+        });
+
         let peopleList = await getPeopleInvolved(this.props.transactionID);
+        let paperworkData =
+            myFirestore
+                .collection('transactions')
+                .doc(this.props.transactionID)
+                .collection('paperwork')
+                .doc(this.props.filename);
+
         let accessData = {};
-        console.log(myFirestore.app.auth().currentUser)
-        console.log(peopleList);
+        let paperworkAccessData = (await paperworkData.get()).data().accessData;
 
         for (let i = 0; i < peopleList.length; i++) {
-            accessData[peopleList[i].email] = 'no-access';
+            accessData[peopleList[i].email] = 0;
         }
+
+        accessData = Object.assign(accessData, paperworkAccessData);
+        console.log(accessData);
 
         this.setState({
             peopleList,
@@ -92,7 +126,7 @@ class AccessRightsModal extends React.Component {
      * @param {string} email
      * Email ID for which the access has to be set.
      * 
-     * @param {"no-access" | "read-access" | "read-edit-access"} value
+     * @param {number} value
      * Access right value to be set for a given email ID.
      */
     setAccess(email, value) {
@@ -104,13 +138,25 @@ class AccessRightsModal extends React.Component {
 
     /**
      * Saves current access rights in the cloud.
+     * @returns {Promise<void>}
      */
     saveAccessRights() {
-        // @TODO: Save `accessData` in firebase
+        return myFirestore
+            .collection('transactions')
+            .doc(this.props.transactionID)
+            .collection('paperwork')
+            .doc(this.props.filename)
+            .update({
+                accessData: this.state.accessData
+            });
     }
 
     render() {
-        let { visible, dismissCallback } = this.props;
+        let {
+            visible,
+            dismissCallback,
+            showSnackbarCallback=() => {}
+        } = this.props;
 
         return (
             <Modal
@@ -147,17 +193,17 @@ class AccessRightsModal extends React.Component {
                                                     e.target.value
                                                 )}
                                             >
-                                                <MenuItem value={"no-access"}>
+                                                <MenuItem value={accessRights.NO_ACCESS}>
                                                     <NoEntryIcon size={20} />
                                                     <span style={{marginRight: 20}} />
                                                     No Access
                                                 </MenuItem>
-                                                <MenuItem value={"read-access"}>
+                                                <MenuItem value={accessRights.READ_ACCESS}>
                                                     <EyeIcon size={20} />
                                                     <span style={{marginRight: 20}} />
                                                     Read Access only
                                                 </MenuItem>
-                                                <MenuItem value={"read-edit-access"}>
+                                                <MenuItem value={accessRights.READ_EDIT_ACCESS}>
                                                     <PencilIcon size={20} />
                                                     <span style={{marginRight: 20}} />
                                                     Read &amp; Edit Access
@@ -209,16 +255,22 @@ class AccessRightsModal extends React.Component {
                     <Button
                         variant="outlined"
                         color="primary"
-                        onClick={() => dismissCallback()}
+                        onClick={() =>{
+                            dismissCallback();
+                            this.currentFileName = null
+                        }}
                     >
                         Cancel
                     </Button>
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => {
-                            this.saveAccessRights();
+                        onClick={async () => {
+                            await this.saveAccessRights();
                             dismissCallback();
+                            showSnackbarCallback(
+                                `Access Rights have been set for "${this.props.filename}"`
+                            );
                         }}
                     >
                         Save Changes
