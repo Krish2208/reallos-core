@@ -255,7 +255,10 @@ class AccessRightsModal extends React.Component {
                     <Button
                         variant="outlined"
                         color="primary"
-                        onClick={() => dismissCallback()}
+                        onClick={() =>{
+                            dismissCallback();
+                            this.currentFileName = null
+                        }}
                     >
                         Cancel
                     </Button>
