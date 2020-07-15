@@ -1,9 +1,12 @@
 import React from "react";
+import { useLocation } from "react-router";
 import { createUseStyles } from "react-jss";
 import { Button } from "@material-ui/core";
 import PdfIcon from "../../../assets/pdf_icon_duotone.svg";
 import PauseIcon from "../../../assets/pause-icon.svg";
 import { CheckIcon, UploadIcon } from "@primer/octicons-react";
+import { myFirestore } from "../../../Config/MyFirebase";
+import { getTransactionID, getCurrentUser } from "../../../global_func_lib";
 import "./DocUploadStatus.css";
 
 /**
@@ -52,6 +55,8 @@ function DocUploadStatus({
   onSuccessCallback = () => {},
   isSavingDocument = false,
 }) {
+  let location = useLocation();
+  
   /**
    * Pause upload task.
    */
@@ -96,19 +101,38 @@ function DocUploadStatus({
 
   let classes = uploadStatusStyles(uploadStatus);
 
-  // Reset upload form and dismiss upload modal once
+  // Upload paperwork metadata to firebase database.
+  // Then, reset upload form and dismiss upload modal once
   // upload is completed.
   if (uploadStatus.progress === 100) {
-    setTimeout(() => {
-      dismissCallback();
-      resetUploadStateCallback();
-      showSnackbarCallback(
-        isSavingDocument
-          ? "Document saved successfully"
-          : "Document Uploaded Successfully"
-      );
-      onSuccessCallback();
-    }, 1000);
+    (async () => {
+      let transactionID = getTransactionID(location);
+      let currentEmail = getCurrentUser().email;
+
+      if (!isSavingDocument) {
+        await myFirestore
+          .collection('transactions')
+          .doc(transactionID)
+          .collection('paperwork')
+          .doc(uploadStatus.filename)
+          .set({
+            creator: currentEmail,
+            accessData: {},
+            path: `${transactionID}/paperworks/${uploadStatus.filename}`
+          });
+      }
+
+      setTimeout(() => {
+        dismissCallback();
+        resetUploadStateCallback();
+        showSnackbarCallback(
+          isSavingDocument
+            ? "Document Saved Successfully"
+            : "Document Uploaded Successfully"
+        );
+        onSuccessCallback();
+      }, isSavingDocument ? 1000 : 500);
+    })();
   }
 
   return (

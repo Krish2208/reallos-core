@@ -22,6 +22,9 @@ import "./DocUploadModal.css";
  * @param {Function} props.onSuccessCallback
  * Callback called after an upload is successful.
  *
+ * @param {(filename: string) => void} props.onFileExistsCallback
+ * Callback called when the file to be uploaded already exists.
+ *
  * @param {Function} props.dismissCallback
  * Callback to dismiss the upload modal.
  *
@@ -33,6 +36,7 @@ function DocUploadModal({
   dismissCallback,
   showSnackbarCallback,
   onSuccessCallback,
+  onFileExistsCallback
 }) {
   let [isUploading, setUploadState] = useState(false);
   let [uploadTaskStatus, setUploadTaskStatus] = useState({
@@ -45,6 +49,26 @@ function DocUploadModal({
   const transactionID = getTransactionID(location);
 
   /**
+   * Returns a boolean value stating if a file exists
+   * in firebase storage.
+   * 
+   * @param {firebase.storage.Reference} fileRef
+   * Reference to the file to be checked.
+   * 
+   * @returns {Promise<boolean>}
+   * Boolean value based on file existence.
+   */
+  const checkFileExists = async (fileRef) => {
+    try {
+      await fileRef.getDownloadURL();
+      return true;
+    }
+    catch(e) {
+      return false;
+    }
+  }
+
+  /**
    * Uploads document selected in uploader
    *
    * @param {File[]} acceptedFiles
@@ -54,13 +78,21 @@ function DocUploadModal({
    * @returns {void}
    * Void
    */
-  const uploadDocument = (acceptedFiles) => {
+  const uploadDocument = async (acceptedFiles) => {
     if (acceptedFiles.length === 1) {
+      let filename = acceptedFiles[0].name;
+      let fileRef =
+        myStorage
+          .ref()
+          .child(`${transactionID}/paperworks/${filename}`);
+      
+      if (await checkFileExists(fileRef)) {
+        onFileExistsCallback(filename);
+        dismissCallback();
+        return;
+      }
+      
       setUploadState(true);
-
-      let fileRef = myStorage
-        .ref()
-        .child(`${transactionID}/paperworks/${acceptedFiles[0].name}`);
       let uploadTask = fileRef.put(acceptedFiles[0]);
 
       uploadTask.on("state_changed", (snapshot) => {
@@ -68,7 +100,7 @@ function DocUploadModal({
         let isPaused = snapshot.state === "paused";
 
         let newUploadTaskDetails = {
-          filename: acceptedFiles[0].name,
+          filename,
           progress,
           isPaused,
           uploadTask,

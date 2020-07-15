@@ -8,9 +8,9 @@ import AccessRightsModal from './AccessRightsModal';
 import UserAvatar from '../../assets/user.png';
 import PdfLogo from '../../assets/pdf_icon_duotone.svg';
 import { NavLink } from 'react-router-dom';
-import { myStorage } from '../../Config/MyFirebase';
+import { myStorage, myFirestore } from '../../Config/MyFirebase';
 import { withStyles } from '@material-ui/core/styles';
-import { getTransactionID } from '../../global_func_lib';
+import { getTransactionID, getEffectiveDocumentName, getCurrentUser, getPeopleInvolved } from '../../global_func_lib';
 
 import {
     Container,
@@ -53,6 +53,8 @@ class PaperWork extends React.Component {
         this.state = {
             isUploadModalVisible: false,
             isSnackbarVisible: false,
+            isPaperworkExistsModalVisible: false,
+            uploadFileName: null,
             snackbarMessage: null,
             documents: null,
             menuAnchorElement: null,
@@ -61,9 +63,7 @@ class PaperWork extends React.Component {
             menuTagetDocumentData: {
                 name: '',
                 creator: '',
-                doc_id: '',
-                path: '',
-                members: []
+                path: ''
             }
         };
 
@@ -156,16 +156,6 @@ class PaperWork extends React.Component {
     }
 
     /**
-     * Returns document name with the extension stripped off.
-     *
-     * @param {string} docName
-     * Document name
-     */
-    getEffectiveDocumentName(docName) {
-        return docName.replace(/\.pdf$/, '');
-    }
-
-    /**
      * Returns URL of thumbnail for a PDF.
      *
      * @TODO: Should return thumbnail as data URL
@@ -178,19 +168,44 @@ class PaperWork extends React.Component {
      * Sets `document` state to documents in cloud.
      */
     async setDocumentList() {
-        let storageRef = myStorage.ref().child(`${this.transactionID}/paperworks`);
-        let documentList = await storageRef.listAll();
-        let paperworks = [];
+        let paperworkDataSnapshot =
+            await myFirestore
+                .collection('transactions')
+                .doc(this.transactionID)
+                .collection('paperwork')
+                .get()
 
-        documentList.items.map(documentItem => {
-            paperworks.push({
-                name: documentItem.name,
-                creator: 'John Doe',
-                doc_id: documentItem.name,
-                path: documentItem.fullPath,
-                members: ['Joseph John']
-            })
-        })
+        let paperworks = [];
+        let peopleList = await getPeopleInvolved(this.transactionID);
+
+        paperworkDataSnapshot.docs.map(doc => {
+            let paperworkMeta = doc.data();
+
+            if (paperworkMeta.creator === getCurrentUser().email ||
+                paperworkMeta.accessData[getCurrentUser().email] > 0
+            ) {
+                let documentRef = myStorage.ref().child(
+                    `${this.transactionID}/paperworks/${paperworkMeta.path}`
+                );
+
+                let creator =
+                    (paperworkMeta.creator === getCurrentUser().email)
+                        ? "You"
+                        : peopleList.filter(person => person.email == paperworkMeta.creator)[0]
+
+                let currentUserAcessRight =
+                    (paperworkMeta.creator === getCurrentUser().email)
+                        ? 2
+                        : paperworkMeta.accessData[getCurrentUser().email] ?? 0;
+
+                paperworks.push({
+                    name: documentRef.name,
+                    creator: creator,
+                    path: paperworkMeta.path,
+                    accessRight: currentUserAcessRight
+                });
+            }
+        });
 
         this.setState({
             documents: paperworks
@@ -200,7 +215,7 @@ class PaperWork extends React.Component {
     /**
      * Deletes the specified document from the cloud.
      *
-     * @param {{ name: string, creator: string, doc_id: string, path: string, members: any[] }} docData
+     * @param {{ name: string, creator: string, path: string }} docData
      * The document data of the particular document.
      */
     async deletePaperwork(docData) {
@@ -289,7 +304,7 @@ class PaperWork extends React.Component {
                     {this.state.documents.map((docData, itemIndex) => (
                         <div
                             className="doc-card-root"
-                            key={docData.doc_id}
+                            key={docData.name}
                             style={{
                                 opacity: 0,
                                 animation: `slide-up-anim 150ms ease-out ${itemIndex * 25}ms forwards`
@@ -303,7 +318,7 @@ class PaperWork extends React.Component {
                             </IconButton>
 
                             <NavLink to={{
-                                pathname: `/transaction/${this.transactionID}/paperwork/${docData.doc_id}`,
+                                pathname: `/transaction/${this.transactionID}/paperwork/${docData.name}`,
                                 state: docData
                             }}>
                                 <Card className="doc-card" title={docData.name}>
@@ -318,7 +333,7 @@ class PaperWork extends React.Component {
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis'
                                         }}>
-                                            {this.getEffectiveDocumentName(docData.name)}
+                                            {getEffectiveDocumentName(docData.name)}
                                         </h2>
 
                                         <div style={{
@@ -395,7 +410,7 @@ class PaperWork extends React.Component {
                                 <br />
 
                                 <strong>
-                                    {this.getEffectiveDocumentName(
+                                    {getEffectiveDocumentName(
                                         this.state.menuTagetDocumentData.name
                                     )}
                                 </strong>
@@ -426,10 +441,53 @@ class PaperWork extends React.Component {
                             </Button>
                         </ModalActionFooter>
                     </Modal>
+
+                    <Modal
+                        title="Can't Upload"
+                        visible={this.state.isPaperworkExistsModalVisible}
+                        dismissCallback={() => this.setState({isPaperworkExistsModalVisible: false})}
+                        modalWidth={700}
+                    >
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 30
+                        }}>
+                            <img
+                                src={PdfLogo}
+                                alt=""
+                                style={{marginRight: 30, width: 80}}
+                            />
+
+                            <div style={{fontSize: 18}}>
+                                You cannot upload "
+                                <strong>
+                                    {getEffectiveDocumentName(
+                                        this.state.uploadFileName
+                                    )}
+                                </strong>
+                                " as it already exists. If you want to upload this paperwork, delete the existing paperwork first.
+                            </div>
+                        </div>
+
+                        <ModalActionFooter>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => this.setState({isPaperworkExistsModalVisible: false})}
+                            >
+                                Close
+                            </Button>
+                        </ModalActionFooter>
+                    </Modal>
+
                     <AccessRightsModal
                         visible={this.state.isAccessRightsModalVisible}
                         dismissCallback={() => this.setState({isAccessRightsModalVisible: false})}
+                        filename={this.state.menuTagetDocumentData.name}
                         transactionID={this.transactionID}
+                        showSnackbarCallback={this.showSnackbar}
                     />
                 </div>
             )
@@ -470,6 +528,12 @@ class PaperWork extends React.Component {
                     visible={this.state.isUploadModalVisible}
                     showSnackbarCallback={this.showSnackbar}
                     onSuccessCallback={() => this.setDocumentList()}
+                    onFileExistsCallback={filename => {
+                        this.setState({
+                            isPaperworkExistsModalVisible: true,
+                            uploadFileName: filename
+                        })
+                    }}
                 />
                 <Snackbar
                     open={this.state.isSnackbarVisible}
