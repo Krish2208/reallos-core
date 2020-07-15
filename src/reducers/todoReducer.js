@@ -13,7 +13,8 @@ function todoReducer(state=initialState,action){
                     Description: action.Description,
                     Date: action.Date,
                     To: action.To,
-                    From: action.From
+                    From: action.From,
+                    Completed: action.Completed
                 }
             ]
         case actions.DELETE_TODO:
@@ -27,6 +28,20 @@ function todoReducer(state=initialState,action){
                         Description: action.Description,
                         Date: action.Date,
                         To: action.To
+                    }
+                }
+                else{
+                    return{
+                        ...todo
+                    }
+                }
+            })
+        case actions.COMPLETE_TODO:
+            return state.map((todo) =>{
+                if(todo.id === action.id){
+                    return{
+                        ...todo,
+                        Completed: true
                     }
                 }
                 else{

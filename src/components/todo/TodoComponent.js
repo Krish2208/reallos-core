@@ -6,6 +6,7 @@ import {
   deleteTask,
   editTask,
   getTask,
+  completeTask
 } from "../../actions/todoActions";
 import { ReallosLoaderWithOverlay } from "../shared/preloader/ReallosLoader";
 import {
@@ -64,6 +65,7 @@ const mapDispatchToProps = (dispatch) => {
       deleteTask,
       editTask,
       getTask,
+      completeTask
     },
     dispatch
   );
@@ -88,11 +90,13 @@ class Todo extends Component {
         to: null,
       },
       expandedTask: {
+        id: "",
         title: "",
         description: "",
         date: "",
         to: {},
         from: {},
+        completed: false
       },
       validated: false,
     };
@@ -110,6 +114,7 @@ class Todo extends Component {
     this.expandTask = this.expandTask.bind(this);
     this.getIcon = this.getIcon.bind(this);
     this.getDeadlineText = this.getDeadlineText.bind(this);
+    this.markCompleted = this.markCompleted.bind(this);
   }
 
   componentDidMount() {
@@ -133,6 +138,11 @@ class Todo extends Component {
     } else if (diff > 3) {
       return <CheckIcon className="success-color" size={20} />;
     }
+  }
+
+  markCompleted(id, taskId){ // Marking the task completed
+    this.props.completeTask(id,taskId);
+    this.toggleModal();
   }
 
   getDeadlineText(deadline_date) {
@@ -340,7 +350,11 @@ class Todo extends Component {
                 <tr>
                   <td>{this.getIcon(this.state.expandedTask.date)}</td>
                   <td style={{ paddingLeft: "10px", paddingTop: "4px" }}>
-                    {this.getDeadlineText(this.state.expandedTask.date)}
+                    {this.state.expandedTask.completed ? ( // If the task is completed, display completed
+                      <Typography>Completed</Typography>
+                    ):(
+                      this.getDeadlineText(this.state.expandedTask.date)
+                    )}
                   </td>
                 </tr>
               </table>
@@ -424,12 +438,17 @@ class Todo extends Component {
               </table>
             </Box>
             <Typography align="right">
-              <Button
+              {this.state.expandedTask.completed ? (
+                <></>
+              ):(
+                <Button
+                onClick={() => this.markCompleted(this.props.match.params.tid, this.state.expandedTask.id)}
                 startIcon={<CheckCircleFillIcon />}
                 style={{ backgroundColor: "#150578", color: "#fff" }}
-              >
-                Completed
-              </Button>
+                >
+                  Completed
+                </Button>
+              )}
             </Typography>
           </Grid>
         </Grid>
@@ -586,11 +605,13 @@ class Todo extends Component {
     // opens the modal for that particular task
     this.setState({
       expandedTask: {
+        id: todo.id,
         title: todo.Title,
         description: todo.Description,
         date: todo.Date,
         to: todo.To,
         from: todo.From,
+        completed: todo.Completed
       },
     });
     this.toggleModal();

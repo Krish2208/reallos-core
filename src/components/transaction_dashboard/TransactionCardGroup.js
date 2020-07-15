@@ -137,11 +137,11 @@ function RenderCard(props) {
                             <table>
                               <tr>
                                 <td style={{ paddingBottom: '4.5px', paddingRight: '18px' }}><CheckCircleIcon className="transaction-card-subicongreen" size={18} /></td>
-                                <td>{transaction.completedTask} Tasks</td>
+                                <td>{transaction.allTask ? transaction.completedTask : 0} Tasks</td>
                               </tr>
                               <tr>
                                 <td style={{ paddingBottom: '4.5px', paddingRight: '18px' }}><XCircleIcon className="transaction-card-subiconred" size={18} /></td>
-                                <td>{transaction.allTask - transaction.completedTask} Tasks</td>
+                                <td>{transaction.allTask ? transaction.allTask - transaction.completedTask : 0} Tasks</td>
                               </tr>
                             </table>
                           </Typography>
