@@ -286,6 +286,7 @@ export const getCurrentUser = () => {
  * Document name
  */
 export const getEffectiveDocumentName = (docName) => {
+  docName = String(docName);
   return docName.replace(/\.pdf$/, '');
 }
 
