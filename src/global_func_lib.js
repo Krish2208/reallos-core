@@ -267,3 +267,33 @@ export const getPeopleInvolved = async (transactionID) => {
 
   return response.data.peopleList;
 }
+
+/**
+ * Returns `currentUser` from `firebase.auth` namespace.
+ * 
+ * @returns {firebase.User}
+ * Object containing details of the user currently
+ * signed in. If no user is signed in, `null` is returned.
+ */
+export const getCurrentUser = () => {
+  return myFirebase.auth().currentUser;
+}
+
+/**
+ * Returns document name with the extension stripped off.
+ *
+ * @param {string} docName
+ * Document name
+ */
+export const getEffectiveDocumentName = (docName) => {
+  return docName.replace(/\.pdf$/, '');
+}
+
+/**
+ * Enum for access rights
+ */
+export const accessRights = {
+  NO_ACCESS: 0,
+  READ_ACCESS: 1,
+  READ_EDIT_ACCESS: 2
+}
