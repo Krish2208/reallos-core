@@ -33,27 +33,30 @@
 }
 
 .coming-soon-img {
-  height: 270px;
-  padding-bottom: 10px;
+  height: 310px;
+  padding-bottom: 8px;
 }
 
 .div-heading {
   font-size: 25px !important;
-  padding-bottom: 8px;
+  padding-bottom: 6px;
   text-align: center;
   font-weight: bold;
 }
 
 .div-text {
   font-size: 20px !important;
-  padding-bottom: 10px;
+  padding-bottom: 35px;
   text-align: center;
 }
 
 .cards {
-  height: 130px !important;
+  height: 110px !important;
   border-radius: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
   background-color: #6c63ff;
+  cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
 
@@ -64,7 +67,7 @@
 }
 
 .card-content {
-  padding-top: 20px !important;
+  padding-top: 11px !important;
   color: #ffffff !important;
   margin: auto !important;
   text-align: center !important;
